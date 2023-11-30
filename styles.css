@@ -72,6 +72,11 @@ body {
     margin-bottom: 10px;
 }
 
+.textbox:hover,
+.textbox2:hover {
+    border-color: blue;
+}
+
 .button {
     width: 100%; 
     padding: 10px;
@@ -107,4 +112,11 @@ input[type="checkbox"] {
     .container {
         flex-basis: 100%
     }
+}
+.eye-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
 }
