@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Registration Page</title>
+    <style>     
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="left-container">
+        <img src="sample-image.jpg" alt="Left Container Image">
+    </div>
+    <div class="right-container">
+        <h1 class="typewriter">REGISTER</h1>
+        <form id="registrationForm">
+            <div class="form-group">
+                <label for="email"></label>
+                <input type="text" id="email" class="textbox" placeholder="Enter your email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="username"></label>
+                <input type="text" id="username" class="textbox" placeholder="Enter your username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password"></label>
+                <div style="position: relative;">
+                    <input type="password" id="password" class="textbox" placeholder="Enter your password" required>
+                    <i id="togglePassword" class="eye-icon" onclick="togglePasswordVisibility(true)">👁️</i>
+                </div>
+                <span id="passwordMessage" class="message"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword"></label>
+                <input type="password" id="confirmPassword" class="textbox" placeholder="Confirm your password" required>
+                <span id="confirmPasswordMessage" class="message"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="SecurityQuestion"></label>
+                <select id="securityQuestion" class="dropdown common-input" required>
+                    <option value="" disabled selected>Select a security question</option>
+                    <option value="question1">What is your favorite color?</option>
+                    <option value="question2">What is the name of your first pet?</option>
+                    <option value="question3">In which city were you born?</option>
+                </select>
+                <span id="securityQuestionMessage" class="message"></span>
+            </div>
+            
+            <div class="form-group">
+                <label for="securityAnswer"></label>
+                <input type="text" id="securityAnswer" class="textbox" placeholder="Type your answer" required>
+                <span id="securityAnswerMessage" class="message"></span>
+            </div>
+            
+
+            <button type="button" class="button" onclick="validateForm()">Register</button>
+        </form>
+        <br>
+        <a href="login.html" style="color: #007bff;">Back To Log In</a>
+    </div>
+</div>
+
+<script>
+    function validateForm() {
+         // Display password validation message
+        var passwordMessage = document.getElementById("passwordMessage");
+        passwordMessage.textContent = isPasswordValid ? "" : "Password must be 8 characters long, contain an uppercase letter, a number, and a special character.";
+
+        // Display confirm password validation message
+        var confirmPasswordMessage = document.getElementById("confirmPasswordMessage");
+        confirmPasswordMessage.textContent = doPasswordsMatch ? "" : "Passwords do not match.";
+    }
+
+    // Toggle password visibility
+    function togglePasswordVisibility(isPassword) {
+        var passwordInput = document.getElementById("password");
+        var togglePasswordIcon = document.getElementById("togglePassword");
+
+        if (isPassword) {
+            passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+            togglePasswordIcon.textContent = passwordInput.type === "password" ? "👁️" : "🔒";
+        }
+    }
+    function typewriterEffect() {
+                // initializing the character index to zero
+                let i = 0;
+                // Get the text from the element with the class 'typewriter'
+                let text = document.querySelector(".typewriter").innerText;
+                document.querySelector(".typewriter").innerText = "";
+
+                // this function types one character at a time
+                function type() {
+                    if(i < text.length) {
+                        document.querySelector(".typewriter").innerText += text.charAt(i);
+                        // Increment the character index
+                        i++;
+                        setTimeout(type, 150); // speed of the typing
+                    }
+                }
+                
+                // Call the type function to start the typing effect
+                type();
+            }
+
+            // Calling the function when the window loads
+            window.onload = typewriterEffect;
+</script>
+
+</body>
+</html>
