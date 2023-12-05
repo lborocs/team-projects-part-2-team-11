@@ -1,0 +1,81 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f7f7f7; /* Updated background color */
+}
+
+.container {
+    width: 70%; /* Increased container width */
+    /* padding: 20px; */
+    height: auto;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+}
+
+.left-container img {
+    width: 100%;
+    max-width: 1000px;
+    max-height: auto;
+    height: auto;
+    border-radius: 10px; /* Added border-radius to images */
+   
+}
+
+.right-container {
+    width: 48%; /* Adjusted width for better balance */
+    padding: 20px;
+    background-color: #f9f9f9; /* Updated background color */
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px; /* Adjusted margin for labels */
+}
+
+.textbox {
+    width: calc(100% - 16px); /* Adjusted width and padding for textboxes */
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    margin-bottom: 12px;
+}
+
+.button {
+    width: 100%;
+    padding: 12px;
+    background-color: #fe6817;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Added transition */
+}
+
+.button:hover {
+    background-color: #fe6840;
+}
+
+.eye-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.common-input {
+    width: calc(100% - 16px);
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    margin-bottom: 12px;
+}
