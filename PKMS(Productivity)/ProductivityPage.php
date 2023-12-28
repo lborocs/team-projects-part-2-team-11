@@ -9,7 +9,7 @@
         //set up the connection to the data base
         $username = "team011";
         $password = "JAEWyfUXpzqank7scpWm";
-        $servername = "sci-mysql";
+        $servername = "localhost";
         $dbname = "team011";
     
         // Create connection
@@ -39,6 +39,9 @@
             }
         }
         //echo "</datalist>";
+
+        // INSERT INTO `Tasks` (`task_id`, `Title`, `Description`, `Deadline`, `user_email`) 
+        // VALUES ('103', 'Testing Task', '', '2023-12-31', 'frederickumah@makeitall.org.uk');
 
     ?>
 
