@@ -68,12 +68,12 @@
             </div>
             <div class="content" id="knowledgeContent" style="display: none;">
                 <!-- Content for the 'Knowledge' tab -->
-                <div id="topicsNavbar">
-                    <div class="topicsNavbarContent" id="page">Page</div>
-                    <div class="topicsNavbarContent" id="all">All Posts</div>
-                    <div class="topicsNavbarContent" id="recent">Recent</div>
-                    <div class="topicsNavbarContent" id="mostLiked">Most Liked</div>
-                    <div id="searchContent" class="topicsNavbarContent">
+                <div id="postsNavbar">
+                    <div class="postsNavbarContent" id="page">Page</div>
+                    <div class="postsNavbarContent" id="all">All Posts</div>
+                    <div class="postsNavbarContent" id="recent">Recent</div>
+                    <div class="postsNavbarContent" id="mostLiked">Most Liked</div>
+                    <div id="searchContent" class="postsNavbarContent">
                         <form>
                             <div>
                                 <input type="text" placeholder="Search..." name="search">
@@ -85,20 +85,55 @@
                     </div>
                 </div>
                 <hr>
-                <div class="topicHeader"> 
-                    <h2 class="headerContent">TOPIC</h2>
-                    <h2 class="headerContent">POSTS</h2>
+                <div class="postStructureContent"> 
+                    <h2 class="postHeaderContent">POSTS</h2>
+                    <div id="posts">
+                        <div class="posts">
+                            <a href="#" id="openModalLink">Post 1</a>
+                        </div>
+                        <div class="button-container">
+                            <button id="updateButton" class="update-button" data-count="0" onclick="toggleUpdate()">
+                                <img src="bell.png" alt="updat icon">
+                                <span class="update-count">0</span>
+                            </button>
+                            <button id="likeButton" class="like-button" data-count="0" onclick="toggleLike()">
+                                <img src="heart.png" alt="heart Icon">
+                                <span class="like-count">0</span>
+                            </button>
+                        </div>
+                        <div class="posts">
+                            <a href="#" id="openModalLink">Post 2</a>
+                        </div>
+                         <div class="button-container">
+                            <button id="updateButton" class="update-button" data-count="0" onclick="toggleUpdate()">
+                                <img src="bell.png" alt="updat icon">
+                                <span class="update-count">0</span>
+                            </button>
+                            <button id="likeButton" class="like-button" data-count="0" onclick="toggleLike()">
+                                <img src="heart.png" alt="heart Icon">
+                                <span class="like-count">0</span>
+                            </button>
+                        </div>
+                        <div class="posts">
+                            <a href="#" id="openModalLink">Post 3</a>
+                        </div>
+                        <div class="button-container">
+                            <button id="updateButton" class="update-button" data-count="0" onclick="toggleUpdate()">
+                                <img src="bell.png" alt="updat icon">
+                                <span class="update-count">0</span>
+                            </button>
+                            <button id="likeButton" class="like-button" data-count="0" onclick="toggleLike()">
+                                <img src="heart.png" alt="heart Icon">
+                                <span class="like-count">0</span>
+                            </button>
+                            </div>
+                    </div>
                 </div>
-                <div>
-                    <div class="topics">
-                        <a href="file:///Users/fionakissi/Documents/bagel_game/team-projects-part-2-team-11/Make-it-All-Knowledge%20System/posts.html" id="openModalLink">Topic 1</a>
-                    </div>
-                    <div class="topics">
-                        <a href="file:///Users/fionakissi/Documents/bagel_game/team-projects-part-2-team-11/Make-it-All-Knowledge%20System/posts.html" id="openModalLink">Topic 2</a>
-                    </div>
-                    <div class="topics">
-                        <a href="file:///Users/fionakissi/Documents/bagel_game/team-projects-part-2-team-11/Make-it-All-Knowledge%20System/posts.html" id="openModalLink">Topic 3</a>
-                    </div>
+                <div class="overlay" id="overlay"></div>
+                <div class="popup" id="popup">
+                    <h2>Popup Modal Content</h2>
+                    <p>This is the content of the modal.</p>
+                    <button onclick="closePopup()">&times;</button>
                 </div>
             </div>
             <div class="content" id="content3" style="display: none;">
@@ -218,6 +253,21 @@
             document.querySelector('.update-count').innerText = updateCount;
         }
     }
+
+    document.getElementById('openModalLink').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default link behavior
+        openPopup();
+    });
+
+    function openPopup() {
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('popup').style.display = 'block';
+    }
+
+    function closePopup() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('popup').style.display = 'none';
+    }       
 </script>
 
 </body>
