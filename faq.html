@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles_main2.css">
+	<script>
+    function toggleExpansion(element) {
+    var content = element.querySelector(".box-content");
+  if (content.style.display === "none") {
+   
+    content.style.display = "block";
+    element.classList.add("expanded");
+   } else {
+   
+    content.style.display = "none";
+    element.classList.remove("expanded");
+    }
+    }
+	</script>
+
+
+
+
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <img src="images/companylogo.png">
+        </div>
+        <div class="tabs">
+            <button class="tab">
+                <img src="images/manage.png" alt="Manage Icon" height="20px" width="20px">
+                Manage</button>
+            <button class="tab">
+                <img src="images/productivity.png" alt="Productivity Icon" height="30px" width="30px">
+                Productivity</button>
+            <button class="tab">
+                <img src="images/knowledge.png" alt="Knowledge Icon" height="20px" width="20px">
+                Knowledge</button>
+            <button class="tab">
+                <img src="images/reminder.png" alt="Reminder Icon" height="20px" width="20px">
+                Reminders</button>
+            <button class="tab">
+                <img src="images/invite.png" alt="Invite Icon" height="20px" width="20px">
+                Invite</button>
+        </div>
+        <div class="buttons">
+            <button class="user-btn">
+                <img src="images/user.png" class="user-pic" onclick="toggleMenu()">
+            </button>
+            <div class="sub-menu-wrap" id="subMenu">
+                <div class="sub-menu">
+                    <div class="user-info">
+                        <img src="images/user.png">
+                        <h4>James Aldrino</h4>
+                    </div>
+                    <hr>
+                    <a href="#" class="sub-menu-link">
+                    <img src="images/help.png">
+                    <p>Help </p>
+                    <span>></span>
+                    </a>
+                    <a href="#" class="sub-menu-link">
+                    <img src="images/logout.png">
+                    <p>logout</p>
+                    <span>></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- code for the MAIN CONTENT after header div -->
+<div class="main-content">
+    <div class="white-div">
+                
+                <div class="white-div">
+                    <br>
+                    <h1 class="faq-title">Frequently Asked Questions</h1>
+                    <ul class="breadcrumbs">
+                        <li class="breadcrumbs-item">
+                            <a href="standard_index.html" class="breadcrumbs_link">Home</a>
+                        </li>
+                        <li class="breadcrumbs-item">
+                            <a href="faq.html" class="breadcrumbs_link--active" 
+                            breadcrumbs_link--active>FAQS</a>
+                        </li>
+                    </ul>
+                    <div class="expandable-box" onclick="toggleExpansion(this)">
+                        <h2>title 1</h2>
+                        <p class="box-content" style="display: none;">.....</p>
+                    </div>
+                    <br>
+                    <div class="expandable-box" onclick="toggleExpansion(this)">
+                        <h2>title 2</h2>
+                        <p class="box-content" style="display: none;">.....</p>
+                    </div>
+                    <br>
+                    <div class="expandable-box" onclick="toggleExpansion(this)">
+                        <h2>title 3</h2>
+                        <p class="box-content" style="display: none;">.....</p>
+                    </div>
+                    <br>
+                    <div class="expandable-box" onclick="toggleExpansion(this)">
+                        <h2>title 4</h2>
+                        <p class="box-content" style="display: none;">.....</p>
+                    </div>
+                    <br>
+                    <div class="expandable-box" onclick="toggleExpansion(this)">
+                        <h2>title 5</h2>
+                        <p class="box-content" style="display: none;">.....</p>
+                    </div>
+                    
+                      
+                </div>
+            <div class="content" id="content4" style="display: none;">
+           
+                <h2>Other Content</h2>
+            </div>
+            <div class="content" id="content5" style="display: none;">
+                <h2>Other2 Content</h2>
+            </div>
+        </div>
+    <!-- section for footer -->
+    <div class="footer">
+        <p><u>Make It All</u> <u>Acceptable Use Policy </u></p>
+    </div>
+    <script>
+    let subMenu = document.getElementById("subMenu");
+    let userButton = document.querySelector(".user-btn");
+
+    function toggleMenu() {
+        subMenu.classList.toggle("open-menu");
+
+        if (subMenu.classList.contains("open-menu")) {
+            // Add event listener to detect clicks outside the submenu
+            document.addEventListener('click', closeMenuOutside);
+        } else {
+            // If menu is closed, remove the click event listener
+            document.removeEventListener('click', closeMenuOutside);
+        }
+    }
+
+    function closeMenuOutside(event) {
+        // Check if the clicked element is outside the user button and submenu
+        if (!subMenu.contains(event.target) && !userButton.contains(event.target)) {
+            subMenu.classList.remove("open-menu");
+            // Remove the click event listener after closing the submenu
+            document.removeEventListener('click', closeMenuOutside);
+        }
+    }
+
+
+    const tabs = document.querySelectorAll('.tab');
+    const arrow = document.querySelector('.arrow');
+    const contents = document.querySelectorAll('.content'); // Get all content divs
+
+    function positionArrow() {
+        const activeTab = document.querySelector('.tab.active');
+        if (activeTab) {
+            const tabRect = activeTab.getBoundingClientRect();
+            const arrowWidth = arrow.offsetWidth;
+            arrow.style.left = `${tabRect.left + (activeTab.offsetWidth - arrowWidth) / 1.7}px`;
+        }
+    }
+
+
+
+    tabs.forEach((tab, index) => {
+    tab.addEventListener('click', function () {
+        if (index === 2) { 
+            window.location.href = 'standard_index.html'; 
+            return;
+        } 
+        if (index === 0) {
+            window.location.href = 'manage.html';
+            return;
+        }
+        if (index === 3) { 
+            window.location.href = 'reminders.html'; 
+            return;
+        }
+        if (index === 4) { 
+            window.location.href = 'invite.html'; 
+            return;
+        }
+        tabs.forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        contents.forEach(content => (content.style.display = 'none'));
+        contents[index].style.display = 'block';
+        arrow.style.display = 'block';
+        positionArrow();
+    });
+});
+
+    // Handle window resize event
+    window.addEventListener('resize', function () {
+        if (arrow.style.display === 'block') {
+            positionArrow();
+        }
+    });
+
+</script>
+
+</body>
+</html>
