@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="ManagerStyles.css">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <img src="images/companylogo.png">
+        </div>
+        <div class="tabs">
+            <button class="tab">
+                <img src="images/manage.png" alt="Manage Icon" height="20px" width="20px">
+                Manage</button>
+            <button class="tab">
+                <img src="images/productivity.png" alt="Productivity Icon" height="30px" width="30px">
+                Productivity</button>
+            <button class="tab">
+                <img src="images/knowledge.png" alt="Knowledge Icon" height="20px" width="20px">
+                Knowledge</button>
+            <button class="tab">
+                <img src="images/reminder.png" alt="Reminder Icon" height="20px" width="20px">
+                Reminders</button>
+            <button class="tab">
+                <img src="images/invite.png" alt="Invite Icon" height="20px" width="20px">
+                Invite</button>
+        </div>
+        <div class="buttons">
+            <button class="user-btn">
+                <img src="images/user.png" class="user-pic" onclick="toggleMenu()">
+            </button>
+            <div class="sub-menu-wrap" id="subMenu">
+                <div class="sub-menu">
+                    <div class="user-info">
+                        <img src="images/user.png">
+                        <h4>James Aldrino</h4>
+                    </div>
+                    <hr>
+                    <a href="#" class="sub-menu-link">
+                    <img src="images/help.png">
+                    <p>Help </p>
+                    <span>></span>
+                    </a>
+                    <a href="#" class="sub-menu-link">
+                    <img src="images/logout.png">
+                    <p>logout</p>
+                    <span>></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- code for the MAIN CONTENT after header div -->
+    <div class="main-content">
+        <div class="white-div">
+            <div class="content" id="content1" style="display: none;">
+                <!-- Content for the 'Productivity' tab -->
+                <h2>Productivity Content</h2>
+            </div>
+            <div class="content" id="content2" style="display: none;">
+                <!-- Content for the 'Knowledge' tab -->
+                <h2>Knowledge Content</h2>
+            </div>
+            <div class="content" id="content3" style="display: block; color: white;"> <!-- Add style for text color -->
+                <!-- Content for the 'Manage' tab -->
+                <h2>Please select the project you want to manage</h2>
+                <div id="manageDataContainer"></div>
+                <div class="project-details" id="projectDetails" style="display: none;">
+                    <button onclick="goBack()">Back</button>
+                    <!-- Add your project details content here -->
+                    <h3>Project Details</h3>
+                </div>
+            </div>
+            <div class="content" id="content4" style="display: none;">
+                <!-- Content for the 'Other' tab -->
+                <h2>Other Content</h2>
+            </div>
+            <div class="content" id="content5" style="display: none;">
+                <!-- Content for the 'Other2' tab -->
+                <h2>Other2 Content</h2>
+            </div>
+        </div>
+    </div>
+    <!-- section for footer -->
+    <div class="footer">
+        <p><u>Make It All</u> <u>Acceptable Use Policy </u></p>
+    </div>
+    <script>
+
+
+    let subMenu = document.getElementById("subMenu");
+    let userButton = document.querySelector(".user-btn");
+
+    function toggleMenu() {
+        subMenu.classList.toggle("open-menu");
+
+        if (subMenu.classList.contains("open-menu")) {
+            // Add event listener to detect clicks outside the submenu
+            document.addEventListener('click', closeMenuOutside);
+        } else {
+            // If menu is closed, remove the click event listener
+            document.removeEventListener('click', closeMenuOutside);
+        }
+    }
+
+    function closeMenuOutside(event) {
+        // Check if the clicked element is outside the user button and submenu
+        if (!subMenu.contains(event.target) && !userButton.contains(event.target)) {
+            subMenu.classList.remove("open-menu");
+            // Remove the click event listener after closing the submenu
+            document.removeEventListener('click', closeMenuOutside);
+        }
+    }
+
+    const tabs = document.querySelectorAll('.tab');
+    // const arrow = document.querySelector('.arrow');
+    const contents = document.querySelectorAll('.content'); // Get all content divs
+
+    tabs.forEach((tab, index) => {
+    tab.addEventListener('click', function () {
+        tabs.forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        contents.forEach(content => content.classList.remove('active'));
+        contents[index].classList.add('active');
+        // arrow.style.display = 'block';
+        // positionArrow();
+    });
+});
+
+function fetchDataForManageTab() {
+        // Use AJAX to fetch data from the server (replace with your endpoint)
+        let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // Update the content of the "Manage" tab with the fetched data
+                document.getElementById('manageDataContainer').innerHTML = xhr.responseText;
+            }
+        };
+        xhr.open('GET', 'dataForManage.php', true);
+        xhr.send();
+    }
+
+    // Fetch data for 'Manage' tab by default
+    fetchDataForManageTab();
+
+    function handleBoxClick(boxId) {
+    // Handle the click event for the clicked box
+    alert('Clicked Box ' + boxId);
+    // You can customize this function to perform actions based on the clicked box
+}
+
+
+    // Add this script to set the "Manage" tab as active initially
+    window.onload = function() {
+    const manageTab = document.querySelector('.tab'); // Select the Manage tab
+    manageTab.classList.add('active'); // Add the active class
+    const manageContent = document.getElementById('content3'); // Select the Manage content
+    manageContent.classList.add('active'); // Add the active class to the corresponding content
+};
+
+
+
+    // Handle window resize event
+    // window.addEventListener('resize', function () {
+    //     if (arrow.style.display === 'block') {
+    //         positionArrow();
+    //     }
+    // });
+
+        // Add this script to set the "Manage" tab as active initially
+        window.onload = function() {
+        const manageTab = document.querySelector('.tab'); // Select the Manage tab
+        manageTab.classList.add('active'); // Add the active class
+        const manageContent = document.getElementById('content3'); // Select the Manage content
+        manageContent.classList.add('active'); // Add the active class to the corresponding content
+    };
+
+    function handleBoxClick(boxId) {
+            // Show the project details div when a box is clicked
+            document.getElementById('projectDetails').style.display = 'block';
+        }
+
+        function goBack() {
+            // Hide the project details div and show the main content
+            document.getElementById('projectDetails').style.display = 'none';
+        }
+
+</script>
+
+</body>
+</html>
