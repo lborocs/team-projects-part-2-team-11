@@ -3,6 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="styles_main2.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script>
     function toggleExpansion(element) {
     var content = element.querySelector(".box-content");
@@ -85,31 +86,9 @@
                             breadcrumbs_link--active>FAQS</a>
                         </li>
                     </ul>
-                    <div class="expandable-box" onclick="toggleExpansion(this)">
-                        <h2>title 1</h2>
-                        <p class="box-content" style="display: none;">.....</p>
+                    <div id="faqPosts">
+
                     </div>
-                    <br>
-                    <div class="expandable-box" onclick="toggleExpansion(this)">
-                        <h2>title 2</h2>
-                        <p class="box-content" style="display: none;">.....</p>
-                    </div>
-                    <br>
-                    <div class="expandable-box" onclick="toggleExpansion(this)">
-                        <h2>title 3</h2>
-                        <p class="box-content" style="display: none;">.....</p>
-                    </div>
-                    <br>
-                    <div class="expandable-box" onclick="toggleExpansion(this)">
-                        <h2>title 4</h2>
-                        <p class="box-content" style="display: none;">.....</p>
-                    </div>
-                    <br>
-                    <div class="expandable-box" onclick="toggleExpansion(this)">
-                        <h2>title 5</h2>
-                        <p class="box-content" style="display: none;">.....</p>
-                    </div>
-                    
                       
                 </div>
             <div class="content" id="content4" style="display: none;">
@@ -125,6 +104,74 @@
         <p><u>Make It All</u> <u>Acceptable Use Policy </u></p>
     </div>
     <script>
+
+
+function createFAQ(category, title, content)
+{
+    let faqContainer = document.getElementById("faqPosts");
+    let div = document.createElement('div');
+div.classList.add('expandable-box');
+
+// Create an h2 element with the text "title 1"
+let h2 = document.createElement('h2');
+h2.textContent = title;
+
+// Create a p element with the class "box-content" and initial style "display: none;"
+let p = document.createElement('p');
+p.classList.add('box-content');
+p.style.display = 'none';
+p.textContent = content; // Add your content here
+let h4=document.createElement('h4')
+h4.style.display = 'none';
+h4.textContent = category; // Add your content here
+// Append the h2 and p elements to the div element
+div.appendChild(h2);
+div.appendChild(p);
+div.appendChild(h4);
+div.style.marginBottom = '30px';
+// Add an onclick event listener to toggle the display of the p element
+div.addEventListener('click', function() {
+    p.style.display = p.style.display === 'none' ? 'block' : 'none';
+    h4.style.display = h4.style.display === 'none' ? 'block' : 'none';
+});
+faqContainer.append(div);
+}
+      $(document).ready(function() {
+                $.ajax({
+                    url: "faq.php",
+                    type: "GET",
+		            dataType: 'json',
+                    success: function (postsData) {
+                        let len = postsData.posts.length;
+                        for (let i = 0; i < len; i++) {
+                            let category= postsData.posts[i].category;
+                            let title= postsData.posts[i].title;
+                            let content = postsData.posts[i].content;
+                            createFAQ(category, title, content);
+                            console.log(postsData)
+               		 }
+                    
+                    },
+                    error: function (e) {
+                        console.log(e.message);
+                    }
+                });
+    
+            });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     let subMenu = document.getElementById("subMenu");
     let userButton = document.querySelector(".user-btn");
 
