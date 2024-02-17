@@ -455,14 +455,6 @@ border-style: solid; /* Optionally set border style */
     text-align: center;
  }
 
- /* .white-div2 {
-  #1C274C
-  background-color: #e8e7e7; 
-  height: 600px; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  } */
 .expandable-box {
   width: 100%;
   background-color: #e8e7e7;
