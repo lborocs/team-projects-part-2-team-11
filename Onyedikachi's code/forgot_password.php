@@ -1,6 +1,10 @@
 <?php
 session_start(); // Start session if not already started
 
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // Set up the connection to the database
 $username = "team011";
 $password = "JAEWyfUXpzqank7scpWm";
@@ -16,11 +20,12 @@ if ($conn->connect_error) {
 }
 
 // Escape user input for security
-$email = $conn->real_escape_string($_POST['email']);
+$email = $conn->real_escape_string($_POST['reset_email']);
+$security_answer = $conn->real_escape_string($_POST['security_answer']);
 
-// Prepare SQL statement to check if email exists
-$stmt = $conn->prepare("SELECT * FROM Users_Details WHERE user_email = ?");
-$stmt->bind_param("s", $email);
+// Prepare SQL statement to check if email exists and security question answer is correct
+$stmt = $conn->prepare("SELECT user_email FROM Users_Details WHERE user_email = ? AND secure_ans = ?");
+$stmt->bind_param("ss", $email, $security_answer);
 
 // Execute the query
 $stmt->execute();
@@ -28,33 +33,20 @@ $stmt->execute();
 // Get the result
 $result = $stmt->get_result();
 
-// Check if the email exists in the database
+// Check if there is a matching record
 if ($result->num_rows > 0) {
-    // Generate a random reset token
-    $reset_token = bin2hex(random_bytes(32));
-
-    // Store the reset token in the database
-    $update_stmt = $conn->prepare("UPDATE Users_Details SET reset_token = ? WHERE user_email = ?");
-    $update_stmt->bind_param("ss", $reset_token, $email);
-    $update_stmt->execute();
-
-    // Send reset password email with a link containing the reset token
-    $reset_link = "http://team011.sci-project.lboro.ac.uk/PKMS/PKMS_Complete/reset_password.php" . $reset_token; // Change this to your reset password page URL
-    $to = $email;
-    $subject = "Reset Your Password";
-    $message = "To reset your password, please click the following link: $reset_link";
-    $headers = "From: your@example.com" . "\r\n" .
-               "Reply-To: your@example.com" . "\r\n" .
-               "X-Mailer: PHP/" . phpversion();
-
-    // Send the email
-    mail($to, $subject, $message, $headers);
-
-    // Respond with success message
-    echo json_encode(array("success" => true, "message" => "Reset password link sent to your email"));
+    // Store the user's email in a session variable
+    $_SESSION['reset_email'] = $email;
+    
+    // Redirect user to the reset password page
+    header("Location: resetPassword.php");
+    exit; // Stop further execution
 } else {
-    // Email not found in the database
-    echo json_encode(array("success" => false, "message" => "Email not found in the database"));
+    // If no matching record found, redirect back to forgot password page with error message
+    // $_SESSION['error_message'] = "Invalid email or security answer";
+    echo "Invalid email or security answer";
+    // header("Location: forgot_password.php");
+    exit; // Stop further execution
 }
 
 // Close the prepared statement

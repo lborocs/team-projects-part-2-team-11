@@ -66,12 +66,35 @@ if ($result->num_rows > 0) {
     // Verify the password
     if ($password == $storedPassword) {
         // Password is correct, handle successful login
+        $_SESSION['valid']=true;
+        $_SESSION['timeout']=time();
         $_SESSION['email'] = $email; // Store email in session for further use
-        echo json_encode(array("success" => true, "message" => "Login successful"));
+
+        
+        $role_query = "SELECT role FROM Users_Details WHERE TRIM(user_email) = ?";
+        $role_stmt = $conn->prepare($role_query);
+        $role_stmt->bind_param("s", $email);
+        $role_stmt->execute();
+        $role_result = $role_stmt->get_result();
+    
+        if ($role_result->num_rows > 0) {
+            $role_row = $role_result->fetch_assoc();
+            $role = $role_row['role'];
+
+            $_SESSION['role'] = $role;// store the role of the user for further use.
+    
+            // Include role information in the JSON response
+            echo json_encode(array("success" => true, "message" => "Login successful", "role" => $role));
+        } else {
+            // Role not found
+            echo json_encode(array("success" => true, "message" => "Login successful. Role not found"));
+        }
+    
+        $role_stmt->close();
     } else {
         // Password is incorrect
         echo json_encode(array("success" => false, "message" => "Incorrect password", "debug_info" => $debug_info));
-    }
+    }    
 } else {
     // User not found
     $debug_info = json_encode(array(

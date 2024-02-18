@@ -67,10 +67,10 @@
                 <span id="securityAnswerMessage" class="message"></span>
             </div>
 
-            <button type="submit" class="button" onclick="validateForm()">Register</button>
+            <button type="submit" class="button" onsubmit="validateForm()">Register</button>
         </form>
         <br>
-        <a href="login.html" style="color: #007bff;">Back To Log In</a>
+        <a href="signin.php" style="color: #007bff;">Back To Log In</a>
     </div>
 </div>
 <script>
@@ -91,55 +91,35 @@
         togglePasswordIcon.textContent = passwordInput.type === "password" ? "👁️" : "🔒";
     }
     function validateForm() {
-        // Display password validation message
-        var passwordMessage = document.getElementById("passwordMessage");
-        passwordMessage.textContent = ""; 
+    // Display password validation message
+    var passwordMessage = document.getElementById("passwordMessage");
+    passwordMessage.textContent = ""; 
 
-        // Display confirm password validation message
-        var confirmPasswordMessage = document.getElementById("confirmPasswordMessage");
-        var confirmPasswordInput = document.getElementById("confirmPassword");
-        confirmPasswordMessage.textContent = ""; 
+    // Display confirm password validation message
+    var confirmPasswordMessage = document.getElementById("confirmPasswordMessage");
+    var confirmPasswordInput = document.getElementById("confirmPassword");
+    confirmPasswordMessage.textContent = ""; 
 
-        // Get password input
-        var passwordInput = document.getElementById("password");
+    // Get password input
+    var passwordInput = document.getElementById("password");
 
-        // Check if passwords match
-        if (passwordInput.value !== confirmPasswordInput.value) {
-            confirmPasswordMessage.textContent = "Passwords do not match";
+    // Check if passwords match
+    if (passwordInput.value !== confirmPasswordInput.value) {
+        confirmPasswordMessage.textContent = "Passwords do not match";
+        return false; // Prevent form submission
+    }
+
+    // Check password complexity
+    var password = passwordInput.value;
+        if (!password.match(/[A-Z]/) || !password.match(/[0-9]/) || !password.match(/[^A-Za-z0-9]/) || password.length < 8) {
+            passwordMessage.textContent = "Password must contain at least one capital letter, one number, one symbol, and be at least 8 characters long";
             return false; // Prevent form submission
-        }
+}
 
-        // Add more validation logic if needed
-
-        // If everything is valid, you can proceed with form submission
-        // For example, you can remove the line below if you want to allow form submission
-        // return true;
-    }
-
-    function typewriterEffect() {
-        // initializing the character index to zero
-        let i = 0;
-        // Get the text from the element with the class 'typewriter'
-        let text = document.querySelector(".typewriter").innerText;
-        document.querySelector(".typewriter").innerText = "";
-
-        // this function types one character at a time
-        function type() {
-            if (i < text.length) {
-                document.querySelector(".typewriter").innerText += text.charAt(i);
-                // Increment the character index
-                i++;
-                setTimeout(type, 150); // speed of the typing
-            }
-        }
-
-        // Call the type function to start the typing effect
-        type();
-    }
-
-    // Calling the function when the window loads
-    window.onload = typewriterEffect;
-</script>
+    // If all checks pass, return true to allow form submission
+    return true;
+}
+ </script>
 
 
 

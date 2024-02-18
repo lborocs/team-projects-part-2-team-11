@@ -1,30 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reset Password</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container">
-        <div class="left-container">
-            <!-- Your logo or image -->
-            <img src="logo.png" alt="Logo">
-        </div>
-        <div class="right-container">
-            <form action="reset_password.php" method="post">
-                <div class="form-group">
-                    <label for="newPassword">New Password:</label>
-                    <input type="password" id="newPassword" name="newPassword" class="textbox" required>
-                </div>
-                <div class="form-group">
-                    <label for="confirmPassword">Confirm Password:</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" class="textbox" required>
-                </div>
-                <button type="submit" class="button">Reset Password</button>
-            </form>
-        </div>
-    </div>
-</body>
-</html>
+<?php
+session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// set up the connection to the database
+$username = "team011";
+$password = "JAEWyfUXpzqank7scpWm";
+$servername = "localhost";
+$dbname = "team011";
+
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+// Retrieve email and new password from the form
+$email = $_SESSION['reset_email'];
+$newPassword = $_POST['newPassword'];
+
+// Update password in the database
+$query = "UPDATE `Users_Details`
+          SET `Users_Details`.`password` = '$newPassword'
+          WHERE user_email = '$email' ";
+$result = mysqli_query($conn, $query);
+
+// Check if the update was successful
+if ($result) {
+    // Password updated successfully
+    echo "<script>alert('Password updated successfully.');</script>";
+    echo "<script>window.location.href = 'signin.php';</script>";
+    exit;
+} else {
+    // Password update failed
+    echo "<script>alert('Password update failed. Please try again.');</script>";
+}
+?>

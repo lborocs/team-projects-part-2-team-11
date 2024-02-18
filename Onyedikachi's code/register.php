@@ -13,7 +13,7 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-echo "Success";
+// echo "Success";
 
 // Process form data
 if ($_SERVER["REQUEST_METHOD"] == 'POST') {
@@ -30,27 +30,19 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
     $result = mysqli_stmt_get_result($stmt);
 
     if (mysqli_num_rows($result) > 0) {
-        // Perform SQL update if email exists
+        // If email exists, perform SQL update
         $updateQuery = "UPDATE Users_Details SET username=?, password=?, secure_ans=? WHERE user_email=?";
         $stmt = mysqli_prepare($conn, $updateQuery);
         mysqli_stmt_bind_param($stmt, "ssss", $username, $password1, $securityans, $email);
 
         if (mysqli_stmt_execute($stmt)) {
-            echo "Update successful";
+            echo "Registration successful";
         } else {
             echo "Error updating record: " . mysqli_error($conn);
         }
     } else {
-        // Perform SQL insert if email does not exist
-        $insertQuery = "INSERT INTO Users_Details (user_email, username, password, secure_ans) VALUES (?, ?, ?, ?)";
-        $stmt = mysqli_prepare($conn, $insertQuery);
-        mysqli_stmt_bind_param($stmt, "ssss", $email, $username, $password1, $securityans);
-        
-        if (mysqli_stmt_execute($stmt)) {
-            echo "Registration successful";
-        } else {
-            echo "Error inserting record: " . mysqli_error($conn);
-        }
+        // If email does not exist, deny registration
+        echo "Email not found in database. Registration denied.";
     }
 
     // Close the statement

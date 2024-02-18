@@ -1,3 +1,13 @@
+<?php
+session_start();
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+
+//session_register('email');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,79 +29,36 @@
             <br>
             <h1 class="typewriter">LOGIN</h1>
             
-            <form id="loginForm" action="login.php" method="post">
-                <div class="form-group">
-                    <label for="email">Email:</label>
+        <form id = "loginForm">
+            <div class="form-group">
+                    <!-- <label for="email">Email:</label> -->
                     <input type="email" placeholder="Email" class="textbox" id="email" name="email" required>
                 </div>
                 <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" placeholder="Password" class="textbox2" id="password" name="password" required>
-                    <br>
-                    <a href="forgot_password.html" style="color: #007bff;">Forgotten password?</a>
+                <!-- <label for="password">Password:</label> -->
+                <div style="position: relative;">
+                    <input type="password" name="password1" id="password" class="textbox"
+                           placeholder="Enter your password" required>
+                           
+                    <i id="togglePassword" class="eye-icon" onclick="togglePasswordVisibility()">👁️</i>
                 </div>
+                <span id="passwordMessage" class="message"></span>
+                <a href="forgotPassword.php" style="color: #007bff;">Forgotten password?</a>
+            </div>
                 <button type="submit" class="button" id="loginButton">Login</button>
+                <!-- <a href="forgotPassword.php" style="color: #007bff;">Forgotten password?</a> -->
                 <p>Don't have an account? <a href="registration.php" style="color: #007bff;">Register now</a></p>
             </form>
 
-            <script>
-                // document.getElementById("loginForm").addEventListener("submit", function(event) {
-                //     event.preventDefault(); // Prevent the form from submitting normally
-                    
-                //     var email = document.getElementById("email").value;
-                //     var password = document.getElementById("password").value;
+            <script> 
+             function togglePasswordVisibility() {
+                var passwordInput = document.getElementById("password");
+                var togglePasswordIcon = document.getElementById("togglePassword");
 
-                //     console.log(email);
-                //     console.log(password);
-
-                    // $.ajax({
-                    //     url:'login.php',
-                    //     type:'POST',
-
-                    //     data :{
-                    //         email : $('#email').val(),
-                    //         password : $('#password').val()
-                    //     },
-                    //     success : function(data){
-                    //         // Redirect the user to the dashboard or another page upon successful login
-                    //         console.log(data.success);
-                    //         if (data.success == true){
-                    //             alert('yes');
-                    //         }else {
-                    //             alert('no')
-                    //         }
-                    //         //window.location.href = "registration.php";
-                    //     },
-                    //     error : function(){
-                    //         alert("Error");
-                    //     }
-                    // });
-
-
-                    // $.ajax({
-                    //     url: 'login.php',
-                    //     type: 'POST',
-                    //     data: {
-                    //         email: $('#email').val(),
-                    //         password: $('#password').val()
-                    //     },
-                    //     success: function(data) {
-                    //         // Parse the JSON response
-                    //         var responseData = JSON.parse(data);
-
-                    //         // Check if login was successful
-                    //         if (responseData.success) {
-                    //             alert('Login successful');
-                    //             // Redirect to the dashboard or another page
-                    //             window.location.href = "dashboard.php";
-                    //         } else {
-                    //             alert('Login failed: ' + responseData.message);
-                    //         }
-                    //     },
-                    //     error: function() {
-                    //         alert("Error");
-                    //     }
-                     
+                passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+                togglePasswordIcon.textContent = passwordInput.type === "password" ? "👁️" : "🔒";
+               
+            }
                      document.getElementById("loginForm").addEventListener("submit", function(event) {
                         event.preventDefault(); // Prevent the form from submitting normally
 
@@ -116,12 +83,27 @@
 
                                 // Check if login was successful
                                 if (data.success) {
-                                    alert('Login successful');
-                                    // Redirect to the dashboard or another page
-                                    window.location.href = "registration.php";
+                                    // Display both the success message and the role information
+                                    alert('Login successful. Role: ' + data.role);
+                                    
+
+
+                                    //console.log(data.role);
+                                    //$_SESSION['email'] = $('#email').val()
+                                    //console.log($_SESSION['email']);
+
+
+                                    if (data.role == "Employee"){
+                                        window.location.href = "/PKMS/PKMS(Productivity)/ProductivityLanding.php";
+                                    } else if (data.role == "Manager"){
+                                        window.location.href = "/PKMS/PKMS(Manager)/ManagerLanding.php";
+                                    } else{
+                                        window.location.href = "/PKMS/PKMS(Manager)/admin.php";
+                                    }
                                 } else {
                                     alert('Login failed: ' + data.message);
                                 }
+
                             },
                             error: function() {
                                 alert("Error");
