@@ -5,231 +5,6 @@ body {
     font-family: Arial, sans-serif;
     position: relative;
   }
- /*i made a change*/
- 
-.header {
-background-color: #000000; 
-/* padding: 20px; */
-display: flex;
-justify-content: space-between;
-align-items: center;
-height:60px;
-}
-.white-div {
-background-color: #e8e7e7; 
-height:600px;
-width: 100%;
-}
-
-/* .heading {
-text-align: center;
-font-weight: bold;
-font-size: 40px;
--webkit-text-stroke: 2px orange; 
--webkit-text-fill-color: grey; 
-} */
-
-.main-content {
-padding: 20px;
-position: relative; /* Set the parent container to relative positioning */
-} 
-
-.tabs {
-/* Style your tabs bar here */
-display: flex;
-justify-content:center; 
-padding-bottom: 20px;
-padding-top:0;
-}
-
-.tab {
-font-size: 15px;
-font-weight: bold;
-padding: 10px 20px;
-background-color: #303030;
-border: none;
-color:#ffffff;
-cursor: pointer;
-margin-right: 10px; /* Adjust spacing between tabs */
-/* position: relative; */
-border-radius: 10px; /* Adjust the value to change the roundness */
-}
-.tab img {
-    margin-right: 8px; /* Adjust the space between the icon and the text */
-}
-
-.arrow {
-width: 3px;
-height: 3px;
-border-left: 10px solid transparent;
-border-right: 10px solid transparent;
-border-top: 10px solid #ffffff; /* Arrow color */
-position: absolute;
-left: 50%; /* Position the arrow horizontally centered */
-transform: translateX(-50%) translateY(-10px); /* Center the arrow horizontally and move it upwards */
-display: none; /* Hide the arrow initially */
-z-index: 1; /* Ensure the arrow is above other elements */
-}
-
-/* Style for the user icon button */
-.user-btn {
-border: none;
-background: none;
-cursor: pointer;
-display: flex;
-align-items: center;
-color: #333;
-font-size: 16px;
-white-space: nowrap;
-position:relative;
-}
-.user-icon {
-font-size: 24px;
-margin-right: 5px; /* Adjust margin as needed */
-white-space: nowrap;
-
-}
-
-.username {
-font-size: 16px; /* Adjust font size as needed */
-margin-right: 5px; /* Adjust margin as needed */
-white-space: nowrap;
-
-}
-nav{
-background: #1a1a1a;
-width: 100%;
-padding:10px 10%;
-display:flex;
-align-items: center;
-justify-content:space-between;
-position: relative;
-}
-.logo{
-    margin:20px;
-    display:flex;
-width:120px;
-align-items: center;
-}
-
-.logo img {
-    margin:10px;
-padding: 5px;
-max-width: 200px; /* Set the maximum width of the logo */
-max-height: 100px; /* Set the maximum height of the logo */
-/* Adjust these values as needed */
-align-items: center;
-}
-
-.user-pic{
-width:40px;
-border-radius: 50%;
-cursor: pointer;
-margin-left: 30px;
-}
-
-.sub-menu-wrap{
-position: absolute;
-top: calc(100%+10px); /* Position the submenu below the user image */
-right:-10%;
-transform: translateX(-50%); /* Center the submenu horizontally */
-width:300px;
-max-height:0px;
-overflow: hidden;
-transition:max-height 0.5s;
-z-index: 2;
-}
-
-@media screen and (max-width: 1640px) {
-    .sub-menu-wrap {
-      right: 0; /* Adjust as needed */
-      transform: translateX(0);
-      width: 250px; /* Adjust submenu width */
-    }
-  }
-.sub-menu-wrap.open-menu{
-max-height:350px;
-}
-
-
-.sub-menu{
-background:#fff;
-padding:10px;
-margin:10px;
-}
-
-.user-info{
-display:flex;
-align-items: center;
-}
-
-.user-info h3{
-font-weight: 500;
-}
-
-.user-info img{
-width: 60px;
-border-radius: 50%;
-margin-right:15px;
-}
-
-.sub-menu hr{
-border:0;
-height: 1px;
-width:100%;
-background:#ccc;
-margin:15px 0 10px;
-}
-
-.sub-menu-link{
-display:flex;
-align-items: center;
-text-decoration: none;
-color: #525252;
-margin:12px 0;
-}
-
-.sub-menu-link p{
-width: 100%;
-}
-
-.sub-menu-link img{
-width:40px;
-background:#e5e5e5;
-border-radius: 50%;
-padding:8px;
-margin-right: 15px;
-
-}
-.sub-menu-link span{
-font-size: 22px;
-transition:transform 0.5s;
-}
-
-.sub-menu-link:hover span{
-transform: translateX(5px);
-}
-.sub-menu-link:hover p{
-font-weight:600;
-}
-
-.tab:hover {
-background-color: #fff; /* Change background color on hover */
-color: #000; /* Change font color on hover */
-border-color: orange;
-border-width: 1px; /* Optionally set border width */
-border-style: solid; /* Optionally set border style */
-}
-
-.footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    background-color: rgb(0, 0, 0);
-    color: white;
-    text-align: center;
- }
 
 /*Productivity PAGE CSS*/
 .sidenav {
@@ -279,7 +54,6 @@ border-style: solid; /* Optionally set border style */
   display: block;
   border: #111;
   background-color: white;
-
   border-radius: 10px;
   margin: 5px;
 
@@ -300,3 +74,100 @@ border-style: solid; /* Optionally set border style */
   text-align: center;
   color: white;
   }
+
+  /* modal css */
+.modal {
+    font-size: small;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    width: 500px;
+    padding: 1.3rem;
+    min-height: 250px;
+    position: fixed; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    background-color: white;
+    border: 3px solid #000000;
+    border-radius: 15px;
+    z-index: 2;
+  }
+  
+.overlay {
+    position: fixed; /* Change position to fixed */
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+    z-index: 1;
+}
+
+.modal .flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.modal input {
+    padding: 0.7rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 0.9em;
+}
+
+.modal p {
+    font-size: 0.9rem;
+    color: #777;
+    margin: 0.4rem 0 0.2rem;
+}
+
+.hidden {
+    display: none;
+}
+
+.modal .btn-close {
+    padding: 0.5rem 0.7rem;
+    top: 10px; /* Adjust top position */
+    right: 10px; /* Adjust right position */
+    position: absolute;
+    background: #eee;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    font-weight: 600;
+}
+
+.input-field {
+    width: 250px; /* Adjust the width as needed */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+.submit-button {
+    align-items: center;
+    width: 100px; 
+    padding: 10px; 
+    border: none;
+    border-radius: 8px; 
+    background-color: #000000; 
+    color: white; 
+    font-size: 10px;
+    cursor: pointer;
+    margin: 0 auto; 
+    display: block; 
+}
+
+h3{
+    text-align: center;
+}
+  
+  /* modal css */

@@ -32,7 +32,7 @@
     ?>
 
     <!--PRODUCTIVITY PAGES-->
-    <div id="productivityPage">
+    <div id="productivitypage">
         <!-- ------------------------------------------Side bar--------------------------------------------------------- -->
         <!-- code for the side bar -->
         <div class="sidenav">
@@ -66,8 +66,6 @@
                             $ProjectID = $row[0];
                             echo "<a id='$ProjectID' class = 'projectB' href='#Project:$ProjectID' onclick = 'getProjectTasks(this.id)'> ".$row[1]."</a>";
                         }
-                    } else {
-                        echo "No Projects";
                     }
         
                 }catch(Exception $e){
@@ -89,7 +87,7 @@
                     //get all tasks
                     $projQuery = "SELECT project_id, `name`
                     FROM `Project` 
-                    WHERE team_leader = '$User' OR manager = '$User'
+                    WHERE team_leader = '$User'
                     ORDER BY project_id ASC;";
                     $allProjs = mysqli_query($conn, $projQuery);
 
@@ -100,10 +98,7 @@
                             $ProjectID = $row[0];
                             echo "<a id='$ProjectID' class = 'projectB' href='#Project:$ProjectID' onclick = 'getProjectTasks_Leader(this.id)'> ".$row[1]."</a>";
                         }
-                    } else {
-                        echo "No Projects";
                     }
-        
         
                 }catch(Exception $e){
                     //catch whatever exception is thrown first and display it's message.
@@ -134,8 +129,6 @@
                             while ($row = mysqli_fetch_array($allTasks)){
                                 echo "<a href = '#Task:$row[0]' onclick = 'getTaskDetails($row[0])'> task : [".$row[0]."] -> ".$row[1]."</a>";
                             }
-                        } else {
-                            echo "No Tasks";
                         }
             
                     }catch(Exception $e){
@@ -144,13 +137,13 @@
                     }
                 ?>
             </div>
-            <button class ='createTasksBtn submit-button'>Create Task</button>
+            <button class ="createTasksBtn" class="submit-button">Create Task</button>
         </div>
     
         <div id = "ArchTasks" class = "main" style="display: none;">
             <!--This will be the place where Archived task will be displayed.-->
             <h3>Archived Tasks</h3>
-            <div id = "listOfTasks_Arch">
+            <div class = "tasks">
                 <!-- <a href="#Task1">Task 1 - Complete</a>
                 <a href="#Task2">Task 2 - Complete</a> -->
                 <?php
@@ -171,8 +164,6 @@
                                 echo "<a href = '#Task:$row[0]' onclick = 'getTaskDetails($row[0])'> task : [".$row[0]."] -> ".$row[1]."</a>";
                                 //$possibleCountries = $row[0];
                             }
-                        } else {
-                            echo "No Tasks";
                         }
             
                     }catch(Exception $e){
@@ -193,16 +184,11 @@
 
         <div id = "LeadProjectTasks" class = "main" style="display: none;">
             <!--This will be the page where the project's tasks will be displayed.-->
-            <h3>Project Tasks</h3>
+            <h3>Project  Tasks</h3>
             <div id = "leadProjTasks" class = "tasks">
             <!-- This is where the project's task list will be displayed -->
             </div>
-            <div style = "display : flex; align : center;">
-                <button class ='createTasksBtn submit-button'>Create Task</button>
-                <button class = 'filterB submit-button' >Filter</button>
-                <button class = 'refresh submit-button' >Refresh</button>
-            </div>
-            
+            <button class ="createTasksBtn" class="submit-button">Create Task</button>
         </div>
     
 
@@ -245,8 +231,6 @@
         </div>
         <input id = "Task_ID" name = "Task_ID" type="hidden">
         <input id = "Permission" name = "Permission" type="hidden"> 
-        <input id = "Deleteable" name = "Deleteable" type="hidden"> 
-        <input id = "Update" name = "Update" type="hidden">
         <div id = "taskInfo"></div>
     </section>
     <!-- End of Task Modal -->
