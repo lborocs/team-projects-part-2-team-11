@@ -146,99 +146,77 @@ function sendPostToDB(topicID)
 }
 
 
- $(document).ready(function () {
-            $("#createTopicForm").submit(function (event) {
-                event.preventDefault()
-                const topic =  $("#topicTitle").val();
-                  let topicid = generateTopicId(topic);
-                   
+    $(document).ready(function () {
+        $("#createTopicForm").submit(function (event) {
+            event.preventDefault()
+            const topic =  $("#topicTitle").val();
+            let topicid = generateTopicId(topic);
+            $.ajax ({
+                url: "getPermissions.php",
+                type: "GET",
+                //sessions needed here
+                data: {email: email},
+                dataType: 'json',
+                success: function(response) {
+        		console.log("Success response:", response);
+                if (response.permissions[0] === 1){
                     $.ajax({
-                    url: "findTopic.php",
-                    type: "GET",
-		            dataType: 'json',
-                    success: function (response) {
-                      console.log(response);
-                        let idExists=false;
-                        for (let i=0;i<response.length;i++)
-                       
-                        {
-                            if(topicid===response[i])
-                            {
-                                idExists=true;
-                                break;
+                        url: "findTopic.php",
+                        type: "GET",
+                        dataType: 'json',
+                        success: function (response) {
+                            console.log(response);
+                            let idExists=false;
+                            for (let i=0;i<response.length;i++){
+                                if(topicid===response[i]){
+                                    idExists=true;
+                                    break;
+                                }
+                                }if(idExists===false){
+                                    //call creation function
+                                    sendPostToDB(topicid)
+                                }
+                                else{
+                                    let unique=false
+                                    let newIDValid=true
+                                    let index=0
+                                    let NewTopicID=topicid+index
+                                    while (!unique) {
+                                        newIDValid = true; // Reset the flag for each iteration
+                                        for (let i = 0; i < response.length; i++) {
+                                            if (NewTopicID === response[i]) {
+                                                newIDValid = false; // Found a match, ID is not unique
+                                                break; // Exit the for loop
+                                            }
+                                        }
+                                        if (!newIDValid) {
+                                            index++; // Increment index if the ID was not unique
+                                            NewTopicID = topicid + index; // Generate a new ID
+                                        } else {
+                                            unique = true; // If no match was found, the ID is unique
+                                        }
+                                    }//while
+                                    console.log(NewTopicID)
+                                    sendPostToDB(NewTopicID)
+                                }//else
+                            },
+                            error: function (e) {
+                                console.log(e.message);
                             }
-                        }
-                        if(idExists===false)
-                        {
-                            //call creation function
-                            sendPostToDB(topicid)
-                        }
-                        else{
-                            let unique=false
-                            let newIDValid=true
-                            let index=0
-                            let NewTopicID=topicid+index
-                 while (!unique) {
-    newIDValid = true; // Reset the flag for each iteration
-    for (let i = 0; i < response.length; i++) {
-        if (NewTopicID === response[i]) {
-            newIDValid = false; // Found a match, ID is not unique
-            break; // Exit the for loop
-        }
-    }
-
-    if (!newIDValid) {
-        index++; // Increment index if the ID was not unique
-        NewTopicID = topicid + index; // Generate a new ID
-    } else {
-        unique = true; // If no match was found, the ID is unique
-    }
-}//while
-
-   console.log(NewTopicID)
-    sendPostToDB(NewTopicID)
- 
-                            }//else
-                  
-                    },
-                    error: function (e) {
-                        console.log(e.message);
-                    }
-                });
-
-                });
-
+                        });
+                    }else{
+                        alert("ERROR: Denied access. Speak to a manager");
+                        closePopup();
+                    };
+                    }});
+            });
         });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
 
 
 </script>
 
 
-    <script>
+<script>
 $(document).ready(function() {
     $("#searchForm").submit(function(event) {
         event.preventDefault(); // Prevent the form from submitting through the browser
@@ -413,12 +391,12 @@ $(document).ready(function() {
                         <input type="text" id="postTitle" name="postTitle" required style="width: 50vh;">
                         <textarea id="postContent" name="postContent" required style="height:30vh ;width:30vh">
                         </textarea>
-                        <div  class="dropdown-container">
+                        <!-- <div  class="dropdown-container">
                             <select id="dropdownMenuTopic">
                                 <option value="allPosts">Technical</option>
                                 <option value="mostLiked">Non-Technical</option>
                             </select>
-                        </div>
+                        </div> -->
                         <div class="createTopicButton-container">
                             <button type="submit" id="createTopicButton">Create</button>
                             <button type="button" id="cancelTopicButton" onclick="closePopup()">Cancel</button>
@@ -466,58 +444,6 @@ $(document).ready(function() {
     const arrow = document.querySelector('.arrow');
     const contents = document.querySelectorAll('.content'); // Get all content divs
 
-    function positionArrow() {
-        const activeTab = document.querySelector('.tab.active');
-        if (activeTab) {
-            const tabRect = activeTab.getBoundingClientRect();
-            const arrowWidth = arrow.offsetWidth;
-            arrow.style.left = `${tabRect.left + (activeTab.offsetWidth - arrowWidth) / 1.7}px`;
-        }
-    }
-
-    // tabs.forEach((tab, index) => {
-    //     tab.addEventListener('click', function () {
-    //         tabs.forEach(t => t.classList.remove('active'));
-    //         this.classList.add('active');
-    //         contents.forEach(content => (content.style.display = 'none'));
-    //         contents[index].style.display = 'block';
-    //         arrow.style.display = 'block';
-    //         positionArrow();
-    //     });
-    // });
-//     tabs.forEach((tab, index) => {
-//     tab.addEventListener('click', function () {
-//         if (index === 2) { 
-//             window.location.href = 'standard_index.html'; 
-//             return;
-//         } 
-//         if (index === 0) {
-//             window.location.href = 'manage.html';
-//             return;
-//         }
-//         if (index === 3) { 
-//             window.location.href = 'reminders.html'; 
-//             return;
-//         }
-//         if (index === 4) { 
-//             window.location.href = 'invite.html'; 
-//             return;
-//         }
-//         tabs.forEach(t => t.classList.remove('active'));
-//         this.classList.add('active');
-//         contents.forEach(content => (content.style.display = 'none'));
-//         contents[index].style.display = 'block';
-//         arrow.style.display = 'block';
-//         positionArrow();
-//     });
-// });
-
-//     // Handle window resize event
-//     window.addEventListener('resize', function () {
-//         if (arrow.style.display === 'block') {
-//             positionArrow();
-//         }
-//     });
 
     function openPopup() {
         document.getElementById('overlay').style.display = 'block';

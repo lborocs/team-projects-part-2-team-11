@@ -169,9 +169,10 @@ $role = $_SESSION['role'];
                     //returns array of emails
                     // use emails to send emails to say the post is updated
                     if(response.emails.length>0){
+                        let emailsString = response.emails.map(entry => entry.user_email).join(',');
                         let subject= "Post Update for "+title;
                         let newContent="Here is the updated post: %0A"+content +" %0A Yours Sincerely %0A Post Owner";
-                        window.open('mailto:'+response.emails+'?subject='+subject+'&body='+newContent, '_self');
+                        window.open('mailto:'+emailsString+'?subject='+subject+'&body='+newContent, '_self');
                     }
                 } else if (response.status === 'failed') {
                     //error message
@@ -204,7 +205,7 @@ $role = $_SESSION['role'];
                 console.log('success');
                 alert('Your new edited post has been saved.');
                 let text = "Would you like to update users subscribed to your post";
-                console.log(confirm(text));
+                
                 if (confirm(text) === true) {
                     getSubscribedUsers(topic_ID,postnum , title,content);
                 }
@@ -272,7 +273,6 @@ function deletePost(element) {
 <script>
     function fetchAndUpdateMyPosts(pagenum) {
         //sessions needed here
-        //let email="olivia.rodriguez@makeitall.org.uk";
 		let filter="default";
         $.ajax({
             url: "posts.php",
@@ -303,7 +303,6 @@ function deletePost(element) {
     document.addEventListener('DOMContentLoaded', function() {
         const selectElement = document.getElementById('dropdownMenuPage');
         //sessions needed here
-        //let email="olivia.rodriguez@makeitall.org.uk";
         let filter="default";
         selectElement.addEventListener('change', function() {
         let pagenum= this.value;

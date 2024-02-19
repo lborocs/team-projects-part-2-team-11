@@ -15,18 +15,14 @@ $password = "JAEWyfUXpzqank7scpWm";
 $dbname = "team011";
 
 $conn = mysqli_connect($host, $username, $password, $dbname);
-if ($conn){
-    echo("here else");
-}
+
 if (!$conn) {
     echo json_encode(['status' => 'error', 'message' => 'Connection failed: ' . mysqli_connect_error()]);
-    echo("here conn");
     exit;
 }
 
 if($operation=="increment")
 {
-    echo("here");
     $sql = "UPDATE Posts SET update_count = update_count+1 ,date_updated= ? WHERE Topic_ID = ? AND PostNo = ?;";
 }
 else{

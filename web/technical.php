@@ -149,70 +149,71 @@ function sendPostToDB(topicID)
 }
 
 
- $(document).ready(function () {
-            $("#createTopicForm").submit(function (event) {
-                event.preventDefault()
-                const topic =  $("#topicTitle").val();
-                  let topicid = generateTopicId(topic);
-                   
+$(document).ready(function () {
+        $("#createTopicForm").submit(function (event) {
+            event.preventDefault()
+            const topic =  $("#topicTitle").val();
+            let topicid = generateTopicId(topic);
+            $.ajax ({
+                url: "getPermissions.php",
+                type: "GET",
+                //sessions needed here
+                data: {email: email},
+                dataType: 'json',
+                success: function(response) {
+        		console.log("Success response:", response);
+                if (response.permissions[0] === 1){
                     $.ajax({
-                    url: "findTopic.php",
-                    type: "GET",
-		            dataType: 'json',
-                    success: function (response) {
-                      console.log(response);
-                        let idExists=false;
-                        for (let i=0;i<response.length;i++)
-                       
-                        {
-                            if(topicid===response[i])
-                            {
-                                idExists=true;
-                                break;
+                        url: "findTopic.php",
+                        type: "GET",
+                        dataType: 'json',
+                        success: function (response) {
+                            console.log(response);
+                            let idExists=false;
+                            for (let i=0;i<response.length;i++){
+                                if(topicid===response[i]){
+                                    idExists=true;
+                                    break;
+                                }
+                                }if(idExists===false){
+                                    //call creation function
+                                    sendPostToDB(topicid)
+                                }
+                                else{
+                                    let unique=false
+                                    let newIDValid=true
+                                    let index=0
+                                    let NewTopicID=topicid+index
+                                    while (!unique) {
+                                        newIDValid = true; // Reset the flag for each iteration
+                                        for (let i = 0; i < response.length; i++) {
+                                            if (NewTopicID === response[i]) {
+                                                newIDValid = false; // Found a match, ID is not unique
+                                                break; // Exit the for loop
+                                            }
+                                        }
+                                        if (!newIDValid) {
+                                            index++; // Increment index if the ID was not unique
+                                            NewTopicID = topicid + index; // Generate a new ID
+                                        } else {
+                                            unique = true; // If no match was found, the ID is unique
+                                        }
+                                    }//while
+                                    console.log(NewTopicID)
+                                    sendPostToDB(NewTopicID)
+                                }//else
+                            },
+                            error: function (e) {
+                                console.log(e.message);
                             }
-                        }
-                        if(idExists===false)
-                        {
-                            //call creation function
-                            sendPostToDB(topicid)
-                        }
-                        else{
-                            let unique=false
-                            let newIDValid=true
-                            let index=0
-                            let NewTopicID=topicid+index
-                 while (!unique) {
-    newIDValid = true; // Reset the flag for each iteration
-    for (let i = 0; i < response.length; i++) {
-        if (NewTopicID === response[i]) {
-            newIDValid = false; // Found a match, ID is not unique
-            break; // Exit the for loop
-        }
-    }
-
-    if (!newIDValid) {
-        index++; // Increment index if the ID was not unique
-        NewTopicID = topicid + index; // Generate a new ID
-    } else {
-        unique = true; // If no match was found, the ID is unique
-    }
-}//while
-
-   console.log(NewTopicID)
-    sendPostToDB(NewTopicID)
- 
-                            }//else
-                  
-                    },
-                    error: function (e) {
-                        console.log(e.message);
-                    }
-                });
-
-                });
-
+                        });
+                    }else{
+                        alert("ERROR: Denied access. Speak to a manager");
+                        closePopup();
+                    };
+                    }});
+            });
         });
-
 
 
 </script>

@@ -86,7 +86,6 @@ function favouritePost(element) {
     // You can access the ID of the element with element.id
     console.log("Element ID:", element.id); // For debugging
     //sessions needed here
-    //let email = "olivia.rodriguez@makeitall.org.uk";
     let parts = element.id.split("-");
     let topic_ID = parts[0];
     let postnum = parts[1];
@@ -150,13 +149,13 @@ function favouritePost(element) {
         const updateImg = element.getElementsByTagName('img')[0];
         console.log(email);
         $.ajax({
-            url: "getPermissions.php",
+            url: "canUpdate.php",
             type: "GET",
-            data: {email: email},
+            data: {email: email,topic_ID:topic_ID,postnum:postnum},
             dataType: 'json',
             success: function(response) {
-            if (response.permissions[0] === 1){
-            console.log(response);
+            if (response.post[0] !== email){
+                console.log(response);
                 $.ajax({
                     url: "update.php",
                     type: "GET",
@@ -177,7 +176,7 @@ function favouritePost(element) {
                 });
             } else{
                 console.log(response)
-                alert("ERROR: You do not have permission to update post. Contact Manager for further information.");
+                alert("ERROR: You can not subscribe to your own post");
                 closePopup()
             }
             closePopup()
@@ -193,15 +192,12 @@ function favouritePost(element) {
         let parts = element.id.split("-");
         let topic_ID = parts[0];
         let postnum = parts[1];
-        console.log("hi friend");
         $.ajax({
             url: "changeUpdateCount.php",
             type: "POST",
             data: {operation:"increment",topic_ID: topic_ID, postnum:postnum },
             success: function (response) {
                 console.log("Success response:", response);
-                console.log("hi");
-                alert(response);
             },
             error: function (xhr, status, error) {
                 console.log("Error response:", xhr.responseText);
@@ -220,7 +216,6 @@ function favouritePost(element) {
             data: {operation:"decrement", topic_ID: topic_ID, postnum:postnum },
             success: function (response) {
                 console.log("Success response:", response);
-                alert(response);
             },
             error: function (xhr, status, error) {
                 console.log("Error response:", xhr.responseText);
@@ -410,24 +405,37 @@ function generateTopicId(topicName) {
 		let topicid = generateTopicId(topic);
 		let title = $("#postTitle").val();
                 event.preventDefault();
-                $.ajax({
-    			url: "create.php",
-    			type: "POST",
-                //sessions needed here
-    			data: {content: post, email: email,topic: topic, category: category, topicid: topicid, title: title},
-    			success: function(response) {
+                $.ajax ({
+                    url: "getPermissions.php",
+                    type: "GET",
+                    //sessions needed here
+                    data: {email: email},
+                    dataType: 'json',
+                    success: function(response) {
         			console.log("Success response:", response);
-        			alert(response); // Or display this message in your HTML
-				    fetchAndUpdatePosts(document.getElementById("dropdownMenuPage").value);
-				    closePopup()
-    			},
-    			error: function(xhr, status, error) {
-        			console.log("Error response:", xhr.responseText);
-        			
-    			} 
-});;
-            });
-        });
+                    if (response.permissions[0] === 1){
+                        $.ajax({
+                            url: "create.php",
+                            type: "POST",
+                            //sessions needed here
+                            data: {content: post, email: email,topic: topic, category: category, topicid: topicid, title: title},
+                            success: function(response) {
+                                console.log("Success response:", response.permissions[0]);
+                                alert(response); // Or display this message in your HTML
+                                fetchAndUpdatePosts(document.getElementById("dropdownMenuPage").value);
+                                closePopup()
+                            },
+                            error: function(xhr, status, error) {
+                                console.log("Error response:", xhr.responseText);  
+    			            } 
+                        });
+                    }else{
+                        alert("ERROR: Denied access. Speak to a manager");
+                        closePopup();
+                    };
+                    }});
+        })
+    });
 
         $(document).ready(function () {
             const topic = "<?php echo $topic; ?>";
