@@ -16,7 +16,7 @@ $('#ManageButton').click(function (){
     window.location.href = "/PKMS(Manager)/ManagerLanding.php";
 });
 
-//manger page essensials
+//manager page essensials
 $('#ProdButton').click(function (){
     window.location.href = "/PKMS(Productivity)/ProductivityLanding.php";
 });
