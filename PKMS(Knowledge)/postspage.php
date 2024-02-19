@@ -24,7 +24,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : '';
 <script>
 var email = '<?php echo $email?>';
 
-function createPostElement(id, title, content,email,date,i) {
+function createPostElement(id, title, content,email,updates,date,i) {
     				const postDiv = document.createElement("div");
     				postDiv.setAttribute("id", id);
     				postDiv.setAttribute("class", "posts");
@@ -150,44 +150,90 @@ function favouritePost(element) {
 
 <script>
     function updatePost(element) {
-    // You can access the ID of the element with element.id
-    console.log("Element ID:", element.id); // For debugging
-    //sessions needed here
-    //let email = "olivia.rodriguez@makeitall.org.uk";
-    let parts = element.id.split("-");
-    console.log(parts);
-    let topic_ID = parts[0];
-    console.log(parts[0]);
-    let postnum = parts[1];
-    console.log(parts[1]);
-    const updateImg = element.getElementsByTagName('img')[0];
-    console.log("topic id:", topic_ID);
-    $.ajax({
-        url: "update.php",
-        type: "GET",
-        data: { email: email, topic_ID: topic_ID, postnum: postnum },
-        dataType: 'json',
-        success: function (response) {
-            if (response.status === 'added') {
-                updateImg.src = "images/bell.png";
-            } else if (response.status === 'removed') {
-                updateImg.src = "images/noUpdate.png";
-            }
-        },
-        error: function (e) {
-            console.log("Error:", e.responseText); // Note: Changed to e.responseText for more detailed error information
-        }
-    });
-}
-
-    function isUpdate(element) {
-        //sessions needed here
-        //let email = "olivia.rodriguez@makeitall.org.uk";
         let parts = element.id.split("-");
         let topic_ID = parts[0];
         let postnum = parts[1];
-        console.log(topic_ID);
-        console.log(postnum);
+        const updateImg = element.getElementsByTagName('img')[0];
+        $.ajax({
+            url: "getPermissions.php",
+            type: "GET",
+            //sessions needed here
+            data: {email: email},
+            dataType: 'json',
+            success: function(response) {
+            if (response === 1)
+                { $.ajax({
+                    url: "update.php",
+                    type: "GET",
+                    data: { email: email, topic_ID: topic_ID, postnum: postnum },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.status === 'added') {
+                            updateImg.src = "images/bell.png";
+                            incrementUpdateCount(element);
+                        } else if (response.status === 'removed') {
+                            updateImg.src = "images/noUpdate.png";
+                            decrementUpdateCount(element);
+                        }
+                    },
+                    error: function (e) {
+                        console.log("Error:", e.responseText); // e.responseText for detailed error information
+                    }
+                });
+            } else{
+                alert("ERROR: You do not have permission to update post. Contact Manager for further information.");
+                closePopup()
+            }
+            closePopup()
+            },
+            error: function(xhr, status, error) {
+                console.log("Error response:", xhr.responseText);
+                alert("Error: " + xhr.responseText); // Or display this message in your HTML
+            }
+        });
+    }
+
+    function incrementUpdateCount(element) {
+        let parts = element.id.split("-");
+        let topic_ID = parts[0];
+        let postnum = parts[1];
+        $.ajax({
+            url: "editPostUpdate.php",
+            type: "POST",
+            data: {operation:"increment",topic_ID: topic_ID, postnum:postnum },
+            success: function (response) {
+                console.log("Success response:", response);
+                alert(response);
+            },
+            error: function (xhr, status, error) {
+                console.log("Error response:", xhr.responseText);
+            }
+        });
+    }
+
+
+    function decrementUpdateCount(element) {
+        let parts = element.id.split("-");
+        let topic_ID = parts[0];
+        let postnum = parts[1];
+        $.ajax({
+            url: "changeUpdate.php",
+            type: "POST",
+            data: {operation:"decrement", topic_ID: topic_ID, postnum:postnum },
+            success: function (response) {
+                console.log("Success response:", response);
+                alert(response);
+            },
+            error: function (xhr, status, error) {
+                console.log("Error response:", xhr.responseText);
+            }
+        });
+    }
+
+    function isUpdate(element) {
+        let parts = element.id.split("-");
+        let topic_ID = parts[0];
+        let postnum = parts[1];
         const updateButton = element;
         $.ajax({
             url: "checkUpdate.php",
@@ -208,10 +254,11 @@ function favouritePost(element) {
                 }
             },
             error: function (e) {
-                console.log("Error:", e.responseText); // Note: Changed to e.responseText for more detailed error information
+                console.log("Error:", e.responseText); // e.responseText for more detailed error information
             }
         });
     }
+
 </script>
 
     <script>
@@ -259,7 +306,8 @@ function favouritePost(element) {
                             titles.push(title);
 			    let date = postsData[i].date_updated;
 			    let uname = postsData[i].username;
-			    createPostElement(id, title, content,uname, date,i)
+                let updates = postsData[i].update_count;
+			    createPostElement(id, title, content,uname,updates,date,i)
                		    }
                     },
                     error: function (e) {
@@ -325,7 +373,7 @@ function fetchAndUpdatePosts() {
             document.getElementById("posts").innerHTML = "";
             for (let i = 0; i < postsData.length; i++) {
                 // Call 'createPostElement' for each post
-                createPostElement(postsData[i].post_ID, postsData[i].title, postsData[i].content,postsData[i].username,postsData[i].date_updated, i);
+                createPostElement(postsData[i].post_ID, postsData[i].title, postsData[i].content,postsData[i].username,postsData[i].date_updated,postsData[i].update_count, i);
             }
         },
         error: function (e) {
