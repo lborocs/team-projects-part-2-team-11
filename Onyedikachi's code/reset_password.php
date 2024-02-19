@@ -21,11 +21,13 @@ if (!$conn) {
 $email = $_SESSION['reset_email'];
 $newPassword = $_POST['newPassword'];
 
+$hash = password_hash($newPassword,PASSWORD_DEFAULT);
+
 // Update password in the database
 $query = "UPDATE `Users_Details`
-          SET `Users_Details`.`password` = '$newPassword'
+          SET `Users_Details`.`password` = '$hash'   
           WHERE user_email = '$email' ";
-$result = mysqli_query($conn, $query);
+$result = mysqli_query($conn, $query); //Execute the update query
 
 // Check if the update was successful
 if ($result) {

@@ -22,6 +22,9 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
     $password1 = $_POST['password1']; // Store plaintext password
     $securityans = $_POST['securityAnswer'];
 
+    $plaintext_password = $password1;
+    $hash = password_hash($plaintext_password,PASSWORD_DEFAULT);
+
     // Check if the email already exists
     $checkEmailQuery = "SELECT * FROM Users_Details WHERE user_email = ?";
     $stmt = mysqli_prepare($conn, $checkEmailQuery);
@@ -33,16 +36,19 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
         // If email exists, perform SQL update
         $updateQuery = "UPDATE Users_Details SET username=?, password=?, secure_ans=? WHERE user_email=?";
         $stmt = mysqli_prepare($conn, $updateQuery);
-        mysqli_stmt_bind_param($stmt, "ssss", $username, $password1, $securityans, $email);
+        mysqli_stmt_bind_param($stmt, "ssss", $username, $hash, $securityans, $email);
 
         if (mysqli_stmt_execute($stmt)) {
-            echo "Registration successful";
+            echo '<script>alert("Registration successful!");</script>';
+            header("Location: signin.php"); //after a successful login, it redirects you to the login page
+            exit();
         } else {
             echo "Error updating record: " . mysqli_error($conn);
         }
     } else {
         // If email does not exist, deny registration
-        echo "Email not found in database. Registration denied.";
+        echo '<script>alert("Email not found in datbase, Registration denied");</script>';
+        // header("Location: registration.php");
     }
 
     // Close the statement
