@@ -1,7 +1,8 @@
 //functions that will collect the specified user data
 //make them usable for the the websites
 var mains = document.getElementsByClassName("main");
-User_ = 'frederick.umah@makeitall.org.uk';
+
+//set the initial permissions and flags for the page on load up.
 updateAssignedTo(null);
 permission = 'false';
 deleteable = 'false';
@@ -14,6 +15,7 @@ document.getElementById("CurrentTasksB").onclick = function() {
   state = 'currentTasks';
   updateAssignedTo(null);
 
+  //hide all other 'main' divs
   Array.from(mains).forEach(element => {
       if (element.id != "CurTasks"){
         element.style.display = "none";
@@ -28,6 +30,7 @@ document.getElementById("ArchivedTasksB").onclick = function() {
   deleteable = 'true';
   state = 'ArchTasks';
 
+  //hide all other 'main' divs
   Array.from(mains).forEach(element => {
       if (element.id != "ArchTasks"){
         element.style.display = "none";
@@ -37,7 +40,7 @@ document.getElementById("ArchivedTasksB").onclick = function() {
   $('#listOfTasks_Arch').load(document.URL +  ' #listOfTasks_Arch');
 }
 
-////code for each project////
+////code for each project (not projects that I Lead).////
 function getProjectTasks(id){
   var projID = id;
   $('#Project_ID').val(projID);
@@ -45,6 +48,7 @@ function getProjectTasks(id){
   deleteable = 'false';
   state = 'project';
 
+  //hide all other 'main' divs
   Array.from(mains).forEach(element => {
     if (element.id != "ProjectTasks"){
       element.style.display = "none";
@@ -52,6 +56,7 @@ function getProjectTasks(id){
   });
   document.getElementById("ProjectTasks").style.display = "block";
 
+  //load the contents for the project contents div.
   $.ajax({
     url:"ProjectsTasks.php",
     type: "POST",
@@ -79,6 +84,7 @@ function getProjectTasks_Leader(id){
   $('#Project_ID').val(projID);
   updateAssignedTo(projID)
 
+  //hide all the other divs
   Array.from(mains).forEach(element => {
     if (element.id != "LeadProjectTasks"){
       element.style.display = "none";
@@ -86,6 +92,7 @@ function getProjectTasks_Leader(id){
   });
   document.getElementById("LeadProjectTasks").style.display = "block";
 
+  //load the contents for the project i lead contents div.
   $.ajax({
     url:"ProjectsTasks_Leader.php",
     type: "POST",
@@ -103,8 +110,9 @@ function getProjectTasks_Leader(id){
   });
 }
 
-//// code for the create tasks model ////
+//// code for the create tasks modal ////
 $(".createTasksBtn").click(openModal);
+//open the create tasks modal
 function openModal() {
   $('#createTaskModal').removeClass("hidden");
   $('.overlay').removeClass("hidden");
@@ -113,6 +121,7 @@ function openModal() {
   $("#Overlay").css("display", "block");
 };
 
+//open the task details modal
 function openTaskModal() {
   $('#taskModal').removeClass("hidden");
   $('.overlay').removeClass("hidden");
@@ -121,6 +130,7 @@ function openTaskModal() {
   $("#Overlay").css("display", "block");
 };
 
+//close all modals
 function closeModal() {
   $('#createTaskForm').trigger("reset");
 
@@ -138,9 +148,9 @@ $(document).on("keydown", function (e) {
 });
 
 //// code to create task////
-$('#SubmitB').click(function(){  
+$('#SubmitB').on('click', function(){  
 
-  // Validate project name
+  // Validate task name
   if ($.trim($('#taskTitle').val()) == "") {
     alert("Please enter a Task name.");
     return false;
@@ -181,21 +191,14 @@ $('#SubmitB').click(function(){
     },
     success: function(data){
       closeModal();
-      if ($('#Project_ID').val() == '0'){
-        $('#CurrentTasksB').click();
-        //$('#listOfTasks').load(document.URL +  ' #listOfTasks');
-      }else{
-        $('.sidenav').load(document.URL +  ' .sidenav');
-        //$('#listOfTasks').load(document.URL +  ' #listOfTasks');
-        getProjectTasks_Leader($('#Project_ID').val());
-      }
-      
+      updateArea(state);
+
       $('#createTaskForm').trigger("reset");
-      //alert("Task Created - Refresh page to access the new task");
     } ,
   });
 });
 
+//update the assignedto section on the create task modal.
 function updateAssignedTo(ID){
   $('#Project_ID').val(ID);
   $.ajax({
@@ -215,12 +218,12 @@ function updateAssignedTo(ID){
   });
 }
 
-////When a task is created////
+////When a task is clicked it should show the tasks details////
+//write function to get task details
 function getTaskDetails(id){
   var taskID = id;
   openTaskModal();
   $('#Task_ID').val(id);
-  User_ = 'frederick.umah@makeitall.org.uk';
 
   $.ajax({
     url:"GetTaskDetails.php",
@@ -240,7 +243,7 @@ function getTaskDetails(id){
   });
 }
 
-////updateing a task////
+////updating a task////
 function updateTask(taskID,string){
   $('#Update').val(string)
   console.log($('#Update').val());
@@ -260,13 +263,14 @@ function updateTask(taskID,string){
       Project_ID : $('#Project_ID').val()
     },
     success: function(data){
-      updateArea(state)
+      updateArea(state);
       closeModal();
       alert('Task Updated :)');
     },
   });
 }
 
+//when the task has been updated reload the page behind it.
 function updateArea(state){
   if (state == "currentTasks"){
     $('#CurrentTasksB').click();
@@ -280,7 +284,7 @@ function updateArea(state){
 }
 
 
-//// code to create task////
+//// code to filter button.////
 $('.filterB').click(function(){
   
   $.ajax({
@@ -301,7 +305,7 @@ $('.filterB').click(function(){
   
 });
 
-//// code to create task////
+//// code to refresh the projects that i lead section.////
 $('.refresh').click(function(){
   var all = '';
   $.ajax({
@@ -320,3 +324,12 @@ $('.refresh').click(function(){
     }
   });
 });
+
+//this is to highlight the link clicked on the navBar
+$('.sidenav a').click(function (){
+  $('.sidenav a').css("background-color","");
+  $('.sidenav a').css("color","");
+
+  $(this).css("background-color","orange");
+  $(this).css("color","white");
+})

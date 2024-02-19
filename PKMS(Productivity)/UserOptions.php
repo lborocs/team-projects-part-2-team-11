@@ -13,18 +13,17 @@
         $ID = $_POST['Project_ID'];
     } else {
         $User = '';
+        $ID = '';
+        
     }
 
-    $User = 'frederick.umah@makeitall.org.uk';
-
-    //echo '<option value="">Select User</option>';
-
+    //if the user is creating a task for themselves allow them only the option to assign that task to themselves
     if ($ID == null){
         echo '<option value="'.$User.'">yourself</option>';
     } else {
         echo '<option value="">Select User</option>';
 
-        //get all the users
+        //get all the users that are not the current user
         $employeeQuery = "SELECT user_email, username 
         FROM `Users_Details` 
         WHERE role = 'Employee' and username IS NOT NULL;";

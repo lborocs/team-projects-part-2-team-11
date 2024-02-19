@@ -1,0 +1,202 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #3d3d3d; 
+  margin: 0;
+  font-family: Arial, sans-serif;
+  position: relative;
+}
+
+.sidenav {
+  height: 90%;
+  width: 25%;
+  position: fixed;
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin-top: 10px;
+  text-align: center;
+  display: block;
+  float: left;
+}
+
+.sidenav div,.main div {
+  margin: 20px;
+  border-radius: 10px;
+  background-color: #303030;
+  border: none;
+  color:#ffffff;
+  cursor: pointer;
+  padding: 15px;
+  overflow-y: auto;
+  text-align: center;
+  table-layout: auto;
+  margin: 10px;
+  border-radius: 10px;
+}
+.main a {
+  padding: 10px 10px 10px 10px;
+  text-decoration: none;
+  font-size: 10px;
+  color: #000000;
+  display: block;
+  border: #000000;
+  background-color: #ffffff;
+  border-radius: 10px;
+  margin: 5px;
+}
+.main a:hover {
+  color: rgb(255, 255, 255);
+  background-color: orange;
+}
+.sidenav a{
+  padding: 10px 10px 10px 10px;
+  text-decoration: none;
+  font-size: 10px;
+  color: #111;
+  display: block;
+  border: #111;
+  background-color: white;
+  border-radius: 10px;
+  margin: 5px;
+}
+
+.sidenav a:hover {
+  color: #ffffff;
+  background-color: orange;
+}
+
+.main {
+  display: block;
+  float: right;
+  position: fixed;
+  margin-left: 25%;
+  margin-top: 10px;
+  width: 75%;
+  height: 90%;
+  text-align: center;
+  color: white;
+  overflow:auto;
+}
+
+
+.sidenav .project-link.active {
+  background-color: orange; 
+  color: white;
+  font-weight: bold; 
+}
+
+/* modal css */
+.modal,.task-modal,.delete-modal,.editProject-modal {
+  font-size: small;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 500px;
+  height: auto;
+  padding: 1.3rem;
+  min-height: 250px;
+  position: fixed; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); 
+  background-color: white;
+  border: 3px solid #000000;
+  border-radius: 15px;
+  z-index: 2;
+}
+
+.overlay,.task-overlay,.delete-overlay,.editProject-overlay {
+  position: fixed; /* Change position to fixed */
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+  z-index: 1;
+}
+
+.modal .flex,
+.task-modal .flex,
+.delete-modal .flex,
+.editProject-modal.flex{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.modal input,
+.task-modal input,
+.delete-modal input,
+.editProject-modal input{
+  padding: 0.7rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 0.9em;
+}
+
+.modal p,
+.task-modal p,
+.delete-modal p,
+.editProject-modal p{
+  font-size: 0.9rem;
+  color: #777;
+  margin: 0.4rem 0 0.2rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.modal .btn-close,
+.task-modal .task-btn-close,
+.delete-modal .delete-btn-close,
+.editProject-modal .editProject-btn-close{
+  padding: 0.5rem 0.7rem;
+  top: 10px; /* Adjust top position */
+  right: 10px; /* Adjust right position */
+  position: absolute;
+  background: #eee;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  font-weight: 600;
+}
+
+.input-field {
+  width: 250px; /* Adjust the width as needed */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+.submit-button {
+  align-items: center;
+  width: 100px; 
+  padding: 10px; 
+  border: none;
+  border-radius: 8px; 
+  background-color: #000000; 
+  color: white; 
+  font-size: 10px;
+  cursor: pointer;
+  margin: 0 auto; 
+  display: block; 
+}
+ h3{
+  text-align: center;
+ }
+
+/* end of modal css */
+
+.selected {
+  color: #ffffff;
+  background-color: orange;
+}
