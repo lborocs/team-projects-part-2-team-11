@@ -89,61 +89,70 @@ if (isset($_GET['category']) && !empty($_GET['category'])) {
 <script>
 
 
-function sendPostToDB(topicID)
-{
-      let post = $("#postContent").val();
-                const topic =  $("#topicTitle").val();
-                let category = "<?php echo $category; ?>";
-               
-                let postno = 1;
-                let title = $("#postTitle").val();
-                console.log("value:", topic);
-                event.preventDefault();
-                $.ajax({
-    			url: "createTopic.php",
-    			type: "POST",
-                //sessions needed here
-    			data: {content: post, email:email,postno:postno,topic: topic, category: category, topicid: topicID, title: title},
-    			success: function(response) {
-        			console.log("Success response:", response);
-        			alert(response); // Or display this message in your HTML
-				    
-				    closePopup()
-                    $.ajax({
-                    url: "topics.php",
-                    type: "GET",
-                    data: { category:category},
-		            dataType: 'json',
-                    success: function (insertedHtml) {
-                        console.log(insertedHtml)
-                        let len = insertedHtml.length;
-                        document.getElementById("topicsContainer").innerHTML="";
-                        for (let i = 0; i < len; i++) {
-                            let name = insertedHtml[i].topic;
-                            const x = document.createElement("div");
-			                x.setAttribute("id",name);
-	                        x.setAttribute("class","topics");
-                            x.innerHTML = name;
-                	    // Make the div clickable
-               		        x.style.cursor = "pointer"; // Change cursor on hover
-               		        x.onclick = function() {
-                   	        window.location.href = "postspage.php?category=" + encodeURIComponent(category) + "&topicname=" + encodeURIComponent(x.getAttribute("id")); // Redirect on click
-               		        };
-               		        document.getElementById("topicsContainer").appendChild(x);
-                             }
-                    },
-                    error: function (e) {
-                        console.log(e.message);
+function sendPostToDB(topicID) {
+    // Get values from form inputs
+    let post = $("#postContent").val();
+    const topic = $("#topicTitle").val();
+    let category = "<?php echo $category; ?>";
+    let postno = 1;
+    let title = $("#postTitle").val();
+    
+    console.log("value:", topic);
+    
+    event.preventDefault();
+    
+    // Ajax request to create a new topic
+    $.ajax({
+        url: "createTopic.php",
+        type: "POST",
+        // Sessions needed here
+        data: { content: post, email: email, postno: postno, topic: topic, category: category, topicid: topicID, title: title },
+        success: function (response) {
+            console.log("Success response:", response);
+            alert(response); // Or display this message in your HTML
+
+            // Close the popup
+            closePopup();
+
+            // Reload topics after creating a new post
+            $.ajax({
+                url: "topics.php",
+                type: "GET",
+                data: { category: category },
+                dataType: 'json',
+                success: function (insertedHtml) {
+                    console.log(insertedHtml);
+                    let len = insertedHtml.length;
+                    document.getElementById("topicsContainer").innerHTML = "";
+                    for (let i = 0; i < len; i++) {
+                        let name = insertedHtml[i].topic;
+                        const x = document.createElement("div");
+                        x.setAttribute("id", name);
+                        x.setAttribute("class", "topics");
+                        x.innerHTML = name;
+                        
+                        // Make the div clickable
+                        x.style.cursor = "pointer"; // Change cursor on hover
+                        x.onclick = function () {
+                            window.location.href = "postspage.php?category=" 
+                            + encodeURIComponent(category) + "&topicname=" +
+                             encodeURIComponent(x.getAttribute("id")); // Redirect on click
+                        };
+                        document.getElementById("topicsContainer").appendChild(x);
                     }
-                });
-    			},
-    			error: function(xhr, status, error) {
-        			console.log("Error response:", xhr.responseText);
-        			alert("Error: " + xhr.responseText); // Or display this message in your HTML
-                    
-    			} 
-});;
+                },
+                error: function (e) {
+                    console.log(e.message);
+                }
+            });
+        },
+        error: function (xhr, status, error) {
+            console.log("Error response:", xhr.responseText);
+            alert("Error: " + xhr.responseText); // Or display this message in your HTML
+        }
+    });
 }
+
 
 
     $(document).ready(function () {
@@ -153,6 +162,7 @@ function sendPostToDB(topicID)
             let topicid = generateTopicId(topic);
             $.ajax ({
                 url: "getPermissions.php",
+     //checks if user has a write permission and either allows them to create or sends aan alert denying access
                 type: "GET",
                 //sessions needed here
                 data: {email: email},
@@ -177,6 +187,7 @@ function sendPostToDB(topicID)
                                     sendPostToDB(topicid)
                                 }
                                 else{
+                                    //checks the ID makes sure it is unique
                                     let unique=false
                                     let newIDValid=true
                                     let index=0
@@ -245,7 +256,9 @@ $(document).ready(function() {
                         // Make the div clickable
                                x.style.cursor = "pointer"; // Change cursor on hover
                                x.onclick = function() {
-                               window.location.href = "postspage.php?category=" + encodeURIComponent(category) + "&topicname=" + encodeURIComponent(x.getAttribute("id")); // Redirect on click
+                               window.location.href = "postspage.php?category=" + 
+                               encodeURIComponent(category) + "&topicname=" + 
+                               encodeURIComponent(x.getAttribute("id")); // Redirect on click
                                };
                                document.getElementById("topicsContainer").appendChild(x);
                              }

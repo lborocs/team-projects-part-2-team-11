@@ -15,56 +15,66 @@ $role = $_SESSION['role'];
 	<script>
     var email = '<?php echo $email?>';
 
-	function createPostElement(id, title, content,email,topic,date) {
-    				const postDiv = document.createElement("div");
-    				postDiv.setAttribute("id", id);
-    				postDiv.setAttribute("class", "posts");
+	// Function to create a post element in the DOM
+function createPostElement(id, title, content, email, topic, date) {
+    // Create a new div for the post
+    const postDiv = document.createElement("div");
+    postDiv.setAttribute("id", id);
+    postDiv.setAttribute("class", "posts");
 
-                    const topicElement = document.createElement("h4");
-    				topicElement.innerHTML = topic;
-    				postDiv.appendChild(topicElement);
+    // Create a heading element for the topic and add it to the post div
+    const topicElement = document.createElement("h4");
+    topicElement.innerHTML = topic;
+    postDiv.appendChild(topicElement);
 
-    				const titleElement = document.createElement("h5");
-    				titleElement.innerHTML = title;
-    				postDiv.appendChild(titleElement);
+    // Create a heading element for the title and add it to the post div
+    const titleElement = document.createElement("h5");
+    titleElement.innerHTML = title;
+    postDiv.appendChild(titleElement);
 
-    				const contentDiv = document.createElement("div");
-    				contentDiv.setAttribute("class", "posts");
-    				contentDiv.innerHTML = content;
-    				postDiv.appendChild(contentDiv);
-    				// Make the div clickable
-               		postDiv.style.cursor = "pointer"; // Change cursor on hover
+    // Create a div for the post content and add it to the post div
+    const contentDiv = document.createElement("div");
+    contentDiv.setAttribute("class", "posts");
+    contentDiv.innerHTML = content;
+    postDiv.appendChild(contentDiv);
 
-    				
+    // Make the post div clickable with a pointer cursor on hover
+    postDiv.style.cursor = "pointer";
 
-    				const buttonContainerDiv = document.createElement("div");
-    				buttonContainerDiv.className = "button-container";
+    // Create a div for the button container
+    const buttonContainerDiv = document.createElement("div");
+    buttonContainerDiv.className = "button-container";
 
-    				const likeButton = document.createElement("button");
-    				likeButton.id = id + "LikeButton";
-    				likeButton.className = "like-button";
-    				likeButton.setAttribute("onclick", '');
+    // Create a like button with an event listener for clicking
+    const likeButton = document.createElement("button");
+    likeButton.id = id + "LikeButton";
+    likeButton.className = "like-button";
+    likeButton.addEventListener('click', function () {
+        favouritePost(this);
+    });
 
-                    likeButton.addEventListener('click', function() {
-                        favouritePost(this);
-                    });
+    // Create an image element for the like button
+    const likeImg = document.createElement("img");
+    likeImg.src = "images/heart.png";
+    likeImg.alt = "like Icon";
 
-    				const likeImg = document.createElement("img");
-    				likeImg.src =  "images/heart.png";
-    				likeImg.alt = "like Icon";
+    // Append the image to the like button
+    likeButton.appendChild(likeImg);
 
-    				likeButton.appendChild(likeImg);
-            
-                    buttonContainerDiv.appendChild(likeButton);
-                    postDiv.appendChild(buttonContainerDiv);
-                    document.getElementById("postContainer").appendChild(postDiv);
-    }
+    // Append the like button to the button container div
+    buttonContainerDiv.appendChild(likeButton);
+
+    // Append the button container div to the post div
+    postDiv.appendChild(buttonContainerDiv);
+
+    // Append the post div to the post container in the DOM
+    document.getElementById("postContainer").appendChild(postDiv);
+}
+
     </script>
 
 <script>
 	$(document).ready(function() {
-        //sessions needed here
-		//let email="olivia.rodriguez@makeitall.org.uk";
 		let pagenum= 1;
                 $.ajax({
                     url: "showfavourites.php",
@@ -101,8 +111,6 @@ $role = $_SESSION['role'];
 
 <script>
     function fetchAndUpdateMyPosts(pagenum) {
-        //sessions needed here
-    //let email="olivia.rodriguez@makeitall.org.uk";
     let filter="default";
     $.ajax({
         url: "showfavourites.php",
@@ -147,9 +155,7 @@ $role = $_SESSION['role'];
 // Now, define your favouritePost function to accept the element as its first argument
 function favouritePost(element) {
     // You can access the ID of the element with element.id
-    console.log("Element ID:", element.id); // For debugging
-    //sessions needed here
-    //let email = "olivia.rodriguez@makeitall.org.uk";
+   g.uk";
     let parts = element.id.split("-");
     let topic_ID = parts[0];
     let postnum = parts[1];
@@ -176,8 +182,6 @@ function favouritePost(element) {
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const selectElement = document.getElementById('dropdownMenuPage');
-        //sessions needed here
-        //let email="olivia.rodriguez@makeitall.org.uk";
         let filter="default";
         selectElement.addEventListener('change', function() {
         let pagenum= this.value;

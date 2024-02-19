@@ -16,9 +16,7 @@ $role = $_SESSION['role'];
 
          document.addEventListener('DOMContentLoaded', function() {
             const selectElement = document.getElementById('dropdownMenuPage');
-            console.log(selectElement);
-            //sessions needed here
-            //let email="olivia.rodriguez@makeitall.org.uk";
+            //console.log(selectElement);
             let filter="default";
             selectElement.addEventListener('change', function() {
             let pagenum= this.value;
@@ -72,10 +70,8 @@ $role = $_SESSION['role'];
                         document.getElementById("postContainer").appendChild(postDiv);
         }
 
-
+//puts knowledge reminders on page by doing sql query to retrive all posts that user has updates on
         $(document).ready(function() {
-            //sessions needed here
-            //let email="olivia.rodriguez@makeitall.org.uk";
             let pagenum= 1;
                     $.ajax({
                         url: "showKnowledgeReminders.php",
@@ -112,7 +108,6 @@ $role = $_SESSION['role'];
 
         function fetchAndUpdateMyPosts(pagenum) {
             //sessions needed here
-        //let email="olivia.rodriguez@makeitall.org.uk";
         let filter="default";
         $.ajax({
             url: "showKnowledgeReminders.php",
@@ -152,32 +147,36 @@ $role = $_SESSION['role'];
     }
 
 
-    // Now, define your favouritePost function to accept the element as its first argument
     function updatePost(element) {
-        // You can access the ID of the element with element.id
-        console.log("Element ID:", element.id); // For debugging
-        //sessions needed here
-        //let email = "olivia.rodriguez@makeitall.org.uk";
-        let parts = element.id.split("-");
-        let topic_ID = parts[0];
-        let postnum = parts[1];
-        let pagenum = document.getElementById('dropdownMenuPage').value;
-        console.log("topic id:", topic_ID);
-        $.ajax({
-            url: "update.php",
-            type: "GET",
-            data: { email: email, topic_ID: topic_ID, postnum: postnum },
-            dataType: 'json',
-            success: function (response) {
-                if (response.status === 'removed') {
-                    fetchAndUpdateMyPosts(pagenum);
-                }
-            },
-            error: function (e) {
-                console.log("Error:", e.responseText); // Note: Changed to e.responseText for more detailed error information
+    // Split the ID of the clicked element into parts using the "-" delimiter
+    let parts = element.id.split("-");
+    let topic_ID = parts[0];
+    let postnum = parts[1];
+
+    // Get the value of the dropdown menu with the ID 'dropdownMenuPage'
+    let pagenum = document.getElementById('dropdownMenuPage').value;
+
+
+    // Send an AJAX request to the 'update.php' script
+    $.ajax({
+        url: "update.php",
+        type: "GET",
+        data: { email: email, topic_ID: topic_ID, postnum: postnum },
+        dataType: 'json',
+        success: function (response) {
+            // If the server response indicates that the post was removed
+            if (response.status === 'removed') {
+                // Fetch and update posts for the specified page
+                fetchAndUpdateMyPosts(pagenum);
             }
-        });
-    }
+        },
+        error: function (e) {
+            // Log any errors that occur during the AJAX request
+            console.log("Error:", e.responseText);
+        }
+    });
+}
+
     </script>
     
 </head>
