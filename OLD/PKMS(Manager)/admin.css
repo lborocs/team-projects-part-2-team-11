@@ -2,16 +2,16 @@ body {
     background-color: #3d3d3d;
     display: flex;
     justify-content: left;
-    align-items: flex-start; 
+    align-items: flex-start; /* Adjust alignment */
     margin: 0;
-    padding: 20px; 
+    padding: 20px; /* Add padding for spacing */
 }
 
 .container {
     display: flex;
-    flex-direction: column; 
-    width: 100%;
-    margin: 0 auto;
+    flex-direction: column; /* Stack elements vertically */
+    width: 100%; /* Adjust width to 100% */
+    margin: 0 auto; /* Center the container horizontally */
 }
 
 

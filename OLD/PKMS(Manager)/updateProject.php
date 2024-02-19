@@ -16,6 +16,8 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 // Check if all required fields are received
+// if (isset($_POST['projectId'], $_POST['projectName1'], $_POST['editDeadline1'],$_POST['teamLeader1'])) {
+    // Sanitize the input data
 $projectId = mysqli_real_escape_string($conn, $_POST['projectId']);
 $projectName = mysqli_real_escape_string($conn, $_POST['projectName']);
 $deadline = mysqli_real_escape_string($conn, $_POST['editDeadline']);
@@ -44,6 +46,9 @@ $stmt->bind_param("sssii", $projectName, $deadline, $teamLeader, $duration, $pro
 $stmt->execute();
 $conn->commit();
 
+
+// // echo ("hi109")
+
 if ($stmt->affected_rows > 0) {
     // Project details updated successfully
     $response = array('success' => true);
@@ -56,7 +61,12 @@ if ($stmt->affected_rows > 0) {
 
 // Close the statement
 $stmt->close();
-
+// } 
+// else {
+//     // Required fields not received
+//     $response = array('success' => false, 'error' => 'Required fields not received');
+//     echo json_encode($response);
+// }
 $conn->close();
 
 ?>

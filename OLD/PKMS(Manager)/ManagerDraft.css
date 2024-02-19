@@ -48,7 +48,7 @@ body {
 }
 .main a:hover {
   color: white;
-  background-color: orange;
+  background-color: #303030;
 }
 .SideNav a{
   padding: 10px 10px 10px 10px;
@@ -64,13 +64,21 @@ body {
 
 .SideNav a:hover {
   color: #ffffff;
-  background-color: orange;
+  background-color: black;
 }
 
 .graph-container {
   display: flex;
   justify-content: space-around;
 }
+
+/* .graph {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #fff;
+  border-radius: 10px;
+  margin: 5px;
+}  */
 
 .graph-container {
   text-align: center;
@@ -165,7 +173,7 @@ body {
 }
 
 .SideNav .project-link.active {
-  background-color: orange; 
+  background-color: #000000; 
   color: white;
   font-weight: bold; 
 }
@@ -279,32 +287,3 @@ body {
 
 /* end of modal css */
 
-.breadcrumbs {
-  padding: 10px;
-  margin-right: 79vh;
-  }
-  
-  .breadcrumbs-item{
-  display: inline-block;
-  }
-  
-  .breadcrumbs-item:not(:last-of-type)::after{
-    content: '/';
-    margin: 0.5px;
-    color: #cccccc;
-  }
-  
-  .breadcrumbs_link{
-  text-decoration: none;
-  color: #999999
-  }
-  
-  .breadcrumbs_link:hover{
-    text-decoration: underline;
-  }
-  
-  .breadcrumbs_link--active{
-  color:#ed992b;
-  font-weight: 500;
-  
-  }

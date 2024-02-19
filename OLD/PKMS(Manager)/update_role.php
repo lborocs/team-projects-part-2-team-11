@@ -8,18 +8,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_email_update = $_POST['user_email_update'];
     $role_update = $_POST['role_update'];
 
-    // Database connection details
-    $servername = "localhost";
-    $username = "team011";
-    $password = "JAEWyfUXpzqank7scpWm";
-    $dbname = "team011";
+    // Connect to your database
+// Database connection details
+$servername = "localhost";
+$username = "team011";
+$password = "JAEWyfUXpzqank7scpWm";
+$dbname = "team011";
 
-    // Create connection
-    $conn = mysqli_connect($servername, $username, $password, $dbname);
-        // Check connection
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+    // Check connection
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
+
+    // Update the user's role in the database
+    // $sql = "UPDATE Users_Details SET role='$role_update' WHERE user_email='$user_email_update'";
+    // if ($conn->query($sql) === TRUE) {
+    //     echo "User role updated successfully.";
+    // } else {
+    //     echo "Error updating user role: " . $conn->error;
+    // }
+
     // Update the user's role in the database
     $sql = "UPDATE Users_Details SET role='$role_update' WHERE user_email='$user_email_update'";
     if ($conn->query($sql) === TRUE) {

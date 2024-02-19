@@ -1,15 +1,15 @@
-
 <?php
-session_start();
+session_start(); // Start or resume the session
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
+    <!-- Meta and link tags for styling and scripts -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="final_landing.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <title> PKMS DashBoard</title>
+    <script src=" https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 </head>
 <body>
     <!-- code for the black header div -->
@@ -18,6 +18,7 @@ session_start();
             <img src="images/companylogo.png">
         </div>
         <div class="tabs">
+            <!-- Buttons for different tabs -->
             <button id = "ManageButton" class="tab">
                 <img src="images/manage.png" alt="Manage Icon" height="20px" width="20px">
                 Manage</button>
@@ -34,7 +35,7 @@ session_start();
                 <img src="images/invite.png" alt="Invite Icon" height="20px" width="20px">
                 Invite</button>
         </div>
-
+        <!-- User profile button and submenu -->
         <div class="buttons">
             <button class="user-btn">
                 <img src="images/user.png" class="user-pic" onclick="toggleMenu()">
@@ -44,7 +45,6 @@ session_start();
                     <div class="user-info">
                         <img src="images/user.png">
                         <h4><?php
-                        
                             //set up the connection to the data base
                             $username = "team011";
                             $password = "JAEWyfUXpzqank7scpWm";
@@ -93,14 +93,11 @@ session_start();
 <!-- code for the MAIN CONTENT after header div -->
     <div class="main-content">
         <div class="white-div">
-            <div class="content" id="content3" style="display: contents;">
-                <div class="info-center">
-                    <div class="grid-container2">
-                        <a href="ManagerDashboard.php" style="text-decoration:none; color: inherit;" class="grid-item">MY DASHBOARD</a>
-                        <a href="/manage_controls.php" style="text-decoration:none; color: inherit;" class="grid-item">MANAGE CONTROLS</a>
-                    </div>  
-                </div>      
+             <!-- Content area for reminders -->
+            <div class="content" id="remindersContent" style="display: block;">
+                
             </div>
+
         </div>
     </div>
     <!-- section for footer -->
@@ -108,10 +105,7 @@ session_start();
         <p><u>Make It All</u> <u>Acceptable Use Policy </u></p>
     </div>
 
-
-
-
-    
+    <!-- // JavaScript code for toggling submenu and loading content based on user role -->
     <script>
     let role = '<?php echo $role?>';
 
@@ -139,49 +133,18 @@ session_start();
         }
     }
 
-    // $('#logoutB').click(function (){
-    //     window.location.href = "/PKMS/PKMS_Complete/Onyedikachi's%20code/signin.php";
-    // });
-
-    // function displayManager(role){
-    //     if (role != "Manager"){
-    //         $('#ManageButton').css('display','none');
-    //     }else {
-    //         $('#ManageButton').css('display','block');
-    //     }          
-    // }
-    // displayManager(role);
-
-    // $('#ManageButton').click(function (){
-    //     $('#ManageContent').css('display','block');
-    //     $('#ManageButton').addClass("active");
-    //     $('.arrow').css('display','block');
-    // });
-    // $('#ManageButton').click();
-
-    // //manger page essensials
-    // $('#ProdButton').click(function (){
-    //     window.location.href = "/PKMS/PKMS(Productivity)/ProductivityLanding.php";
-    // });
-
     $(document).ready(function (){
-        $('#ManageContent').css('display','block');
-        $('#ManageButton').addClass("active");
+        $('#RemindersButton').addClass("active");
         $('.arrow').css('display','block');
     });
 
-
-
-
-    // // Handle window resize event
-    // window.addEventListener('resize', function () {
-    //     if (arrow.style.display === 'block') {
-    //         positionArrow();
-    //     }
-    // });
-
-</script>
-<script src="/PKMS/link.js"></script>
-
+    if (role == "Manager"){
+        $('#remindersContent').load('reminders_manager.php');
+    } else {
+        $('#remindersContent').load('reminders_employees.php');
+    }
+    </script>
+    <!-- External Script -->
+    <script src="/PKMS/link.js"></script>
 </body>
 </html>

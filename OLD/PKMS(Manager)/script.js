@@ -2,7 +2,6 @@
 function triggerFirstProjectLinkClick() {
     // Get the first project link
     const firstProjectLink = document.querySelector('.project-link');
-        // If a project link exists, trigger a click on it
     if (firstProjectLink) {
         firstProjectLink.click();
     }
@@ -16,7 +15,6 @@ function fetchProjectDeadline(projectName) {
             document.getElementById('deadline').textContent = deadline;
         })
         .catch(error => {
-            // Log and handle errors in fetching the deadline
             console.error('Error fetching project deadline:', error);
             document.getElementById('deadline').textContent = 'Error fetching deadline';
         });
@@ -29,7 +27,6 @@ function fetchProjectID(projectName) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                // Retrieve the project ID from the response
                 const projectId = xhr.responseText;
                 // Include the project ID in the form data or perform other actions
             } else {
@@ -39,36 +36,48 @@ function fetchProjectID(projectName) {
     };
     xhr.send();
 }
-// Event listener to trigger actions when the DOM content is loaded
+
 document.addEventListener('DOMContentLoaded', function() {
     reload();
     // Trigger click on the first project link
     triggerFirstProjectLinkClick();
+
 });
 
 
 function reload(){
+    console.log('Reload Function triggered');
     // Add event listeners to project links for both tasks and project deadlines
     const projectLinks = document.querySelectorAll('.project-link');
+    console.log("hi")
     projectLinks.forEach(function(projectLink) {
+        console.log("hi2")
+
         projectLink.addEventListener('click', function(event) {
+            console.log("Hi")
             event.preventDefault(); // Prevent default link behavior
+
             // Remove active class from all project links
             projectLinks.forEach(link => {
                 link.classList.remove('active');
             });
+
             // Add active class to the clicked project link
             this.classList.add('active');
+            
             const projectName = this.dataset.project; // Get the project name from data attribute
             const projectId = this.dataset.projectId; // Get the project ID from data attribute
+
             // Update the project name in the HTML
             const projectHeader = document.querySelector('#ProjectDetails h3');
             projectHeader.textContent = projectName;
+
             fetchTaskDetails(projectName);
             fetchProjectDeadline(projectName);
             fetchProjectID(projectName); // Fetch project ID based on the project name
             const activeProjectName = document.querySelector(".project-link.active").dataset.project;
             getProjectId(activeProjectName);
+
         });
     });
 };
@@ -117,18 +126,17 @@ const editOverlay = document.querySelector(".editProject-overlay");
 const openEditModalBtn = document.querySelector("#EditProject");
 const closeEditModalBtn = document.querySelector(".editProject-btn-close");
 
-// Declaring variable to open edit modal
 const openEditModal = function () {
     editModal.classList.remove("hidden");
     editOverlay.classList.remove("hidden");
 };
-// Declaring variable to close edit modal
+
 const closeEditModal = function () {
     editModal.classList.add("hidden");
     editOverlay.classList.add("hidden");
     editProjectForm.reset(); 
 };
-// Declaring variable to validate edit modal
+
 const validateEditProjectForm = function (event) {
     const projectName = document.getElementById("projectName1").value;
     const editDeadline = document.getElementById("editDeadline1").value;
@@ -148,12 +156,15 @@ const validateEditProjectForm = function (event) {
         alert("Please enter the deadline in the format YYYY-MM-DD.");
         return false;
     }
-    // Validate if the deadline is a valid date
-    const deadlineDate = new Date(editDeadline);
-    if (isNaN(deadlineDate.getTime())) {
-        alert("Please enter a valid date.");
-        return false;
-    }
+        // Validate if the deadline is a valid date
+        const deadlineDate = new Date(editDeadline);
+        if (isNaN(deadlineDate.getTime())) {
+            alert("Please enter a valid date.");
+            return false;
+        }
+
+    // Validate duration (if provided)
+
     // Validate duration (if provided)
     if (editDuration!== "" && !Number.isInteger(parseInt(editDuration))) {
         alert("Duration must be a valid integer.");
@@ -170,6 +181,7 @@ const validateEditProjectForm = function (event) {
     today.setHours(0, 0, 0, 0); // Set time to midnight to compare dates only
 
     // Parse the deadline date string to a Date object
+    // const deadlineDate = new Date(editDeadline);
     deadlineDate.setHours(0, 0, 0, 0); // Set time to midnight to compare dates only
 
     // Check if the deadline is a day ahead of today
@@ -180,6 +192,9 @@ const validateEditProjectForm = function (event) {
 
     return true;
 };
+
+
+
 
 const openEditProjectModal = function(projectName) {
     // Make an AJAX request to get the project ID based on the project name
@@ -207,6 +222,11 @@ const openEditProjectModal = function(projectName) {
                     if (teamLeaderOption) {
                         teamLeaderSelect.value = responseData.teamLeader;
                     }
+                    console.log(responseData);
+                    console.log("Project Name:", responseData.projectName);
+                    console.log("Deadline:", responseData.deadline);
+                    console.log("Duration:", responseData.duration);
+                    console.log("Team Leader:", responseData.teamLeader);
                     // Open the edit project modal
                     openEditModal();
                 }
@@ -217,7 +237,7 @@ const openEditProjectModal = function(projectName) {
     };
     xhr.send();
 };
-// Event listener for opening edit modal
+
 openEditModalBtn.addEventListener("click", function() {
     const activeProjectLink = document.querySelector(".project-link.active");
     if (activeProjectLink && activeProjectLink.parentElement.id === "archivedProjects") {
@@ -228,24 +248,23 @@ openEditModalBtn.addEventListener("click", function() {
     }
 });
 
-// Function to reload project list 
+
 function reloadProjectList(){
     $.ajax({
         url:"projectsList.php",
         type: "POST",
         success: function(data){
           $('#myProjects').html(data)
-        //   console.log(data);
+          console.log(data);
           reload();
           triggerFirstProjectLinkClick();
           closeProjectModal();
         },
         error: function(){
-        //   console.log('Error')
+          console.log('Error')
         }
       });
 }
-// Event Listener for editing project form
 document.getElementById("editProjectForm").addEventListener("submit", function(event) {
     event.preventDefault();
     if (validateEditProjectForm()) {
@@ -263,9 +282,11 @@ document.getElementById("editProjectForm").addEventListener("submit", function(e
                     formData.append('updateProject', true);
                     for (const keys of formData.keys()){
                         console.log(keys);
+
                     }
                     for (const values of formData.values()){
                         console.log(values);
+
                     }
                     // Continue with the form submission
                     const xhrEditProject = new XMLHttpRequest();
@@ -273,15 +294,20 @@ document.getElementById("editProjectForm").addEventListener("submit", function(e
                     xhrEditProject.onreadystatechange = function () {
                         if (xhrEditProject.readyState === 4) {
                             if (xhrEditProject.status === 200) {
+                               console.log(xhrEditProject.responseText);
                                 const response = JSON.parse(xhrEditProject.responseText);
                                 if (response.success) {
+                                    // Project details updated successfully
+                                    console.log("Project details updated successfully");
                                     // Reload the project list and trigger the click event for the first project
                                     reloadProjectList();
                                     triggerFirstProjectLinkClick();
                                     closeEditModal();
+                                    // Optionally, update the UI or perform additional actions
                                 } else {
                                     // Error occurred while updating project details
                                     console.error("Error updating project details:", response.error);
+                                    // Optionally, display an error message to the user
                                 }
                             } else {
                                 console.error("Error:", xhrEditProject.statusText);
@@ -299,7 +325,7 @@ document.getElementById("editProjectForm").addEventListener("submit", function(e
 });
 
 
-//Event Listener for closing edit modal
+// openEditModalBtn.addEventListener("click", openEditModal);
 closeEditModalBtn.addEventListener("click", closeEditModal);
 editOverlay.addEventListener("click", closeEditModal);
 document.addEventListener("keydown", function (e) {
@@ -314,19 +340,18 @@ const overlay = document.querySelector(".overlay");
 const openModalBtn = document.querySelector("#CreateProject");
 const closeModalBtn = document.querySelector(".btn-close");
 
-// Declaring variable to open the create a project modal
 const openModal = function () {
     modal.classList.remove("hidden");
     overlay.classList.remove("hidden");
     createProjectForm.reset(); 
 };
-// Declaring variable to close the create a project modal
+
 const closeProjectModal = function () {
     modal.classList.add("hidden");
     overlay.classList.add("hidden");
     createProjectForm.reset(); 
 };
-// Declaring variable to validate the create a project modal
+
 const validateProjectForm = function (event) {
     const projectName = document.getElementById("projectName").value;
     const projectDeadline = document.getElementById("projectDeadline").value;
@@ -369,7 +394,7 @@ const validateProjectForm = function (event) {
 };
 
 const createProjectForm = document.getElementById("createProjectForm");
-// Performs the Create a project functionality
+
 createProjectForm.addEventListener("submit", function(event) {
     event.preventDefault();
     if (validateProjectForm()) {
@@ -380,11 +405,13 @@ createProjectForm.addEventListener("submit", function(event) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     const response = JSON.parse(xhr.responseText);
+                    console.log("Hello");
                     $.ajax({
                         url:"projectsList.php",
-                        type: "GET",
+                        type: "POST",
                         success: function(data){
                           $('#myProjects').html(data)
+                          console.log(data);
                           reload();
                           triggerFirstProjectLinkClick();
                           closeProjectModal();
@@ -393,7 +420,7 @@ createProjectForm.addEventListener("submit", function(event) {
                           console.log('Error')
                         }
                       });
-                    // console.log(response);
+                    console.log(response);
                 } else {
                     console.error("Error:", xhr.statusText);
                 }
@@ -418,25 +445,26 @@ const taskOverlay = document.querySelector(".task-overlay");
 const openTaskModalBtn = document.querySelector("#CreateTask");
 const closeTaskModalBtn = document.querySelector(".task-btn-close");
 
-// Declaring the variable to open the create a task modal
 const openTaskModal = function () {
     taskModal.classList.remove("hidden");
     taskOverlay.classList.remove("hidden");
     createTaskForm.reset(); 
 
 };
-// Declaring the variable to close the create a task modal
+
 const closeTaskModal = function () {
     taskModal.classList.add("hidden");
     taskOverlay.classList.add("hidden");
     createTaskForm.reset(); 
 
 };
-// Declaring the variable to validate the create a task modal
+
 const validateTaskForm = function (event) {
     const taskName = document.getElementById("taskName").value;
+    // const taskID = document.getElementById("taskID").value;
     const taskDescription = document.getElementById("taskDescription").value;
     const taskDeadline = document.getElementById("taskDeadline").value;
+    // const teamMember = document.getElementById("teamMember").value;
 
     // Validate task name
     if (taskName.trim() === "") {
@@ -444,6 +472,13 @@ const validateTaskForm = function (event) {
         event.preventDefault();
         return false;
     }
+
+    // // Validate task description
+    // if (taskDescription.trim() === "") {
+    //     alert("Please enter a task description.");
+    //     event.preventDefault();
+    //     return false;
+    // }
 
     // Validate deadline format
     const deadlineRegex = /^\d{4}-\d{2}-\d{2}$/;
@@ -453,6 +488,12 @@ const validateTaskForm = function (event) {
         return false;
     }
 
+    // Validate team member selection
+    // if (teamMember === "") {
+    //     alert("Please select a team member.");
+    //     event.preventDefault();
+    //     return false;
+    // }
     // Get today's date
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Set time to midnight to compare dates only
@@ -466,6 +507,7 @@ const validateTaskForm = function (event) {
         alert("Deadline must be at least a day ahead of today.");
         return false;
     }
+    
     return true;
 };
 
@@ -476,12 +518,15 @@ createTaskForm.addEventListener("submit", function(event) {
     if (validateTaskForm()) {
 
         const projectName = document.querySelector(".project-link.active").dataset.project; // Get the active project name
+        // const formData = new FormData(createTaskForm);
         // Make an AJAX request to get the project ID based on the project name
         const xhr = new XMLHttpRequest();
         xhr.open("GET", `getProjectID.php?projectName=${projectName}`, true);
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
+                // console.log("hi")
                 if (xhr.status === 200) {
+                    // console.log("Hi");
                     const projectId = xhr.responseText;
                     // Include the project ID in the form data
                     const formData = new FormData(createTaskForm);
@@ -493,14 +538,14 @@ createTaskForm.addEventListener("submit", function(event) {
                         if (xhrCreateTask.readyState === 4) {
                             if (xhrCreateTask.status === 200) {
                                 const response = JSON.parse(xhrCreateTask.responseText);
-                                // console.log(xhrCreateTask.responseText);
-                                // console.log(response);
+                                console.log(xhrCreateTask.responseText);
+                                console.log(response);
                                 $.ajax({
                                     url:"projectsList.php",
                                     type: "POST",
                                     success: function(data){
                                     $('#myProjects').html(data)
-                                    // console.log(data);
+                                    console.log(data);
                                     reload();
                                     triggerFirstProjectLinkClick();
                                     closeTaskModal();
@@ -546,12 +591,11 @@ const deleteOverlay = document.querySelector(".delete-overlay");
 const openDeleteModalBtn = document.querySelector("#DeleteProject");
 const closeDeleteModalBtn = document.querySelector(".delete-btn-close");
 
-// Declaring the variable to open the delete a project modal
 const openDeleteModal = function () {
     deleteModal.classList.remove("hidden");
     deleteOverlay.classList.remove("hidden");
 };
-// Declaring the variable to close the delete a project modal
+
 const closeDeleteModal = function () {
     deleteModal.classList.add("hidden");
     deleteOverlay.classList.add("hidden");
@@ -565,6 +609,7 @@ document.addEventListener("keydown", function (e) {
         closeDeleteModal();
     }
 });
+
 // Confirm delete button action
 const confirmDeleteBtn = document.querySelector("#confirmDeleteBtn");
 confirmDeleteBtn.addEventListener("click", function () {
@@ -595,10 +640,9 @@ confirmDeleteBtn.addEventListener("click", function () {
                             closeDeleteModal();
                             $.ajax({
                                 url: "projectsList.php",
-                                type: "GET",
+                                type: "POST",
                                 success: function(data) {
                                     $('#myProjects').html(data);
-                                    // console.log(data);
                                     console.log("Project list reloaded");
                                     reload();
                                     triggerFirstProjectLinkClick();
@@ -700,7 +744,7 @@ const createChart = function(chartData) {
         }
     });
 };
-// Setting Project as complete requests extra validation from the user
+
 document.getElementById('CompleteProject').addEventListener('click', function(event) {
     event.preventDefault(); // Prevent default link behavior
 

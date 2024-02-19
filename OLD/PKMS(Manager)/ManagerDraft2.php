@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html style="background-color:FFFFFF">
 <head>
@@ -11,24 +9,6 @@
 
 </head>
 <body>
-<?php
-    error_reporting(E_ALL);
-    ini_set('display_errors', 1);
-    
-        //set up the connection to the data base
-        $username = "team011";
-        $password = "JAEWyfUXpzqank7scpWm";
-        $servername = "localhost";
-        $dbname = "team011";
-
-        // Create connection
-        $conn = mysqli_connect($servername, $username, $password, $dbname);
-
-        // Check connection
-        if (!$conn) {
-            die("Connection failed: " . mysqli_connect_error());
-        }
-    ?>
     <?php
 
     error_reporting(E_ALL);
@@ -91,8 +71,12 @@
             </form>
     </section>
     <!-- End of create a project Modal -->
+   
+    <!-- Edit Project Modal -->
     <!-- Edit Project Modal -->
     <div class="editProject-overlay hidden"></div> 
+
+    <!-- End of Edit Project Modal -->
     <section class="editProject-modal hidden"> 
         <div class="flex">
             <button class="editProject-btn-close">⨉</button>
@@ -171,40 +155,29 @@
         <button id="confirmDeleteBtn" class="submit-button">Confirm Delete</button>
     </section>
     <!-- End of delete project modal -->
-
-
     <div id="ProjectList">
-    <!-- Breadcrumbs -->
-    <ul class="breadcrumbs">
-             <li class="breadcrumbs-item">
-                <a href="/PKMS/PKMS(Manager)/ManagerLanding.php" class="breadcrumbs_link">Manage</a>
-            </li>
-            <li class="breadcrumbs-item">
-                <a href="/PKMS/PKMS(Manager)/ManagerDashboard.php"  class="breadcrumbs_link--active"
-                    breadcrumbs_link--active>My Dashboard</a>
-                </li>
-            </ul>
-        <!-- This holds all Project details -->
+        
         <div id = "SideTemp" class="SideNav">
-            <div>
-                <a id="CreateProject" href="#createProject">Create A Project</a>
-            </div>
-            <?php
-            // Includes the list of projects from an external php file that is created dynamically
-            include 'projectsList.php'; ?>
+        <div>
+            <a id="CreateProject" href="#createProject">Create A Project</a>
+        </div>
+            <!-- my projects section 1 -->
+            <?php include 'projectsList.php'; ?>
+
         </div>
         <!-- --------------------------------------------------------- -->
         <div id = "ProjectDetails" class = "main">
             <!--This will be the place where the charts will be shown.-->
+            <h3></h3>
+            <!--Deadline-->
             <div class="graph-container">
-                <!-- Displays all buttons that are used to interact with a single project that is selected -->
                 <div class="graph graph-4">
                     <a id="CreateTask" href="#createTask">Create A Task</a>
                     <a id="EditProject" href="#editProject">Edit Project</a>
                     <a id="DeleteProject" href="#deleteProject">Delete Project</a>
                     <a id="CompleteProject" href="#completeProject">Set Complete/ Archive Project</a>
+
                 </div>
-                <!-- This displays the deadline -->
                 <div class="graph graph-2">
                     <h5 class="icon-container">&nbsp;&nbsp;
                     <img src= "images/deadline.png" alt="deadline icon">
@@ -212,7 +185,7 @@
                 </h5>
                 </div>
             </div>
-            <!--Team details and tasks table-->
+            <!--Team details and tasks-->
             <div class="graph-container">
                 <div class="graph graph-1 team-tasks">
                     <table class="team-table">
@@ -228,18 +201,11 @@
                     </table>
                 </div>
                 </div>
-                <!--Completion chart/ Donut chart-->
+                <!--Completion chart-->
                 <div class="graph-container" style="width:auto;height: auto; overflow: auto;">
                     <div class="graph graph-3" id="donutChartConatiner">
                         <h3>Project Completion</h3>
                         <canvas id="donutChart"></canvas>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
                     </div>
                 </div>
             </div>
