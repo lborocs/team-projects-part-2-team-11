@@ -117,6 +117,7 @@
 }
 
     // If all checks pass, return true to allow form submission
+    // alert("Registration successful!");
     return true;
 }
  </script>
@@ -126,4 +127,3 @@
 
 </body>
 </html>
-
