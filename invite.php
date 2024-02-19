@@ -1,5 +1,8 @@
 <?php
 session_start();
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 ?>
 
 <?php
@@ -16,25 +19,90 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT username, can_read, can_write, user_email
-FROM Users_Details
-WHERE username IS NOT NULL AND username != '' 
-  AND password IS NOT NULL AND password != '';
-";
+$emailSent = false;
+$emailExists = false;
 
-$result = $conn->query($sql);
-?>
+// if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email'])) {
+//     $email = $conn->real_escape_string($_POST['email']);
+
+//     $stmt = $conn->prepare("SELECT * FROM Users_Details WHERE user_email = ? AND username IS NOT NULL AND password IS NOT NULL AND username <> '' AND password <> ''");
+//     $stmt->bind_param("s", $email);
+//     $stmt->execute();
+//     $result = $stmt->get_result();
+
+//     if ($result->num_rows == 0) {
+//         $emailSent = true; // Mark email as sent for client-side logic
+//     } else {
+//         $emailExists = true; // Mark email as existing in the database
+//     }
+
+//     $stmt->close();
+// }
+
+// $conn->close();
+// ?>
+
+<script>
+
+    function sendInvite(){
+        let email = document.querySelector('input[name="email"]').value;
+    $.ajax({
+            url: "checkEmail.php",
+            type: "GET",
+            //sessions needed here
+            data: {email: email},
+            dataType: 'json',
+            success: function(response) {
+            console.log("Success response:", response);
+            if (Array.isArray(response.emails)){
+                $(document).ready(function() {
+                // var emailAddress = "<?php //echo $email; ?>";
+                var subject = encodeURIComponent("Registration Link");
+                var body = encodeURIComponent("Here is the attached registration link: [Insert Link Here]");
+                window.open(`mailto:${email}?subject=${subject}&body=${body}`);
+                <?php //endif; ?>
+
+                // $('#sendEmailButton').click(function() {
+                //     $('#emailForm').submit();
+                // });
+        });
+            } else{
+                alert("Request Denied.");
+            }
+        },
+        error: function(xhr, status, error) {
+            console.log("Error response:", xhr.responseText);
+            alert("Error: " + xhr.responseText); // Or display this message in your HTML  
+        } 
+        })}
+
+</script>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>User Permissions</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Email Invitation</title>
     <link rel="stylesheet" type="text/css" href="styles_main2.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- <script>
+        $(document).ready(function() {
+            <?php //if ($emailSent): ?>
+            var emailAddress = "<?php //echo $email; ?>";
+            var subject = encodeURIComponent("Registration Link");
+            var body = encodeURIComponent("Here is the attached registration link: [Insert Link Here]");
+            window.open(`mailto:${emailAddress}?subject=${subject}&body=${body}`);
+            <?php //endif; ?>
+
+            $('#sendEmailButton').click(function() {
+                $('#emailForm').submit();
+            });
+        });
+    </script> -->
 </head>
 <body>
-     <!-- code for the black header div -->
-     <div class="header">
+<div class="header">
         <div class="logo">
             <img src="images/companylogo.png">
         </div>
@@ -62,22 +130,8 @@ $result = $conn->query($sql);
             </button>
             <div class="sub-menu-wrap" id="subMenu">
                 <div class="sub-menu">
-                <div class="user-info">
-                        <h4><?php
-                            //set up the connection to the data base
-                            $username = "team011";
-                            $password = "JAEWyfUXpzqank7scpWm";
-                            $servername = "localhost";
-                            $dbname = "team011";
-                    
-                            // Create connection
-                            $conn = mysqli_connect($servername, $username, $password, $dbname);
-                    
-                            // Check connection
-                            if (!$conn) {
-                                die("Connection failed: " . mysqli_connect_error());
-                            }
-                            
+                    <div class="user-info">
+                        <h4><?php                            
                             $email = $_SESSION['email'];
                             $role = $_SESSION['role'];
 
@@ -107,74 +161,28 @@ $result = $conn->query($sql);
             </div>
         </div>
     </div>
-    <div class="main-content">
-    <div class="manage-controls-div">
-        <ul class="breadcrumbs">
-             <li class="breadcrumbs-item">
-                <a href="/PKMS/PKMS(Manager)/ManagerLanding.php" class="breadcrumbs_link">Manage</a>
-            </li>
-            <li class="breadcrumbs-item">
-                <a href="manage_controls.php"  class="breadcrumbs_link--active"
-                    breadcrumbs_link--active>Knowledge Restrictions</a>
-                </li>
-            </ul>
-        <table class="permissions-table">
-        <thead>
-    <tr>
-        <th>Username</th>
-        <th>Read</th>
-        <th>Write</th>
-    </tr>
-</thead>
 
-            <tbody>
-            <?php if ($result->num_rows > 0): ?>
-    <?php while($row = $result->fetch_assoc()): ?>
-        <tr>
-            <td><?php echo htmlspecialchars($row["username"]); ?></td>
-            <td><input type="checkbox" <?php echo $row["can_read"] ? 'checked' : ''; ?> disabled></td>
-            <td><input type="checkbox" class="write-permission" data-email="<?php echo ($row["user_email"]); ?>" <?php echo $row["can_write"] ? 'checked' : ''; ?>></td>
-        </tr>
-    <?php endwhile; ?>
-<?php else: ?>
-    <tr><td colspan="3">No users found.</td></tr>
-<?php endif; ?>
-            </tbody>
-        </table>
+    <div class="main-content">
+    <div class="black-div">
+        <h2>Send Invitation Email</h2>
+         <!-- <?php //if ($emailExists): ?> -->
+        <!-- <p class="email-message">Email already has a corresponding username and password in the database.</p> -->
+        <?php //endif; ?> 
+        <form id="emailForm" method="post">
+            <input type="email" name="email" placeholder="Enter recipient's email">
+            <button type="button" id="sendEmailButton"onclick="sendInvite()">Send Email</button>
+        </form>
+        </div>
     </div>
-    </div>
+
     <!-- section for footer -->
     <div class="footer">
         <p><u>Make It All</u> <u>Acceptable Use Policy </u></p>
     </div>
 
-<script>
-    let role = '<?php echo $role?>'; 
 
-    $(document).ready(function() {
-        $('.write-permission').change(function() {
-            var email = $(this).data('email');
-            console.log(email);
-            var canWrite = $(this).is(':checked') ? 1 : 0;
-            console.log(canWrite);
-            $.ajax({
-                url: 'setRestrictions.php', // Your PHP script that updates the database
-                type: 'POST',
-                data: {
-                    'user_email': email,
-                    'can_write': canWrite
-                },
-                success: function(response) {
-                    console.log(response);
-                    alert( "Record updated successfully");
-                },
-                error: function(xhr, status, error) {
-                    alert("ERROR: Failed to change user write permissions")
-                    console.error("Error: " + status + " - " + error);
-                }
-            });
-        });
-    });
+    <script>
+    let role = '<?php echo $role?>';
 
     let subMenu = document.getElementById("subMenu");
     let userButton = document.querySelector(".user-btn");
@@ -200,24 +208,9 @@ $result = $conn->query($sql);
         }
     }
 
-    const tabs = document.querySelectorAll('.tab');
-    const arrow = document.querySelector('.arrow');
-    const contents = document.querySelectorAll('.content'); // Get all content divs
-
-    function positionArrow() {
-        const activeTab = document.querySelector('.tab.active');
-        if (activeTab) {
-            const tabRect = activeTab.getBoundingClientRect();
-            const arrowWidth = arrow.offsetWidth;
-            arrow.style.left = `${tabRect.left + (activeTab.offsetWidth - arrowWidth) / 1.7}px`;
-        }
-    }
-
-    
-
     $(document).ready(function (){
-        //$('#ManageContent').css('display','block');
-        $('#ManageButton').addClass("active");
+        $('#ManageContent').css('display','block');
+        $('#InviteButton').addClass("active");
         $('.arrow').css('display','block');
     });
 </script>
@@ -225,7 +218,3 @@ $result = $conn->query($sql);
 
 </body>
 </html>
-
-<?php
-$conn->close();
-?>
