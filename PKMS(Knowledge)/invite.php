@@ -39,7 +39,7 @@ $emailExists = false;
                 $(document).ready(function() {
                 // Prepare the subject and body for the email
                 var subject = encodeURIComponent("Registration Link");
-                var body = encodeURIComponent("Here is the attached registration link: [Insert Link Here]");
+                var body = encodeURIComponent("Here is the attached registration link: [http://34.89.116.223/PKMS/PKMS_Complete/Onyedikachi's%20code/registration.php]");
                 // Open the default email client with the prepared email draft
                 window.open(`mailto:${email}?subject=${subject}&body=${body}`);
         });
