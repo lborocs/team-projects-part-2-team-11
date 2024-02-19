@@ -21,50 +21,27 @@ if ($conn->connect_error) {
 
 $emailSent = false;
 $emailExists = false;
-
-// if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email'])) {
-//     $email = $conn->real_escape_string($_POST['email']);
-
-//     $stmt = $conn->prepare("SELECT * FROM Users_Details WHERE user_email = ? AND username IS NOT NULL AND password IS NOT NULL AND username <> '' AND password <> ''");
-//     $stmt->bind_param("s", $email);
-//     $stmt->execute();
-//     $result = $stmt->get_result();
-
-//     if ($result->num_rows == 0) {
-//         $emailSent = true; // Mark email as sent for client-side logic
-//     } else {
-//         $emailExists = true; // Mark email as existing in the database
-//     }
-
-//     $stmt->close();
-// }
-
-// $conn->close();
-// ?>
+ ?>
 
 <script>
-
+     // Function to send an email invitation
     function sendInvite(){
+        // Retrieve the email address entered in the input field
         let email = document.querySelector('input[name="email"]').value;
     $.ajax({
             url: "checkEmail.php",
             type: "GET",
-            //sessions needed here
             data: {email: email},
             dataType: 'json',
             success: function(response) {
             console.log("Success response:", response);
             if (Array.isArray(response.emails)){
                 $(document).ready(function() {
-                // var emailAddress = "<?php //echo $email; ?>";
+                // Prepare the subject and body for the email
                 var subject = encodeURIComponent("Registration Link");
                 var body = encodeURIComponent("Here is the attached registration link: [Insert Link Here]");
+                // Open the default email client with the prepared email draft
                 window.open(`mailto:${email}?subject=${subject}&body=${body}`);
-                <?php //endif; ?>
-
-                // $('#sendEmailButton').click(function() {
-                //     $('#emailForm').submit();
-                // });
         });
             } else{
                 alert("Request Denied.");
@@ -72,7 +49,7 @@ $emailExists = false;
         },
         error: function(xhr, status, error) {
             console.log("Error response:", xhr.responseText);
-            alert("Error: " + xhr.responseText); // Or display this message in your HTML  
+            alert("Error: " + xhr.responseText); // Or display this error message
         } 
         })}
 
@@ -86,20 +63,6 @@ $emailExists = false;
     <title>Send Email Invitation</title>
     <link rel="stylesheet" type="text/css" href="styles_main2.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!-- <script>
-        $(document).ready(function() {
-            <?php //if ($emailSent): ?>
-            var emailAddress = "<?php //echo $email; ?>";
-            var subject = encodeURIComponent("Registration Link");
-            var body = encodeURIComponent("Here is the attached registration link: [Insert Link Here]");
-            window.open(`mailto:${emailAddress}?subject=${subject}&body=${body}`);
-            <?php //endif; ?>
-
-            $('#sendEmailButton').click(function() {
-                $('#emailForm').submit();
-            });
-        });
-    </script> -->
 </head>
 <body>
 <div class="header">
@@ -165,9 +128,6 @@ $emailExists = false;
     <div class="main-content">
     <div class="black-div">
         <h2>Send Invitation Email</h2>
-         <!-- <?php //if ($emailExists): ?> -->
-        <!-- <p class="email-message">Email already has a corresponding username and password in the database.</p> -->
-        <?php //endif; ?> 
         <form id="emailForm" method="post">
             <input type="email" name="email" placeholder="Enter recipient's email">
             <button type="button" id="sendEmailButton"onclick="sendInvite()">Send Email</button>

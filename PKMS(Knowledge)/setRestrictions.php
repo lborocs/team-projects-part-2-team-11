@@ -16,11 +16,12 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Check if the required POST data (user_email and can_write) is present
 if (isset($_POST['user_email']) && isset($_POST['can_write'])) {
-    $email = $_POST['user_email']; 
-    $canWrite = (int)$_POST['can_write']; 
+    $email = $_POST['user_email']; // Retrieve the user's email from POST data
+    $canWrite = (int)$_POST['can_write']; // Retrieve the new write permission state and cast it to an integer
 
-    
+    // Prepare an SQL statement for updating the user's write permission
     $stmt = $conn->prepare("UPDATE Users_Details SET can_write = ? WHERE user_email = ?");
     if ($stmt === false) {
         die("Failed to prepare statement: " . $conn->error);
