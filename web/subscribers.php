@@ -21,7 +21,7 @@ if (!$conn) {
     exit;
 }
 
-
+// SQL query to select user emails for a specific post update
 $sql = "SELECT user_email FROM Posts_Updates WHERE Postnum= ? AND Topic_ID= ?;";
 
 
@@ -38,7 +38,7 @@ $stmt->bind_param("is",$PostNo,$Topic_ID);
 
 if ($stmt->execute()) {
     $result = $stmt->get_result();
-    $emails =[];
+    $emails =[]; // Initialize an array to hold the fetched email addresses
     while ($row = $result->fetch_assoc()) {
         $emails[] = $row; // Add each row to the array
     }
