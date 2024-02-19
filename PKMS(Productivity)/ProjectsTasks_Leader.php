@@ -19,10 +19,7 @@ ini_set("display_errors", 1);
         $filter_email = '';
     }
     
-
-   
-
-    //get the user's details.
+    //get the user's username.
     $employeeQuery1 = "SELECT username 
     FROM `Users_Details` 
     WHERE user_email = '$filter_email';";
@@ -37,14 +34,13 @@ ini_set("display_errors", 1);
         $filter_email = '%';
     }
 
-    //echo $filter;
-
     echo '
     <div id = "Kanban" style = "display: flex; align-items: stretch;">
     <div id  = "unassignedTasks" style = "width : 100%">
     <h3>Unassigned</h3>';
 
         //get all tasks that are unassigned and incomplet form the database
+        //list them here
         $query1 = "SELECT * FROM `Tasks` 
         WHERE project_id = '$ID' and user_email = '' and `status` = 'INCOMPLETE';";
         $column1 = mysqli_query($conn, $query1);
@@ -64,9 +60,10 @@ ini_set("display_errors", 1);
     <div id  = "incompleteTasks" style = "width : 100%">
     <h3>Incomplete</h3>';
 
-        //get all tasks that are unassigned and incomplete form the database
+        //get all tasks that are assigned and incomplete form the database
+        //list them here
         $query2 = "SELECT * FROM `Tasks` 
-        WHERE project_id = '$ID' and `status` = 'INCOMPLETE' and user_email LIKE '$filter_email';";
+        WHERE project_id = '$ID' and `status` = 'INCOMPLETE' and user_email LIKE '$filter_email' and user_email != '';";
         $column2 = mysqli_query($conn, $query2);
 
         if (mysqli_num_rows($column2) > 0){
@@ -110,7 +107,7 @@ ini_set("display_errors", 1);
         }
         
 
-        //get all team members on the project
+        //get all team members on the project to be used for the filter.
         $UsersQuery = "SELECT DISTINCT `Tasks`.user_email, `Users_Details`.username 
         FROM `Tasks` INNER JOIN `Users_Details` ON `Users_Details`.`user_email` = `Tasks`.`user_email` 
         WHERE project_id = '$ID' and `Tasks`.user_email != '$filter_email';";

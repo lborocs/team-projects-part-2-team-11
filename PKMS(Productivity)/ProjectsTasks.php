@@ -8,19 +8,15 @@
     // Create connection
     $conn = mysqli_connect($servername, $username, $password, $dbname);
 
-
-    // echo "HERE(4)!";
-    // echo $_POST['Project_ID'];
-
     if ($_SERVER["REQUEST_METHOD"] == "POST"){
         $ID = $_POST['Project_ID'];
         $user = $_POST['User'];
-        echo $ID;
+        echo "Project ID : ".$ID;
     } else {
         $ID = 0;
     }
     
-    //get all tasks
+    //get all tasks that are part of the project
     $tasksQuery = "SELECT * FROM `Tasks` 
     WHERE project_id = '$ID' and user_email = '$user';";
     $allTasks = mysqli_query($conn, $tasksQuery);

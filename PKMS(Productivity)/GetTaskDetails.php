@@ -8,6 +8,7 @@
     // Create connection
     $conn = mysqli_connect($servername, $username, $password, $dbname);
 
+    //set the necessary variable
     if ($_SERVER['REQUEST_METHOD'] == "POST"){
         $taskID = $_POST['Task_ID'];
         $user = $_POST['User'];
@@ -22,7 +23,7 @@
 
    
 
-    //get all the users
+    //get the tasks information
     $TaskQuery = "SELECT *
     FROM `Tasks` 
     WHERE task_id = '$taskID';";
@@ -34,6 +35,7 @@
             $projectID = $row[6];
             $email = $row[5];
 
+            // if th epermistions passed in are true or the tasks ID is 
             if (($permission == 'true') || ($projectID == '0')){
                 //grant full access to task changes
                 echo "<h3>[".$row[0]."] : $row[1]</h3>";
@@ -44,7 +46,7 @@
                     
                     echo '<label for="assigned">Assigned To:</label>
                     <select id="assigned" name="assigned" class="input-field" required>';
-                        //get the user's details.
+                        //get the assigned user's username.
                         $employeeQuery1 = "SELECT username 
                         FROM `Users_Details` 
                         WHERE user_email = '$row[5]';";
@@ -60,7 +62,7 @@
                             echo "<option value=''>"."Unassigned"."</option>";
                         }
 
-                        //get all the users
+                        //get all the users inside that are not teh already assigned user.
                         $employeeQuery = "SELECT user_email, username 
                         FROM `Users_Details` 
                         WHERE role = 'Employee' and username IS NOT NULL and user_email != '$row[5]';";
@@ -80,12 +82,15 @@
                     echo '<input id = "assigned" name = "assigned" value = "'.$row[5].'" type="hidden">';
                 }
 
+                //code for the title of the task
                 echo '<label for="Title">Task Title:</label>
                     <input type="text" id="Title" name="Title" class="input-field" value = "'.$row[1].'" required><br>';
-            
-                echo "<h4>Description:</h4>";
-                echo "<textarea id='Description' name='Description' class='input-field' row = '4' cols ='50' style = 'height: 105px; width: 505px'>$row[2]</textarea><br>";
                 
+                //for the description of the task
+                echo "<h4>Description:</h4>";
+                echo "<textarea id='Description' name='Description' class='input-field' row = '4' cols ='50' style = 'height: 105px; width: 460px'>$row[2]</textarea><br>";
+                
+                //for the deadline fo the tasks
                 echo "<label for='Deadline'>Task Deadline (YYYY-MM-DD):</label>";
                 echo "<input type='text' id='Deadline' name='Deadline' class='input-field ' value = '$row[3]' required><br><br>";
 
@@ -102,14 +107,13 @@
                     
                 echo '</select><br>';
 
-                
-
+                //the update button code
                 echo "<div style = 'Display : flex'>";
                 echo "<button id = 'updateTask' type = 'submit' class='submit-button' onclick = 'updateTask($row[0],this.id)' >Update Task</button><br>";
 
+                //if the deletavle flag is true allow the user to be able to delete task or if the task is complete.
                 if (($deletable == 'true') || ($row[4] == 'COMPLETE')){
                     echo "<button id = 'deleteTask' class='submit-button' onclick = 'updateTask($row[0],this.id)' >Delete Task</button>";
-
                 }
                 echo "</div>";
 
@@ -118,13 +122,16 @@
                 echo "<h3>[".$row[0]."] : $row[1]</h3>";
 
                 echo "<pre><p><b>Project</b> : $row[6]</p><br>";
-            
+        
+                //task description code.
                 echo "<h4>Description:</h4>";
-                echo "<textarea class='input-field' row = '4' cols ='50' style = 'height: 105px; width: 505px' readonly>$row[2]</textarea><br>";
+                echo "<textarea class='input-field' row = '4' cols ='50' style = 'height: 105px; width: 460px' readonly>$row[2]</textarea><br>";
                 
+                //task deadline code.
                 echo "<label for='Deadline'>Task Deadline (YYYY-MM-DD):</label>";
                 echo "<input id='Deadline' name='Deadline' type='text' class='input-field' value = '$row[3]' readonly><br>";
 
+                //the status section og the task detail
                 echo '<label for="Status">Status:</label>
                 <select id="Status" name="Status" class="input-field" required>
                     "<option value="'.$row[4].'">'.$row[4].'</option>"';
@@ -134,13 +141,10 @@
                     } else {
                         echo '"<option value="INCOMPLETE">INCOMPLETE</option>"';
                     }
-                    
                 echo '</select><br>';
 
+                //the task update button.
                 echo "<button id = 'updateTaskStatus' type = 'submit' class='submit-button' onclick = 'updateTask($row[0],this.id)' >Update Status</button>";
-
-
-                
             }
         }
     }

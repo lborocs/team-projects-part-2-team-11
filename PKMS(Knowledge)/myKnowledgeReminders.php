@@ -314,7 +314,7 @@ $role = $_SESSION['role'];
 
     $(document).ready(function (){
         $('#ManageContent').css('display','block');
-        $('#KnowledgeButton').addClass("active");
+        $('#RemindersButton').addClass("active");
         $('.arrow').css('display','block');
     });
 </script>
