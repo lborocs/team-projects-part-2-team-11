@@ -140,7 +140,8 @@ session_start(); // Start or resume the session
 
     if (role == "Manager"){
         $('#remindersContent').load('reminders_manager.php');
-    } else {
+    }
+    if (role == "Employee"){
         $('#remindersContent').load('reminders_employees.php');
     }
     </script>
