@@ -1,10 +1,11 @@
+
 body {
   background-color: #3d3d3d; 
   margin: 0px;
   font-family: Arial, sans-serif;
   position: relative;
 }
-
+/*for ease of access to the other pages*/
 .breadcrumbs {
 padding: 10px;
 margin-right: 79vh;
@@ -35,6 +36,7 @@ font-weight: 500;
 
 }
 
+/* For the header section containing the logo and navigation tabs*/
 .header {
 background-color: #000000; 
 display: flex;
@@ -42,18 +44,12 @@ justify-content: space-between;
 align-items: center;
 height:80px;
 }
-/* .white-div {
-background-color: #e8e7e7; 
-height:500px;
-width: 100%;
-display:block;
-border-radius: 15px;
-} */
 
+/*for the main div that the knowledge page uses*/
 .white-div {
 background-color: #000000; 
 width: 100%;
-justify-content: center; /* aligns children horizontally */
+justify-content: center; 
 align-items: center;
 }
 .white-div2 {
@@ -61,11 +57,11 @@ align-items: center;
   }
   
 .manage-controls-div {
-    background-color: black; 
-    width: 100%;
-    justify-content: center; /* aligns children horizontally */
-    align-items: center;
-    }
+  background-color: black; 
+  width: 100%;
+  justify-content: center; 
+  align-items: center;
+  }
 a.fill-div {
   display: block;
   height: 100%;
@@ -73,19 +69,14 @@ a.fill-div {
   text-decoration: none;
 }
 
-/* .heading {
-text-align: center;
-font-weight: bold;
-font-size: 40px;
--webkit-text-stroke: 2px orange; 
--webkit-text-fill-color: grey; 
-} */
 
+/*Most of the content is stored in this particular div*/
 .main-content {
 padding: 20px;
 position: relative; 
 } 
 
+/* these are the navigation tabs*/
 .tabs {
 display: flex;
 justify-content:flex-start;
@@ -149,6 +140,7 @@ white-space: nowrap;
   white-space: nowrap;
 }    
 
+/*for the nav bar*/
 nav{
   background: #1a1a1a;
   width: 100%;
@@ -179,6 +171,7 @@ cursor: pointer;
 margin-left: 30px;
 }
 
+/*This is for when the user presses the icon on the left , resulting in a drop down*/
 .sub-menu-wrap{
   position: absolute;
   top: calc(100%+10px); 
@@ -216,6 +209,7 @@ max-height:350px;
   margin:10px;
   }
   
+  /*user icon css on the right side*/
   .user-info{
   display:flex;
   align-items: center;
@@ -225,6 +219,7 @@ max-height:350px;
   font-weight: 500;
   }
   
+  /*displays user info*/
   .user-info img{
   width: 60px;
   border-radius: 50%;
@@ -279,6 +274,7 @@ padding: 2%;
 .faq-title {
 text-align: center;
 }
+/*Where all the grids in the landing page are displayed*/
 .info-center {
 text-align: center;
 padding: 12px;
@@ -294,21 +290,12 @@ font-size: 2em;
 margin-bottom: 10px;
 }
 
-/* .search-bar {
-width: 80%;
-padding: 10px;
-margin: 20px auto;
-display: block;
-} */
+/*for the posts search*/
 #searchContent {
 display: flex; 
 align-items: center; 
 cursor: pointer;
 border-radius: 10px;
-}
-.fa-search {
-  font-size: 24px;
-  /*isnt working*/
 }
 
 
@@ -330,6 +317,7 @@ margin-bottom: 20px;
 justify-content: center; 
 }
 
+/*the yellow boxes*/
 .grid-item {
 background-color: orange;
 padding: 90px;
@@ -377,88 +365,28 @@ width: 400px;
 font-family: Arial, sans-serif;
 font-weight: bold;
 transition: all 0.2s ease;
-/* box-sizing: border-box; */
 }
 
 .post-item:hover{
 cursor: grab;
 background-color: #edebeb; 
 border: 3px solid orange; 
-/* border-radius: 10%; */
 font-style: italic;
-}
-.sub-menu{
-background:#fff;
-padding:10px;
-margin:10px;
-}
-
-.user-info{
-display:flex;
-align-items: center;
-}
-
-.user-info h3{
-font-weight: 500;
-}
-
-.user-info img{
-width: 60px;
-border-radius: 50%;
-margin-right:15px;
-}
-
-.sub-menu hr{
-border:0;
-height: 1px;
-width:100%;
-background:#ccc;
-margin:15px 0 10px;
-}
-
-.sub-menu-link{
-display:flex;
-align-items: center;
-text-decoration: none;
-color: #525252;
-margin:12px 0;
-}
-
-.sub-menu-link p{
-width: 100%;
-}
-
-.sub-menu-link img{
-width:40px;
-background:#e5e5e5;
-border-radius: 50%;
-padding:8px;
-margin-right: 15px;
-
-}
-.sub-menu-link span{
-font-size: 22px;
-transition:transform 0.5s;
-}
-
-.sub-menu-link:hover span{
-transform: translateX(5px);
-}
-.sub-menu-link:hover p{
-font-weight:600;
 }
 
 .tab:hover {
-background-color: #fff; /* Change background color on hover */
-color: #000; /* Change font color on hover */
+background-color: #fff; 
+color: #000; 
 border-color: orange;
-border-width: 1px; /* Optionally set border width */
-border-style: solid; /* Optionally set border style */
+border-width: 1px; 
+border-style: solid; 
 }
 .tab.active {
   background-color: #ffffff; 
   color: #000000;
 }
+
+/*footer which is on every page*/
 .footer {
   position: fixed;
   left: 0;
@@ -478,6 +406,7 @@ border-style: solid; /* Optionally set border style */
   display: block;
 }
 
+/*For the FAQ's*/
 .expandable-box {
 margin-left: 70px;
 width: 90%;
@@ -488,7 +417,6 @@ box-sizing: border-box;
 border: 1px solid #ccc;
 cursor: pointer;
 transition: all 0.3s ease;
-
 }
 
 
@@ -497,6 +425,7 @@ margin-top: 20px;
 transition: all 0.3s ease;
 }
 
+/*when the user presses on the FAQ's , it expands with more information*/
 .expandable-box.expanded {
 background-color: #d0d0d0;
 }
@@ -546,8 +475,8 @@ margin-bottom: 10px;
 }
 }
 #postsNavbar,#topicsNavbar,#myPostsNavbar{
-display: flex; /* Change to flex to have items in a row */
-justify-content: space-between; /* Distribute items evenly along the row */
+display: flex; 
+justify-content: space-between;
 padding: 5px;
 padding-bottom: 3vh;
 width: 90vh;
@@ -558,17 +487,17 @@ column-gap: 10vh;
 /* Media query for medium-sized screens */
 @media (max-width: 768px) {
 #postsNavbar {
-  column-gap: 10vh; /* Adjust column gap for medium-sized screens */
-  margin-right: 50vh; /* Adjust margin for medium-sized screens */
+  column-gap: 10vh; 
+  margin-right: 50vh; 
 }
 }
 
 /* Media query for small-sized screens */
 @media (max-width: 576px) {
 #postsNavbar {
-  flex-direction: column; /* Change to column layout for small-sized screens */
-  align-items: flex-start; /* Align items to the start of the column */
-  margin-right: 0; /* Remove right margin for small-sized screens */
+  flex-direction: column; 
+  align-items: flex-start; 
+  margin-right: 0; 
 }
 }
 
@@ -578,6 +507,7 @@ height: 7vh;
 border: none;
 }
 
+/*for the filters in the knowledge section*/
 .dropdown-container {
 height: 6vh;
 }
@@ -601,11 +531,12 @@ border: none;
 background-color: transparent;
 }
 
+/*Orange header in knowledge section*/
 hr {
-margin-top: 15px; /* Space above the line */
-width: 100%; /* Ensure the line takes the full width of its container */
-height: 1.5px; /* Height of the line */
-background-color: #ed992b; /* Color of the line */
+margin-top: 15px; 
+width: 100%; 
+height: 1.5px; 
+background-color: #ed992b; 
 border: none;
 }
 
@@ -619,7 +550,7 @@ color: #ed992b;
 padding-bottom: 4px;
 padding-left: 43vh;
 }
-
+/*for the technical and non technical pages*/
 .topics{
   margin-left: 15px;
   width: 90%;
@@ -641,10 +572,11 @@ justify-content: center;
 gap: 20px; 
 }
 
+/*the hover keeps the orange theme consistent */
 .topics:hover {
-background-color: #ed992b; /* Change the background color on hover */
-color: white; /* Change text color on hover for better contrast */
-cursor: pointer; /* Add a pointer cursor to indicate clickability */
+background-color: #ed992b; 
+color: white; 
+cursor: pointer; 
 }
 
 .topicsHeader{
@@ -665,20 +597,21 @@ color: #ed992b;
 
 .postHeaderContent {
 color: #ed992b;
-text-align: left; /* Ensure text aligns to the left */
+text-align: left;
 }
 
+/*for technical and non technical posts*/
 .posts{
-width: 100%; /* Adjust to make posts wider, you can use a specific px value if needed */
-min-height: 10vh; /* Adjust to make posts taller */
+width: 100%; 
+min-height: 10vh; 
 border: 1px solid #000;
 background-color: #f0f0f0;
-padding: 20px; /* Adjust padding for content inside posts */
+padding: 20px; 
 border-radius: 10px;
 box-sizing: border-box;
 display: flex;
 flex-direction: column;
-justify-content: center; /* This centers content vertically inside the post */
+justify-content: center; 
 margin-bottom: 10px;
 }
 
@@ -693,6 +626,7 @@ display: none;
 z-index: 1;
 }
 
+/*for the modals*/
 .popup {
 position: fixed;
 top: 50%;
@@ -714,7 +648,7 @@ top: 10px;
 right: 10px;
 font-size: 20px;
 color: #ed992b;
-background-color: transparent; /* Fix for 'none' to 'transparent' */
+background-color: transparent; 
 border: none;
 border-radius: 50%;
 cursor: pointer;
@@ -803,6 +737,7 @@ justify-content: flex-end;
 margin-top: 10px;
 }
 
+/*the create icon is for creating posts which are technical and non technical*/
 .createPostButton-container,.createTopicButton-container {
 right: 20px;
 display: flex;
@@ -824,6 +759,7 @@ border: none;
 background-color: #e5e5e5;
 }
 
+/*for the favourites*/
 .button-container .like-count {
 color: orangered;
 font-size: 12px;
@@ -867,19 +803,19 @@ width: 100%;
 
 @media screen and (max-width: 768px) {
 .button-container{
-    bottom: 14px; /* Adjust font size for smaller screens */
+    bottom: 14px; 
 }
 }
 
 @media screen and (max-width: 768px) {
 .button-container{
-    bottom: 14px; /* Adjust font size for smaller screens */
+    bottom: 14px; 
 }
 }
 
+/*for the knowledge reminders*/
 .remindersGrid-container {
 display: grid;
-/* grid-template-columns: repeat(2, 2fr); */
 gap: 20px;
 padding: 20px;
 }
@@ -931,30 +867,7 @@ border-color: orange;
   border-collapse: collapse;
 }
 
-/* #inviteContent {
-  background-color: #fff; 
-  padding: 20px; 
-  border-radius: 10px; 
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-  width: 50%; 
-  margin: 20px auto; 
-  text-align: center; 
-  font: white;
-}
-
-#inviteContent form {
-  display: inline-block; 
-  margin-top: 20px; 
-  border-radius: 5px;
-}
-
-
-#inviteContent label {
-  display: block; 
-  color: #333; 
-  margin-bottom: 10px; 
-}
-
+/*for the invite page*/
 #inviteContent input[type="email"] {
   width: 100%; 
   padding: 10px; 
@@ -983,6 +896,7 @@ justify-content: center;
 align-items: center;
 }
 
+/*for the managers , a table for restricting create permissions*/
 .permissions-table {
   width: 100%;
   border-collapse: collapse;
@@ -1012,13 +926,14 @@ align-items: center;
 }
 
 .write-permission {
-  position: relative; /* Needed to position the tooltip correctly */
+  position: relative; 
 }
 
+/*when hovering over the checkboxes, displays a message*/
 .write-permission:hover::after {
   content: "Press to disable";
   position: absolute;
-  top: -35px; /* Adjust this value to position the tooltip above the checkbox */
+  top: -35px; 
   left: 50%;
   transform: translateX(-50%);
   background-color: rgba(0, 0, 0, 0.8);
@@ -1026,11 +941,10 @@ align-items: center;
   padding: 5px 10px;
   border-radius: 5px;
   white-space: nowrap;
-  z-index: 1000; /* Ensure the tooltip is above other content */
+  z-index: 1000; 
   display: block;
 }
 
-/* Hide the tooltip text by default */
 .write-permission::after {
   content: '';
   display: none;
@@ -1089,7 +1003,7 @@ align-items: center;
   border-radius: 5px;
 }
 
-
+/*keeps the yellow theme cohesive for all pages*/
 #sendEmailButton {
   background-color: orange;
   color: #fff;
@@ -1110,6 +1024,7 @@ align-items: center;
   color: orange;
   font-weight: bold;
 }
+/*for the invite page div,significantly smaller than ethe other divs*/
 .black-div {
   background-color: #000; 
   padding: 20px;
