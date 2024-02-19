@@ -96,131 +96,136 @@ function generateTopicId(topicName) {
 
 
 <script>
-
-function sendPostToDB(topicID)
-{
-      let post = $("#postContent").val();
-                const topic =  $("#topicTitle").val();
-                let category = "<?php echo $category; ?>";
-               
-                let postno = 1;
-                let title = $("#postTitle").val();
-                console.log("value:", topic);
-                event.preventDefault();
-                $.ajax({
-    			url: "createTopic.php",
-    			type: "POST",
-                //sessions needed here
-    			data: {content: post, email:email,postno:postno,topic: topic, category: category, topicid: topicID, title: title},
-    			success: function(response) {
-        			console.log("Success response:", response);
-        			alert(response); // Or display this message in your HTML
-				    
-				    closePopup()
-                    $.ajax({
-                    url: "topics.php",
-                    type: "GET",
-                    data: { category:category},
-		            dataType: 'json',
-                    success: function (insertedHtml) {
-                        console.log(insertedHtml)
-                        let len = insertedHtml.length;
-                        document.getElementById("topicsContainer").innerHTML="";
-                        for (let i = 0; i < len; i++) {
-                            let name = insertedHtml[i].topic;
-                            const x = document.createElement("div");
-			                x.setAttribute("id",name);
-	                        x.setAttribute("class","topics");
-                            x.innerHTML = name;
-                	    // Make the div clickable
-               		        x.style.cursor = "pointer"; // Change cursor on hover
-               		        x.onclick = function() {
-                   	        window.location.href = "postspage.php?category=" + encodeURIComponent(category) + "&topicname=" + encodeURIComponent(x.getAttribute("id")); // Redirect on click
-               		        };
-               		        document.getElementById("topicsContainer").appendChild(x);
-                             }
-                    },
-                    error: function (e) {
-                        console.log(e.message);
+// Function to send post data to the database using AJAX
+function sendPostToDB(topicID) {
+    let post = $("#postContent").val(); // Get post content from textarea
+    const topic = $("#topicTitle").val(); // Get topic title from input field
+    let category = "<?php echo $category; ?>"; // PHP variable passed to JavaScript
+    let postno = 1; // Initialize post number
+    let title = $("#postTitle").val(); // Get post title from input field
+    console.log("value:", topic); // Log topic to the console for debugging
+    event.preventDefault(); // Prevent form submission
+    $.ajax({
+        url: "createTopic.php", // URL to PHP script for creating topics
+        type: "POST", // Method type
+        // Data to send in the request
+        data: { content: post, email: email, postno: postno, topic: topic, category: category, topicid: topicID, title: title },
+        success: function(response) {
+            console.log("Success response:", response); // Log success response
+            alert(response); // Show response message as alert
+            closePopup(); // Close the popup window
+            // Fetch updated topics list
+            $.ajax({
+                url: "topics.php",
+                type: "GET",
+                data: { category: category },
+                dataType: 'json',
+                success: function(insertedHtml) {
+                    console.log(insertedHtml); // Log the fetched topics
+                    let len = insertedHtml.length;
+                    document.getElementById("topicsContainer").innerHTML = ""; // Clear topics container
+                    for (let i = 0; i < len; i++) {
+                        let name = insertedHtml[i].topic; // Get topic name
+                        const x = document.createElement("div"); // Create a new div for each topic
+                        x.setAttribute("id", name);
+                        x.setAttribute("class", "topics");
+                        x.innerHTML = name;
+                        x.style.cursor = "pointer"; // Make div clickable
+                        x.onclick = function() {
+                            // Redirect to posts page on click
+                            window.location.href = "postspage.php?category=" + encodeURIComponent(category) + "&topicname=" + encodeURIComponent(x.getAttribute("id"));
+                        };
+                        document.getElementById("topicsContainer").appendChild(x); // Append div to container
                     }
-                });
-    			},
-    			error: function(xhr, status, error) {
-        			console.log("Error response:", xhr.responseText);
-        			alert("Error: " + xhr.responseText); // Or display this message in your HTML
-                    
-    			} 
-});;
+                },
+                error: function(e) {
+                    console.log(e.message); // Log error message
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            console.log("Error response:", xhr.responseText); // Log error response
+            alert("Error: " + xhr.responseText); // Show error message as alert
+        }
+    });
 }
 
-
-$(document).ready(function () {
-        $("#createTopicForm").submit(function (event) {
-            event.preventDefault()
-            const topic =  $("#topicTitle").val();
-            let topicid = generateTopicId(topic);
-            $.ajax ({
-                url: "getPermissions.php",
-                type: "GET",
-                //sessions needed here
-                data: {email: email},
-                dataType: 'json',
-                success: function(response) {
-        		console.log("Success response:", response);
-                if (response.permissions[0] === 1){
+// On document ready
+$(document).ready(function() {
+    // When the create topic form is submitted
+    $("#createTopicForm").submit(function(event) {
+        event.preventDefault(); // Prevent default form submission
+        const topic = $("#topicTitle").val(); // Get topic from input field
+        let topicid = generateTopicId(topic); // Generate a unique topic ID
+        // Check permissions before creating topic
+        $.ajax({
+            url: "getPermissions.php",
+            type: "GET",
+            data: { email: email }, // Pass email to get permissions
+            dataType: 'json',
+            success: function(response) {
+                console.log("Success response:", response); // Log permissions response
+                if (response.permissions[0] === 1) { // If user has permission
+                    // Check if topic ID already exists
                     $.ajax({
                         url: "findTopic.php",
                         type: "GET",
                         dataType: 'json',
-                        success: function (response) {
-                            console.log(response);
-                            let idExists=false;
-                            for (let i=0;i<response.length;i++){
-                                if(topicid===response[i]){
-                                    idExists=true;
-                                    break;
+                        success: function(response) {
+                            console.log(response); // Log found topic IDs
+                            let idExists = false; // Flag to check if ID exists
+                            // Check if generated ID exists in response
+                            for (let i = 0; i < response.length; i++) {
+                                if (topicid === response[i]) {
+                                    idExists = true; // ID exists
+                                    break; // Exit loop
                                 }
-                                }if(idExists===false){
-                                    //call creation function
-                                    sendPostToDB(topicid)
-                                }
-                                else{
-                                    let unique=false
-                                    let newIDValid=true
-                                    let index=0
-                                    let NewTopicID=topicid+index
-                                    while (!unique) {
-                                        newIDValid = true; // Reset the flag for each iteration
-                                        for (let i = 0; i < response.length; i++) {
-                                            if (NewTopicID === response[i]) {
-                                                newIDValid = false; // Found a match, ID is not unique
-                                                break; // Exit the for loop
-                                            }
-                                        }
-                                        if (!newIDValid) {
-                                            index++; // Increment index if the ID was not unique
-                                            NewTopicID = topicid + index; // Generate a new ID
-                                        } else {
-                                            unique = true; // If no match was found, the ID is unique
-                                        }
-                                    }//while
-                                    console.log(NewTopicID)
-                                    sendPostToDB(NewTopicID)
-                                }//else
-                            },
-                            error: function (e) {
-                                console.log(e.message);
                             }
-                        });
-                    }else{
-                        alert("ERROR: Denied access. Speak to a manager");
-                        closePopup();
-                    };
-                    }});
-            });
+                            if (!idExists) {
+                                // If ID does not exist, call creation function
+                                sendPostToDB(topicid);
+                            } else {
+                                // If ID exists, attempt to generate a unique ID
+                                let unique = false; // Flag for uniqueness
+                                let newIDValid = true; // Flag for new ID validity
+                                let index = 0; // Index for appending to ID
+                                let NewTopicID = topicid + index; // Generate new ID
+                                // Loop until a unique ID is found
+                                while (!unique) {
+                                    newIDValid = true; // Assume new ID is valid
+                                    // Check if new ID is in response
+                                        for (let i = 0; i < response.length; i++) {
+                                        if (NewTopicID === response[i]) {
+                                            newIDValid = false; // New ID is not valid
+                                            break; // Exit loop
+                                        }
+                                    }
+                                    if (!newIDValid) {
+                                        // If new ID is not valid, increment index and generate new ID
+                                        index++;
+                                        NewTopicID = topicid + index;
+                                    } else {
+                                        // If new ID is valid, set unique to true
+                                        unique = true;
+                                    }
+                                } // End while
+                                console.log(NewTopicID); // Log the new unique ID
+                                sendPostToDB(NewTopicID); // Send post to database with new ID
+                            } // End else
+                        },
+                        error: function(e) {
+                            console.log(e.message); // Log error message
+                        }
+                    });
+                } else {
+                    // If user does not have permission, show error message
+                    alert("ERROR: Denied access. Speak to a manager");
+                    closePopup(); // Close the popup window
+                }
+            }
         });
-
-
+    });
+});
 </script>
 
 <script>
