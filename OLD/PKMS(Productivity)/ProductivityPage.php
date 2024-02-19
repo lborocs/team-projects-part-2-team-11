@@ -1,15 +1,22 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
-<html style="background-color:FFFFFF">
+<html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="ManagerDraft.css">
-    <title> PKMS DashBoard</title>
+    <link rel="stylesheet" href="ProdStyle.css">
+    <title> PKMS Productivity</title>
 </head>
 <body>
-
+    <!--PRODUCTIVITY PAGES-->
     <?php
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1);
+    
         //set up the connection to the data base
         $username = "team011";
         $password = "JAEWyfUXpzqank7scpWm";
@@ -24,15 +31,8 @@
             die("Connection failed: " . mysqli_connect_error());
         }
 
-        if ($_SERVER['REQUEST_METHOD'] == "POST"){
-            $User = $_POST['$User'];
-        } else {
-            $User = "";
-        }
+        $User = $_SESSION['email'];
     ?>
-
-    <!--PRODUCTIVITY PAGES-->
-    <div id="productivitypage">
         <!-- ------------------------------------------Side bar--------------------------------------------------------- -->
         <!-- code for the side bar -->
         <div class="sidenav">
@@ -49,28 +49,22 @@
             <!-- Collect all the project that the user is in and display the project number in their side bar -->
     
             <?php
-                try{
-                    $User = 'frederick.umah@makeitall.org.uk';
-                    
-                    //get all tasks
-                    $projQuery = "SELECT DISTINCT `Tasks`.`project_id`,  `Project`.`name`
-                    FROM `Tasks` JOIN `Project` ON `Tasks`.`project_id` = `Project`.`project_id`
-                    WHERE user_email = '$User' and `Tasks`.`project_id` != '0'
-                    ORDER BY `Tasks`.`project_id` ASC;";
-                    $allProjs = mysqli_query($conn, $projQuery);
+                //get all tasks
+                $projQuery = "SELECT DISTINCT `Tasks`.`project_id`,  `Project`.`name`
+                FROM `Tasks` JOIN `Project` ON `Tasks`.`project_id` = `Project`.`project_id`
+                WHERE user_email = '$User' and `Tasks`.`project_id` != '0'
+                ORDER BY `Tasks`.`project_id` ASC;";
+                $allProjs = mysqli_query($conn, $projQuery);
 
-        
-                    if (mysqli_num_rows($allProjs) > 0){
-                        //output data of each row
-                        while ($row = mysqli_fetch_array($allProjs)){
-                            $ProjectID = $row[0];
-                            echo "<a id='$ProjectID' class = 'projectB' href='#Project:$ProjectID' onclick = 'getProjectTasks(this.id)'> ".$row[1]."</a>";
-                        }
+    
+                if (mysqli_num_rows($allProjs) > 0){
+                    //output data of each row
+                    while ($row = mysqli_fetch_array($allProjs)){
+                        $ProjectID = $row[0];
+                        echo "<a id='$ProjectID' class = 'projectB' href='#Project:$ProjectID' onclick = 'getProjectTasks(this.id)'> ".$row[1]."</a>";
                     }
-        
-                }catch(Exception $e){
-                    //catch whatever exception is thrown first and display it's message.
-                    echo "Error: ".$e->getMessage();
+                } else {
+                    echo "No Projects";
                 }
             ?>
             </div>
@@ -81,28 +75,22 @@
             <!-- Collect all the project that the user is in and display the project number in their side bar -->
     
             <?php
-                try{
-                    $User = 'frederick.umah@makeitall.org.uk';
-                    
-                    //get all tasks
-                    $projQuery = "SELECT project_id, `name`
-                    FROM `Project` 
-                    WHERE team_leader = '$User'
-                    ORDER BY project_id ASC;";
-                    $allProjs = mysqli_query($conn, $projQuery);
+                //get all tasks
+                $projQuery = "SELECT project_id, `name`
+                FROM `Project` 
+                WHERE team_leader = '$User' OR manager = '$User'
+                ORDER BY project_id ASC;";
+                $allProjs = mysqli_query($conn, $projQuery);
 
-        
-                    if (mysqli_num_rows($allProjs) > 0){
-                        //output data of each row
-                        while ($row = mysqli_fetch_array($allProjs)){
-                            $ProjectID = $row[0];
-                            echo "<a id='$ProjectID' class = 'projectB' href='#Project:$ProjectID' onclick = 'getProjectTasks_Leader(this.id)'> ".$row[1]."</a>";
-                        }
+    
+                if (mysqli_num_rows($allProjs) > 0){
+                    //output data of each row
+                    while ($row = mysqli_fetch_array($allProjs)){
+                        $ProjectID = $row[0];
+                        echo "<a id='$ProjectID' class = 'projectB' href='#Project:$ProjectID' onclick = 'getProjectTasks_Leader(this.id)'> ".$row[1]."</a>";
                     }
-        
-                }catch(Exception $e){
-                    //catch whatever exception is thrown first and display it's message.
-                    echo "Error: ".$e->getMessage();
+                } else {
+                    echo "No Projects";
                 }
             ?>
             </div>
@@ -114,61 +102,43 @@
             <!--This will be the place where current task will be displayed.-->
             <h3>Current Tasks</h3>
             <div id = "listOfTasks">
-                <?php
-                    try{
-                        $User = 'frederick.umah@makeitall.org.uk';
-                        
-                        //get all tasks
-                        $tasksQuery = "SELECT * FROM `Tasks` 
-                        WHERE user_email = '$User' AND status = 'INCOMPLETE';";
-                        $allTasks = mysqli_query($conn, $tasksQuery);
+                <?php                   
+                    //get all tasks
+                    $tasksQuery = "SELECT * FROM `Tasks` 
+                    WHERE user_email = '$User' AND status = 'INCOMPLETE';";
+                    $allTasks = mysqli_query($conn, $tasksQuery);
 
-            
-                        if (mysqli_num_rows($allTasks) > 0){
-                            //output data of each row
-                            while ($row = mysqli_fetch_array($allTasks)){
-                                echo "<a href = '#Task:$row[0]' onclick = 'getTaskDetails($row[0])'> task : [".$row[0]."] -> ".$row[1]."</a>";
-                            }
+        
+                    if (mysqli_num_rows($allTasks) > 0){
+                        //output data of each row
+                        while ($row = mysqli_fetch_array($allTasks)){
+                            echo "<a href = '#Task:$row[0]' onclick = 'getTaskDetails($row[0])'> task : [".$row[0]."] -> ".$row[1]."</a>";
                         }
-            
-                    }catch(Exception $e){
-                        //catch whatever exception is thrown first and display it's message.
-                        echo "Error: ".$e->getMessage();
+                    } else {
+                        echo "No Tasks";
                     }
                 ?>
             </div>
-            <button class ="createTasksBtn" class="submit-button">Create Task</button>
+            <button class ='createTasksBtn submit-button'>Create Task</button>
         </div>
     
         <div id = "ArchTasks" class = "main" style="display: none;">
             <!--This will be the place where Archived task will be displayed.-->
             <h3>Archived Tasks</h3>
-            <div class = "tasks">
-                <!-- <a href="#Task1">Task 1 - Complete</a>
-                <a href="#Task2">Task 2 - Complete</a> -->
+            <div id = "listOfTasks_Arch">
                 <?php
-                    try{
-                        $User = 'frederick.umah@makeitall.org.uk';
-                        
-                        //get all tasks
-                        $tasksQuery = "SELECT * FROM `Tasks` 
-                        WHERE user_email = '$User' AND status = 'COMPLETE';";
-                        $allTasks = mysqli_query($conn, $tasksQuery);
-            
-                        //$tasksArray = array();
-                        //echo "<datalist id = 'possibleCountries'>";
-            
-                        if (mysqli_num_rows($allTasks) > 0){
-                            //output data of each row
-                            while ($row = mysqli_fetch_array($allTasks)){
-                                echo "<a href = '#Task:$row[0]' onclick = 'getTaskDetails($row[0])'> task : [".$row[0]."] -> ".$row[1]."</a>";
-                                //$possibleCountries = $row[0];
-                            }
+                    //get all complete tasks
+                    $tasksQuery = "SELECT * FROM `Tasks` 
+                    WHERE user_email = '$User' AND status = 'COMPLETE';";
+                    $allTasks = mysqli_query($conn, $tasksQuery);
+        
+                    if (mysqli_num_rows($allTasks) > 0){
+                        //output data of each row
+                        while ($row = mysqli_fetch_array($allTasks)){
+                            echo "<a href = '#Task:$row[0]' onclick = 'getTaskDetails($row[0])'> task : [".$row[0]."] -> ".$row[1]."</a>";
                         }
-            
-                    }catch(Exception $e){
-                        //catch whatever exception is thrown first and display it's message.
-                        echo "Error: ".$e->getMessage();
+                    } else {
+                        echo "No Tasks";
                     }
                 ?>
             </div>
@@ -184,15 +154,18 @@
 
         <div id = "LeadProjectTasks" class = "main" style="display: none;">
             <!--This will be the page where the project's tasks will be displayed.-->
-            <h3>Project  Tasks</h3>
+            <h3>Project Tasks</h3>
             <div id = "leadProjTasks" class = "tasks">
             <!-- This is where the project's task list will be displayed -->
             </div>
-            <button class ="createTasksBtn" class="submit-button">Create Task</button>
+            <div style = "display : flex; align : center; " >
+                <button class ='createTasksBtn submit-button'>Create Task</button>
+                <button class = 'filterB submit-button' >Filter</button>
+                <button class = 'refresh submit-button' >Refresh</button>
+            </div>
+                <br><br><br><br>
         </div>
-    
-
-    </div>
+        
     
      <!-- ------------------------------------------all the Modals(pop-ups)--------------------------------------------------------- -->
 
@@ -208,7 +181,7 @@
                 <input type="text" id="taskTitle" name="taskTitle" class="input-field" required><br><br>
 
                 <label for="taskDescription">Task Description:</label>
-                <textarea id="taskDescription" name="taskDescription" class="input-field" row = "4" cols ="50" style = "height: 105px; width: 505px" ></textarea><br><br>
+                <textarea id="taskDescription" name="taskDescription" class="input-field" row = "4" cols ="50" style = "height: 110px; width: 460px" ></textarea><br><br>
 
                 <label for="taskDeadline">Task Deadline (YYYY-MM-DD):</label>
                 <input type="text" id="taskDeadline" name="taskDeadline" class="input-field" required><br><br>
@@ -230,15 +203,19 @@
             <button class="btn-close" onclick = "closeModal()";>⨉</button>
         </div>
         <input id = "Task_ID" name = "Task_ID" type="hidden">
+        <!-- permissions input place holders for the task details  -->
         <input id = "Permission" name = "Permission" type="hidden"> 
+        <input id = "Deleteable" name = "Deleteable" type="hidden"> 
+        <input id = "Update" name = "Update" type="hidden">
         <div id = "taskInfo"></div>
     </section>
     <!-- End of Task Modal -->
     
     <script> 
         //pass the infomation about the countries into the java script
-        let User_ = "<?php echo  $_POST['User']?>";
+        var User_ = "<?php echo  $User?>";
     </script>
     <script src="ProdFunctions.js"></script>
+
 <body>
 </html>

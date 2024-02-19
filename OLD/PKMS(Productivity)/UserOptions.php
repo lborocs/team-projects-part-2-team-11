@@ -10,19 +10,23 @@
 
     if ($_SERVER['REQUEST_METHOD'] == "POST"){
         $User = $_POST['User'];
+        $ID = $_POST['Project_ID'];
     } else {
-        $User = "";
+        $User = '';
+        $ID = '';
+        
     }
 
-    $User = 'frederick.umah@makeitall.org.uk';
-    echo '<label for="assignedTo">Choose User:</label>
-        <select id="assignedTo" name="assignedTo" class="input-field" required>
-            <option value="">Select User</option>';
-    if ($_POST['Project_ID'] != '0'){
-        //get all the users
+    //if the user is creating a task for themselves allow them only the option to assign that task to themselves
+    if ($ID == null){
+        echo '<option value="'.$User.'">yourself</option>';
+    } else {
+        echo '<option value="">Select User</option>';
+
+        //get all the users that are not the current user
         $employeeQuery = "SELECT user_email, username 
         FROM `Users_Details` 
-        WHERE role = 'Employee' and username IS NOT NULL and user_email IS NOT '$User';";
+        WHERE role = 'Employee' and username IS NOT NULL;";
         $allEmployees = mysqli_query($conn, $employeeQuery);
 
         if (mysqli_num_rows($allEmployees) > 0){
@@ -31,8 +35,5 @@
                 echo "<option value='$row[0]'>".$row[1]."</option>";
             }
         }
-    } else {
-        echo '<option value="$User">Yourself</option>';
     }
-    echo '</select><br><br>';
 ?>

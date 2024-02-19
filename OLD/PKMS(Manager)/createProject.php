@@ -1,5 +1,12 @@
 <?php
+session_start();
 
+// Check if session data is set
+if(isset($_SESSION['email'])) {
+    $User1 = $_SESSION['email'];
+} 
+
+$User = $_SESSION['email'];
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -25,9 +32,11 @@ $data = json_decode(file_get_contents('php://input'), true);
 
 // Retrieve the form data sent via POST
 $projectName = $_POST['projectName'];
-// $projectID = $_POST['projectID'];
 $projectDeadline = $_POST['projectDeadline'];
-$manager = "miles.morales@makeitall.org.uk";
+
+// $manager = $_POST['User'];
+$manager=$User;
+
 $teamLeader = $_POST['teamLeader'];
 
 $teamLeaderQuery = "SELECT user_email FROM Users_Details WHERE username = ?";
@@ -40,7 +49,7 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     // Fetch the result row
     $row = $result->fetch_assoc();
-    $teamLeader = $row['user_email']; // Assign the email to the team leader variable
+    $teamLeader = $row['user_email']; 
 } else {
     echo json_encode(array("status" => "error", "message" => "Team leader not found"));
     exit; // Exit the script to prevent further execution
@@ -77,5 +86,6 @@ $stmt->close();
 
 // Close connection
 mysqli_close($conn);
+
 ?>
 
