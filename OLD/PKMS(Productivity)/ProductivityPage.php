@@ -1,5 +1,5 @@
 <?php
-session_start();
+//session_start();
 ?>
 
 <!DOCTYPE html>
@@ -50,7 +50,7 @@ session_start();
     
             <?php
                 //get all tasks
-                $projQuery = "SELECT DISTINCT `Tasks`.`project_id`,  `Project`.`name`
+                $projQuery = "SELECT `Tasks`.`project_id`,  `Project`.`name`
                 FROM `Tasks` JOIN `Project` ON `Tasks`.`project_id` = `Project`.`project_id`
                 WHERE user_email = '$User' and `Tasks`.`project_id` != '0'
                 ORDER BY `Tasks`.`project_id` ASC;";
