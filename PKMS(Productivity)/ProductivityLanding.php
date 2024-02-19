@@ -135,7 +135,7 @@ session_start();
         $('.arrow').css('display','block');
     });
      </script>
-<script src="/PKMS/link.js"></script>
+<script src="/link.js"></script>
 
 </body>
 </html>
