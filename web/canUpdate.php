@@ -4,7 +4,7 @@ error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
 // Get parameters from the query string
-$email = $_GET['email'];
+
 $topic_id = $_GET['topic_ID'];
 $postnum = $_GET['postnum'];
 
@@ -21,7 +21,7 @@ if (!$conn) {
 }
 
 // If you want to check if the provided email matches the creator's email for the post
-$sql = "SELECT user_email FROM Posts WHERE Posts.user_email = ? AND Posts.Topic_ID = ? AND Posts.PostNo = ?";
+$sql = "SELECT user_email FROM Posts WHERE  Posts.Topic_ID = ? AND Posts.PostNo = ?";
 
 // Bind parameters to the prepared SQL statement
 $stmt = $conn->prepare($sql);
@@ -32,7 +32,7 @@ if (!$stmt) {
 }
 
 // Bind parameters to the prepared statement
-$stmt->bind_param("sss", $email, $topic_id, $postnum);
+$stmt->bind_param("si", $topic_id, $postnum);
 
 if ($stmt->execute()) {
     echo json_encode(['status' => 'success', 'post' => $stmt->get_result()->fetch_row()]);
