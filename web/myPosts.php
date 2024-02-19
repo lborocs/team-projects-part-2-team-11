@@ -156,36 +156,79 @@ $role = $_SESSION['role'];
         });
 
 
-        function getSubscribedUsers(topic_ID,postnum , title,content){
-            $.ajax({
-                url: "subscribers.php",
-                type: "GET",
-                data: {topic_ID: topic_ID, postnum: postnum },
-                dataType: 'json',
-                success: function (response) {
+        // function getSubscribedUsers(topic_ID,postnum , title,content){
+        //     $.ajax({
+        //         url: "subscribers.php",
+        //         type: "GET",
+        //         data: {topic_ID: topic_ID, postnum: postnum },
+        //         dataType: 'json',
+        //         success: function (response) {
+        //         if (response.status === 'success') {
+        //             console.log(response.emails);
+        //             // go to the post updates table and find all users that have an update for that specific post
+        //             //returns array of emails
+        //             // use emails to send emails to say the post is updated
+        //             if(response.emails.length>0){
+        //                 let emailsString = response.emails.map(entry => entry.user_email).join(',');
+        //                 let subject= "Post Update for "+title;
+        //                 let newContent="Here is the updated post: %0A"+content +" %0A Yours Sincerely %0A Post Owner";
+        //                 window.open('mailto:'+emailsString+'?subject='+subject+'&body='+newContent, '_self');
+        //             }
+        //         } else if (response.status === 'failed') {
+        //             //error message
+        //             alert('unsuccessful');
+        //         }
+        //         fetchAndUpdateMyPosts(document.getElementById('dropdownMenuPage').value);
+        //         closePopup('editPopup');
+        //         },
+        //         error: function (e) {
+        //             console.log("Error:", e.responseText); // e.responseText for more detailed error information
+        //         }
+        //     });
+        // }
+
+
+    function getSubscribedUsers(topic_ID, postnum, title, content) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: "subscribers.php",
+            type: "GET",
+            data: { topic_ID: topic_ID, postnum: postnum },
+            dataType: 'json',
+            success: function (response) {
                 if (response.status === 'success') {
                     console.log(response.emails);
-                    // go to the post updates table and find all users that have an update for that specific post
-                    //returns array of emails
-                    // use emails to send emails to say the post is updated
-                    if(response.emails.length>0){
-                        let emailsString = response.emails.map(entry => entry.user_email).join(',');
-                        let subject= "Post Update for "+title;
-                        let newContent="Here is the updated post: %0A"+content +" %0A Yours Sincerely %0A Post Owner";
-                        window.open('mailto:'+emailsString+'?subject='+subject+'&body='+newContent, '_self');
-                    }
+
+                    if (response.emails.length > 0) {
+                        let text = "Would you like to update users subscribed to your post";
+                        if(confirm(text)==true){
+                            let emailsString = response.emails.map(entry => entry.user_email).join(',');
+                            let subject = "Post Update for " + title;
+                            let newContent = "Here is the updated post: %0A" + content + " %0A Yours Sincerely %0A Post Owner";
+                            window.open('mailto:' + emailsString + '?subject=' + subject + '&body=' + newContent, '_self');
+                        }else{
+                            closePopup('editPopup'); 
+                        }
+                        } else {
+                            closePopup('editPopup'); 
+                        }
+
+                    resolve(response.emails); // Resolve with the array of emails
                 } else if (response.status === 'failed') {
-                    //error message
-                    alert('unsuccessful');
+                    console.error('Unsuccessful:', response.message);
+                    reject(response.message); // Reject with the error message
                 }
+
                 fetchAndUpdateMyPosts(document.getElementById('dropdownMenuPage').value);
                 closePopup('editPopup');
-                },
-                error: function (e) {
-                    console.log("Error:", e.responseText); // e.responseText for more detailed error information
-                }
-            });
-        }
+            },
+            error: function (e) {
+                console.error("Error:", e.responseText); // e.responseText for more detailed error information
+                reject(e.responseText); // Reject with the error message
+            }
+        });
+    });
+}
 
     function savePost(){
         let id=document.getElementById('saveButton').getAttribute('data-item-id');
@@ -204,11 +247,11 @@ $role = $_SESSION['role'];
                 //success message
                 console.log('success');
                 alert('Your new edited post has been saved.');
-                let text = "Would you like to update users subscribed to your post";
+               
                 
-                if (confirm(text) === true) {
+                //if (confirm(text) === true) {
                     getSubscribedUsers(topic_ID,postnum , title,content);
-                }
+                //}
             } else if (response.status === 'failed') {
                 //error message
                 console.log('unsuccessful');
@@ -231,7 +274,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     deleteButton.addEventListener('click', function() {
         // Code to execute when the button is clicked
-        console.log('Delete button clicked');
+        //console.log('Delete button clicked');
         // You can call your delete function here
         deletePost();
     });
@@ -255,10 +298,11 @@ function deletePost(element) {
             if (response.status === 'success') {
                 //success message
                 alert("Post successfully deleted");
-            } else if (response.status === 'error') {
-                //error message
-                alert("Error: Delete could not be done!");
-            }
+            } 
+            // else  {
+            //     //error message
+            //     alert("Error: Delete could not be done!");
+            // }
             fetchAndUpdateMyPosts(document.getElementById('dropdownMenuPage').value);
             closePopup('deletePopup');
         },

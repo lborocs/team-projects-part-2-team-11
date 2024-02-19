@@ -19,8 +19,7 @@ if (!$conn) {
     die(json_encode(['error' => 'Connection failed: ' . mysqli_connect_error()]));
 }
 
-// SQL to check if there's an existing post update by the user
-$sql = "SELECT * FROM Posts_Updates WHERE user_email = ? AND Topic_ID = ? AND Postnum = ?";
+$sql = "SELECT * FROM Posts_Updates WHERE user_email = ? AND Topic_ID = ? AND PostNo = ?";
 $stmt = $conn->prepare($sql);
 if (!$stmt) {
     http_response_code(500);
@@ -32,9 +31,8 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 $response = [];
-// Check if there's an existing record
 if ($result->num_rows > 0) {
-    $sql2 = "DELETE FROM Posts_Updates WHERE user_email = ? AND Topic_ID = ? AND Postnum = ?";
+    $sql2 = "DELETE FROM Posts_Updates WHERE user_email = ? AND Topic_ID = ? AND PostNo = ?";
     $stmt2 = $conn->prepare($sql2);
     if (!$stmt2) {
         die(json_encode(['error' => 'Error preparing delete statement: ' . $conn->error]));
@@ -47,8 +45,7 @@ if ($result->num_rows > 0) {
     }
     $stmt2->close();
 } else {
-    // If no record exists, prepare to insert a new one
-    $sql2 = "INSERT INTO Posts_Updates (user_email, Topic_ID, Postnum) VALUES (?, ?, ?)";
+    $sql2 = "INSERT INTO Posts_Updates (user_email, Topic_ID, PostNo) VALUES (?, ?, ?)";
     $stmt2 = $conn->prepare($sql2);
     if (!$stmt2) {
         die(json_encode(['error' => 'Error preparing insert statement: ' . $conn->error]));

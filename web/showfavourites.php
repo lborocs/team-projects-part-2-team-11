@@ -22,7 +22,7 @@ if (!$conn) {
 }
 
 $sql = "SELECT p.Topic_ID, p.PostNo, p.content, p.user_email, p.title, p.date_updated,p.topic FROM Posts p JOIN Favourites f
- ON p.Topic_ID = f.Topic_ID AND p.PostNo = f.Postnum WHERE f.user_email = ? LIMIT ? OFFSET ?";
+ ON p.Topic_ID = f.Topic_ID AND p.PostNo = f.PostNo WHERE f.user_email = ? LIMIT ? OFFSET ?";
 
 $stmt = $conn->prepare($sql);
 
@@ -46,7 +46,7 @@ if (!$stmt) {
 		
 			// Process $postsArray or output it as needed
 		}
-		$sql2 = "SELECT COUNT(*) AS totalFavourites FROM Posts p JOIN Favourites f ON p.Topic_ID = f.Topic_ID AND p.PostNo = f.Postnum WHERE f.user_email = ?";
+		$sql2 = "SELECT COUNT(*) AS totalFavourites FROM Posts p JOIN Favourites f ON p.Topic_ID = f.Topic_ID AND p.PostNo = f.PostNo WHERE f.user_email = ?";
 		$stmt2 = $conn->prepare($sql2);
 		if (!$stmt2) {
 			die("Error preparing statement: " . $conn->error);

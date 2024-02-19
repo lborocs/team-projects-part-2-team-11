@@ -74,8 +74,6 @@ $role = $_SESSION['role'];
 
 
         $(document).ready(function() {
-            //sessions needed here
-            //let email="olivia.rodriguez@makeitall.org.uk";
             let pagenum= 1;
                     $.ajax({
                         url: "showKnowledgeReminders.php",

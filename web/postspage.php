@@ -155,7 +155,7 @@ function favouritePost(element) {
             dataType: 'json',
             success: function(response) {
             if (response.post[0] !== email){
-                console.log(response);
+                console.log(response.post[0]);
                 $.ajax({
                     url: "update.php",
                     type: "GET",
@@ -331,7 +331,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 let id = postsData[i].Topic_ID +"-"+ postsData[i].PostNo +"-";
                 let title = postsData[i].title;
                 let date = postsData[i].date_updated;
-                let content = postsData[i].content;   
+                let content = postsData[i].content;
                 let uname = postsData[i].username;
 			    createPostElement(id, title, content,uname, date,i)
             }
@@ -420,7 +420,7 @@ function generateTopicId(topicName) {
                             //sessions needed here
                             data: {content: post, email: email,topic: topic, category: category, topicid: topicid, title: title},
                             success: function(response) {
-                                console.log("Success response:", response.permissions[0]);
+                                console.log("Success response:", response.permission);
                                 alert(response); // Or display this message in your HTML
                                 fetchAndUpdatePosts(document.getElementById("dropdownMenuPage").value);
                                 closePopup()
