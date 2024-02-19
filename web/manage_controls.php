@@ -19,7 +19,7 @@ if ($conn->connect_error) {
 // SQL query to select users with non-empty usernames and passwords
 $sql = "SELECT username, can_read, can_write, user_email
 FROM Users_Details
-WHERE username IS NOT NULL AND username != ''
+WHERE username IS NOT NULL AND username != '' 
   AND password IS NOT NULL AND password != '';
 ";
 

@@ -3,16 +3,6 @@
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
-
-// $PostNo = $_GET['postnum'];
-// $Topic_ID = $_GET['topic_ID'];
-// $operation= $_POST['operation'];
-// $post_date = date('Y-m-d');
-
-// $content = $_GET['topic_ID'];
-// $operation= $_POST['operation'];
-// $post_date = date('Y-m-d');
-
 $host = "localhost";
 $username = "team011";
 $password = "JAEWyfUXpzqank7scpWm";
@@ -25,7 +15,8 @@ if (!$conn) {
     exit;
 }
 
-    $sql = "SELECT title, content, category FROM Posts ORDER BY update_count DESC LIMIT 5;";
+//gets the first 5 posts with highest update count
+$sql = "SELECT title, content, category FROM Posts ORDER BY update_count DESC LIMIT 5;";
 
 $stmt = $conn->prepare($sql);
 
