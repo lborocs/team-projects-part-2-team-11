@@ -23,40 +23,45 @@ if (isset($_GET['category']) && !empty($_GET['category'])) {
 ?>
 
     <script>
+    // Store the user's email in a JavaScript variable, pulled from PHP session variable
     var email = '<?php echo $_SESSION['email'];?>';
 
-	$(document).ready(function() {
-		const category = "<?php echo $category; ?>";
-                $.ajax({
-                    url: "topics.php",
-                    type: "GET",
-                    data: { category:category},
-		            dataType: 'json',
-                    success: function (insertedHtml) {
-                        let len = insertedHtml.length;
-                        for (let i = 0; i < len; i++) {
-                            let name = insertedHtml[i].topic;
-                            const x = document.createElement("div");
-			                x.setAttribute("id",name);
-	                        x.setAttribute("class","topics");
-                            x.innerHTML = name;
-                	    // Make the div clickable
-               		        x.style.cursor = "pointer"; // Change cursor on hover
-               		        x.onclick = function() {
-                   	        window.location.href = "postspage.php?category=" + encodeURIComponent(category) + "&topicname=" + encodeURIComponent(x.getAttribute("id")); // Redirect on click
-               		        };
-               		        document.getElementById("topicsContainer").appendChild(x);
-                             }
+    // When the document is fully loaded, execute the following function
+    $(document).ready(function() {
+        // Retrieve the category from the PHP variable and store it in a JavaScript variable
+        const category = "<?php echo $category; ?>";
+        // Make an AJAX request to the 'topics.php' script, passing the 'category' as data
+        $.ajax({
+            url: "topics.php", // The URL of the PHP file that will process the request
+            type: "GET", // The HTTP method to use for the request
+            data: { category: category }, // Data to be sent to the server
+            dataType: 'json', // Expect a JSON response from the server
+            success: function (insertedHtml) {
+                // This function is called if the request succeeds
+                let len = insertedHtml.length; // Get the length of the response array
+                for (let i = 0; i < len; i++) {
+                    let name = insertedHtml[i].topic; // Extract the topic name from each object in the array
+                    const x = document.createElement("div"); // Create a new div element for each topic
+                    x.setAttribute("id", name); // Set the ID attribute of the div to the topic name
+                    x.setAttribute("class", "topics"); // Set the class attribute of the div
+                    x.innerHTML = name; // Set the inner HTML of the div to the topic name
+                    // Make the div clickable
+                    x.style.cursor = "pointer"; // Change cursor on hover
+                    x.onclick = function() {
+                        // Define what happens when the div is clicked: redirect to the posts page with query parameters
+                        window.location.href = "postspage.php?category=" + encodeURIComponent(category) + "&topicname=" + encodeURIComponent(x.getAttribute("id")); // Redirect on click
+                    };
+                    document.getElementById("topicsContainer").appendChild(x); // Append the created div to the topics container
+                }
                              
-                    },
-                    error: function (e) {
-                        console.log(e.message);
-                    }
-                });
-            });
-    </script>
-
-
+            },
+            error: function (e) {
+                // This function is called if the request fails
+                console.log(e.message); // Log the error message to the console
+            }
+        });
+    });
+</script>
 
 <script>
 
