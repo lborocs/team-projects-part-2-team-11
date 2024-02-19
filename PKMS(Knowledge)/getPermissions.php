@@ -3,7 +3,7 @@
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
-
+// Get the user's email from the query string
 $email = $_GET['email'];
 
 
@@ -19,10 +19,11 @@ if (!$conn) {
     exit;
 }
 
+// SQL query to select the write permission for the given email address
 $sql = "SELECT can_write FROM Users_Details WHERE user_email = ?";
 
 
-
+// Bind the user's email address to the prepared SQL statement
 $stmt = $conn->prepare($sql);
 
 if (!$stmt) {
@@ -40,6 +41,7 @@ if ($stmt->execute()) {
     echo json_encode(['status' => 'failed', 'message' => "Error executing statement: " . $stmt->error]);
 }
 
+// Close the prepared statement and the database connection
 $stmt->close();
 $conn->close();
 
