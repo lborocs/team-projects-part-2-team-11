@@ -1,32 +1,3 @@
-
-// Database connection
-// $host = "localhost";
-// $username = "team011";
-// $password = "JAEWyfUXpzqank7scpWm";
-// $dbname = "team011";
-
-// // Create connection
-// $conn = new mysqli($host, $username, $password, $dbname);
-
-// // Check connection
-// if ($conn->connect_error) {
-//     die("Connection failed: " . $conn->connect_error);
-// }
-
-// $sql = "SELECT topic FROM Topics"; 
-// $result = $conn->query($sql);
-
-// $topics = array();
-// if ($result->num_rows > 0) {
-//     while($row = $result->fetch_assoc()) {
-//         $topics[] = $row['topic']; 
-//     }
-// }
-
-// echo json_encode($topics);
-
-// $conn->close();
-
 <?php
 // Database connection
 $host = "localhost";
@@ -65,5 +36,3 @@ $conn->close();
 $response = ['topics' => $topics, 'employees' => $employees];
 echo json_encode($response);
 ?>
-
-

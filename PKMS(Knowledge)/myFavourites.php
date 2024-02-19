@@ -101,8 +101,6 @@ $role = $_SESSION['role'];
 
 <script>
     function fetchAndUpdateMyPosts(pagenum) {
-        //sessions needed here
-    //let email="olivia.rodriguez@makeitall.org.uk";
     let filter="default";
     $.ajax({
         url: "showfavourites.php",
@@ -146,10 +144,6 @@ $role = $_SESSION['role'];
 <script>
 // Now, define your favouritePost function to accept the element as its first argument
 function favouritePost(element) {
-    // You can access the ID of the element with element.id
-    console.log("Element ID:", element.id); // For debugging
-    //sessions needed here
-    //let email = "olivia.rodriguez@makeitall.org.uk";
     let parts = element.id.split("-");
     let topic_ID = parts[0];
     let postnum = parts[1];
@@ -176,8 +170,6 @@ function favouritePost(element) {
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const selectElement = document.getElementById('dropdownMenuPage');
-        //sessions needed here
-        //let email="olivia.rodriguez@makeitall.org.uk";
         let filter="default";
         selectElement.addEventListener('change', function() {
         let pagenum= this.value;
@@ -264,32 +256,9 @@ function favouritePost(element) {
             </div>
         </div>
     </div>
-<!-- code for the MAIN CONTENT after header div -->
-    <div class="main-content">
-        <!-- <div class="arrow"></div>
-        <div class="tabs">
-            <button class="tab">
-                <img src="images/productivity.png" alt="Productivity Icon" height="30px" width="30px">
-                Productivity</button>
-            <button class="tab">
-                <img src="images/knowledge.png" alt="Knowledge Icon" height="20px" width="20px">
-                Knowledge</button>
-            <button class="tab">
-                <img src="images/manage.png" alt="Manage Icon" height="20px" width="20px">
-                Manage</button>
-            <button class="tab">
-                <img src="images/reminder.png" alt="Reminder Icon" height="20px" width="20px">
-                Reminders</button>
-            <button class="tab">
-                <img src="images/invite.png" alt="Invite Icon" height="20px" width="20px">
-                Invite</button>
 
-        </div> -->
+    <div class="main-content">
         <div class="white-div">
-            <div class="content" id="content1" style="display: none;">
-                <!-- Content for the 'Productivity' tab Productivity Content-->
-                <h2>Productivity Content</h2>
-            </div>
             <div class="content" id="knowledgeContent" style="display: block;">
                 <!-- Content for the 'Knowledge' tab -->
                 <div id="myPostsNavbar" class="myPostsNavbarContent">
@@ -312,18 +281,6 @@ function favouritePost(element) {
                     </li>
                 </ul>
                 <div id="postContainer" class="posts"></div> 
-            </div>
-            <div class="content" id="content3" style="display: none;">
-                <!-- Content for the 'Manage' tab -->
-                <h2>Manage Content</h2>
-            </div>
-            <div class="content" id="content4" style="display: none;">
-                <!-- Content for the 'Other' tab -->
-                <h2>Other Content</h2>
-            </div>
-            <div class="content" id="content5" style="display: none;">
-            <!-- Content for the 'Other2' tab -->
-            <h2>Other2 Content</h2>
             </div>
         </div>
     </div>

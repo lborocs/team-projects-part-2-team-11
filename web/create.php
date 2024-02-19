@@ -50,7 +50,8 @@ $stmt1->close();
 
 
 // Use prepared statements to prevent SQL injection
-$sql = "INSERT INTO Posts (Topic_ID, PostNo, content, date_updated, topic, user_email, title, category) VALUES (?,?, ?, ?, ?, ?, ?, ?)";
+$sql = "INSERT INTO Posts (Topic_ID, PostNo, content, date_updated, topic, user_email, 
+title, category) VALUES (?,?, ?, ?, ?, ?, ?, ?)";
 
 // Prepare statement
 $stmt = $conn->prepare($sql);
