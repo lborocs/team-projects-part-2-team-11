@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles.css" >
+    <title>Login</title>
+  
+</head>
+<body>
+    <div class="container">
+        <div class="left-content"></div>
+        <div class="left-container">
+            <img src="sample-image.jpg" alt="Sample Image">
+        </div>
+        <div class="right-container">
+            <img src="logo.png" alt="logo Image">
+            <br >
+            <br >
+            <h1 class="typewriter">LOGIN</h1>
+            
+           
+                
+            <form>
+                <div class="form-group">
+                    <label for="email"></label>
+                    <input type="text" placeholder="Email" class="textbox" id="username">
+                </div>
+                <div class="form-group">
+                    <label for="password"></label>
+                    <input type="password" placeholder="Password" class="textbox2" id="password">
+                    <br>
+                    <a href="forgot_password.html" style="color: #007bff;">Forgotten password?</a>
+                </div>
+                <!-- <div>
+                    <input type="checkbox" id="remember-me" name="remember-me">
+                    <label for="remember-me">Remember Me</label>
+                </div> -->
+                
+                <br >
+            
+                <button type="button" class="button" id="loginbutton">Login</button>
+
+                <p>Don't have an account? <a href="register.html" style="color: #007bff;">Register now</a></p>
+
+            </form>
+        </div>
+    </div>
+        <script>
+            function typewriterEffect() {
+                // initializing the character index to zero
+                let i = 0;
+                // Get the text from the element with the class 'typewriter'
+                let text = document.querySelector(".typewriter").innerText;
+                document.querySelector(".typewriter").innerText = "";
+
+                // this function types one character at a time
+                function type() {
+                    if(i < text.length) {
+                        document.querySelector(".typewriter").innerText += text.charAt(i);
+                        // Increment the character index
+                        i++;
+                        setTimeout(type, 200); // speed of the typing
+                    }
+                }
+                
+                // Call the type function to start the typing effect
+                type();
+            }
+
+            // Calling the function when the window loads
+            window.onload = typewriterEffect;
+    </script>
+</body>
+</html>
