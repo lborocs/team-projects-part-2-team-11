@@ -198,7 +198,7 @@ function favouritePost(element) {
         let topic_ID = parts[0];
         let postnum = parts[1];
         $.ajax({
-            url: "editPostUpdate.php",
+            url: "changeUpdate.php",
             type: "POST",
             data: {operation:"increment",topic_ID: topic_ID, postnum:postnum },
             success: function (response) {
