@@ -13,200 +13,210 @@ $role = $_SESSION['role'];
     <link rel="stylesheet" type="text/css" href="styles_main2.css" > 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	
-	<script>
-    var email = '<?php echo $email?>';
-	  $(document).ready(function() {
-
-		//let email="olivia.rodriguez@makeitall.org.uk";
-		let filter="default";
-		let pagenum= 1;
-                $.ajax({
-                    url: "posts.php",
-                    type: "GET",
-                    data: { topic: "all", email:email,filter:filter,pagenum:pagenum},
-		            dataType: 'json',
-                    success: function (postsData) {
-                        let len = postsData.length;
-                        for (let i = 0; i < len; i++) {
-                            let id = postsData[i].Topic_ID +"-"+ postsData[i].PostNo +"-";
-                            let title = postsData[i].title;
-                            let date = postsData[i].date_updated;
-                            let content = postsData[i].content;
-                           
-                            createPostElement(id, title, content,date);
-               		 }
-                    },
-                    error: function (e) {
-                        console.log(e.message);
+    <script>
+        var email = '<?php echo $email?>';
+	    $(document).ready(function() {
+            let filter="default";
+            let pagenum= 1;
+            $.ajax({
+                url: "posts.php",
+                type: "GET",
+                data: { topic: "all", email:email,filter:filter,pagenum:pagenum},
+                dataType: 'json',
+                success: function (postsData) {
+                    let len = postsData.length;
+                    for (let i = 0; i < len; i++) {
+                        let id = postsData[i].Topic_ID +"-"+ postsData[i].PostNo +"-";
+                        let title = postsData[i].title;
+                        let date = postsData[i].date_updated;
+                        let content = postsData[i].content;
+                        createPostElement(id, title, content,date);
                     }
-                });
-                $.ajax({
-                    url: "getMyPosts.php",
-                    type: "GET",
-                    data: { topic: "all", email:email,filter:filter,pagenum:pagenum},
-		            dataType: 'json',
-                    success: function (response) {
-			            let result = response.totalRows / 5;
-			            let pages = Math.ceil(result);
-			            for (let a = 1; a < pages+1; a++) {
-				            const page = document.createElement("option");
-        				    page.setAttribute("id", page + a);
-        				    page.setAttribute("value", a);
-		    		        page.innerHTML = "Page " + a;
-			    	        document.getElementById("dropdownMenuPage").appendChild(page);
-			            }
-			
-		     }, error: function (e) {
-                        console.log(e.responseText);
-                    }
-                });
+                },
+                error: function (e) {
+                    console.log(e.message);
+                }
             });
+            $.ajax({
+                url: "getMyPosts.php",
+                type: "GET",
+                data: { topic: "all", email:email,filter:filter,pagenum:pagenum},
+                dataType: 'json',
+                success: function (response) {
+                    let result = response.totalRows / 5;
+                    let pages = Math.ceil(result);
+                    for (let a = 1; a < pages+1; a++) {
+                        const page = document.createElement("option");
+                        page.setAttribute("id", page + a);
+                        page.setAttribute("value", a);
+                        page.innerHTML = "Page " + a;
+                        document.getElementById("dropdownMenuPage").appendChild(page);
+                    }
+                }, error: function (e) {
+                    console.log(e.responseText);
+                }
+            });
+         });
+
     </script>
 
-<script>
-    function createPostElement(id, title, content,date) {
-        const postDiv = document.createElement("div");
-        postDiv.setAttribute("id", id);
-        postDiv.setAttribute("class", "posts");
-                            
+    <script>
+        function createPostElement(id, title, content,date) {
+            const postDiv = document.createElement("div");
+            postDiv.setAttribute("id", id);
+            postDiv.setAttribute("class", "posts");
+                                
 
-        const postTitle = document.createElement("h4");
-        postTitle.innerHTML = title; // Correctly set the title
-        postDiv.appendChild(postTitle);
+            const postTitle = document.createElement("h4");
+            postTitle.innerHTML = title; // Correctly set the title
+            postDiv.appendChild(postTitle);
 
-        const y = document.createElement("div");
-        y.setAttribute("class", "posts");
-        y.innerHTML = content; // Correctly set the content
-        postDiv.appendChild(y);
+            const y = document.createElement("div");
+            y.setAttribute("class", "posts");
+            y.innerHTML = content; // Correctly set the content
+            postDiv.appendChild(y);
 
-        const buttonContainer = document.createElement("div");
-        buttonContainer.className = "button-container";
+            const buttonContainer = document.createElement("div");
+            buttonContainer.className = "button-container";
 
-        // Create the delete button
-        const deleteButton = document.createElement("button");
-        deleteButton.id = id +"deleteButton";
-        deleteButton.onclick = function() { openPopup('deletePopup',id,content,title); }; 
-        const deleteImg = document.createElement("img");
-        deleteImg.src = "images/delete.svg";
-        deleteImg.alt = "Delete Icon";
-        deleteButton.style.cursor = "pointer"; // Change cursor on hover
-        deleteButton.appendChild(deleteImg);
+            // Create the delete button
+            const deleteButton = document.createElement("button");
+            deleteButton.id = id +"deleteButton";
+            deleteButton.onclick = function() { openPopup('deletePopup',id,content,title); }; 
+            const deleteImg = document.createElement("img");
+            deleteImg.src = "images/delete.svg";
+            deleteImg.alt = "Delete Icon";
+            deleteButton.style.cursor = "pointer"; // Change cursor on hover
+            deleteButton.appendChild(deleteImg);
 
-                            // Create the edit button
-        const editButton = document.createElement("button");
-        editButton.id = id +"editButton";
-        editButton.onclick = function() { openPopup('editPopup',id,content,title); };
-        const editImg = document.createElement("img");
-        editImg.src = "images/edit.png";
-        editImg.alt = "Edit Icon";
-        editButton.style.cursor = "pointer"; // Change cursor on hover
-        editButton.appendChild(editImg);
+            // Create the edit button
+            const editButton = document.createElement("button");
+            editButton.id = id +"editButton";
+            editButton.onclick = function() { openPopup('editPopup',id,content,title); };
+            const editImg = document.createElement("img");
+            editImg.src = "images/edit.png";
+            editImg.alt = "Edit Icon";
+            editButton.style.cursor = "pointer"; // Change cursor on hover
+            editButton.appendChild(editImg);
 
-        // Append buttons to the container
-        buttonContainer.appendChild(deleteButton);
-        buttonContainer.appendChild(editButton);
+            // Append buttons to the container
+            buttonContainer.appendChild(deleteButton);
+            buttonContainer.appendChild(editButton);
 
-        // Append the container to the body or another specific element
-        postDiv.appendChild(buttonContainer); // Or replace `document.body` with the specific element you want to append to
-        document.getElementById("postContainer").appendChild(postDiv);
-
-
-    }
+            // Append the container to the body or another specific element
+            postDiv.appendChild(buttonContainer);
+            document.getElementById("postContainer").appendChild(postDiv);
+        }
     </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const deleteButton = document.getElementById('deleteButtonSubmit');
-    
-        deleteButton.addEventListener('click', function() {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteButton = document.getElementById('deleteButtonSubmit');
+            deleteButton.addEventListener('click', function() {
             // Code to execute when the button is clicked
-            console.log('Delete button clicked');
-            // You can call your delete function here
-            deletePost();
+                deletePost();
+            });
         });
-    });
     
-    function deletePost(element) {
-        // Implementation of your delete logic
-        console.log('Deleting post...');
-        // Optionally, you could use AJAX here to call a server-side script to delete the post
-        let id=document.getElementById('deleteButtonSubmit').getAttribute('data-item-id');
+        function deletePost(element) {
+            let id=document.getElementById('deleteButtonSubmit').getAttribute('data-item-id');
+            let parts = id.split("-");
+            let topic_ID = parts[0];
+            let postnum = parts[1];
+            $.ajax({
+                url: "deletepost.php",
+                type: "POST",
+                data: {topic_ID: topic_ID, postnum: postnum },
+                dataType: 'json',
+                success: function (response) {
+                    if (response.status === 'success') {
+                        alert("Post successfully deleted");
+                    } else if (response.status === 'error') {
+                        //error message
+                        alert("ERROR: Delete could not be done!");
+                    }
+                fetchAndUpdateMyPosts(document.getElementById('dropdownMenuPage').value);
+                },
+                error: function (e) {
+                    console.log("Error:", e.responseText); // e.responseText for more detailed error information
+                }
+            });
+        }
+    
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const saveButton = document.getElementById('saveButton');
+            saveButton.addEventListener('click', function() {
+                // Code to execute when the button is clicked
+                savePost();
+            });
+        });
+
+
+        function getSubscribedUsers(topic_ID,postnum , title,content){
+            $.ajax({
+                url: "subscribers.php",
+                type: "GET",
+                data: {topic_ID: topic_ID, postnum: postnum },
+                dataType: 'json',
+                success: function (response) {
+                if (response.status === 'success') {
+                    // go to the post updates table and find all users that have an update for that specific post
+                    //returns array of emails
+                    // use emails to send emails to say the post is updated
+                    if(response.emails.length>0){
+                        let subject= "Post Update for "+title;
+                        let newContent="Here is the updated post: %0A"+content +" %0A Yours Sincerely %0A Post Owner";
+                        window.open('mailto:'+response.emails+'?subject='+subject+'&body='+newContent, '_self');
+                    }
+                } else if (response.status === 'failed') {
+                    //error message
+                    alert('unsuccessful');
+                }
+                fetchAndUpdateMyPosts(document.getElementById('dropdownMenuPage').value);
+                closePopup('editPopup');
+                },
+                error: function (e) {
+                    console.log("Error:", e.responseText); // e.responseText for more detailed error information
+                }
+            });
+        }
+
+    function savePost(){
+        let id=document.getElementById('saveButton').getAttribute('data-item-id');
         let parts = id.split("-");
         let topic_ID = parts[0];
         let postnum = parts[1];
-        console.log("topic id:", topic_ID);
+        let content=document.getElementById('postContent').value;
+        let title=document.getElementById('postTitle').value;
         $.ajax({
-            url: "deletepost.php",
+            url: "editPost.php",
             type: "POST",
-            data: {topic_ID: topic_ID, postnum: postnum },
+            data: {topic_ID: topic_ID, postnum: postnum, content:content,title:title },
             dataType: 'json',
             success: function (response) {
-                if (response.status === 'success') {
-                    alert("Post successfully deleted");
-                } else if (response.status === 'error') {
-                    //error message
-                    alert("ERROR: Delete could not be done!");
-                }
-                fetchAndUpdateMyPosts(document.getElementById('dropdownMenuPage').value);
-                
-            },
-            error: function (e) {
-                console.log("Error:", e.responseText); // Note: Changed to e.responseText for more detailed error information
-            }
-        });
-    } 
-    
-    </script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const saveButton = document.getElementById('saveButton');
-    
-        saveButton.addEventListener('click', function() {
-            // Code to execute when the button is clicked
-            console.log('save button clicked');
-            // You can call your delete function here
-            savePost();
-        });
-    });
-
-    function savePost(){
-    console.log('saving post...');
-    // Optionally, you could use AJAX here to call a server-side script to delete the post
-    let id=document.getElementById('saveButton').getAttribute('data-item-id');
-    let parts = id.split("-");
-    let topic_ID = parts[0];
-    let postnum = parts[1];
-    let content=document.getElementById('postContent').value;
-    let title=document.getElementById('postTitle').value;
-    console.log("topic id:", topic_ID);
-    console.log("post:",postContent);
-    // Check if the post has an update
-    //let hasUpdate = document.getElementById(id + "updateButton").classList.contains('update-button-active');
-    $.ajax({
-        url: "editPost.php",
-        type: "POST",
-        data: {topic_ID: topic_ID, postnum: postnum, content:content,title:title },
-        dataType: 'json',
-        success: function (response) {
             if (response.status === 'success') {
                 //success message
                 console.log('success');
-                alert("Post successfully edited");
+                alert('Your new edited post has been saved.');
+                let text = "Would you like to update users subscribed to your post";
+                if (confirm(text) == true) {
+                    getSubscribedUsers(topic_ID,postnum , title,content);
+                }
             } else if (response.status === 'failed') {
                 //error message
                 console.log('unsuccessful');
                 alert("ERROR: Edit could not be saved!");
             }
             fetchAndUpdateMyPosts(document.getElementById('dropdownMenuPage').value);
-            closePopup('editPopup');
-            
-        },
-        error: function (e) {
-            console.log("Error:", e.responseText); // Note: Changed to e.responseText for more detailed error information
-        }
-    });
-
+            closePopup('editPopup');  
+            },
+            error: function (e) {
+                console.log("Error:", e.responseText); //e.responseText for more detailed error information
+            }
+        });
     }
 </script>
 
