@@ -4,31 +4,33 @@ session_start();
 <!DOCTYPE html>
 <html>
 <head>
+    <!-- Meta tag for responsive design -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="styles_main2.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script>
-    function toggleExpansion(element) {
-    var content = element.querySelector(".box-content");
-  if (content.style.display === "none") {
-   
-    content.style.display = "block";
-    element.classList.add("expanded");
-   } else {
-   
-    content.style.display = "none";
-    element.classList.remove("expanded");
-    }
-    }
+        //  JavaScript function to toggle the expansion of content 
+        function toggleExpansion(element) {
+            var content = element.querySelector(".box-content");
+            if (content.style.display === "none") {
+            content.style.display = "block";
+            element.classList.add("expanded");
+            }else {
+            content.style.display = "none";
+            element.classList.remove("expanded");
+            }
+        }
 	</script>
 </head>
 
 <body>
+<!-- Header section with logo, tabs, and user information -->
 <div class="header">
         <div class="logo">
-            <img src="images/companylogo.png">
+            <img src="images/companylogo.png" alt="Company Logo">
         </div>
         <div class="tabs">
+        <!-- Buttons for different tabs with icons -->
             <button id = "ManageButton" class="tab">
                 <img src="images/manage.png" alt="Manage Icon" height="20px" width="20px">
                 Manage</button>
@@ -48,8 +50,9 @@ session_start();
 
 
         <div class="buttons">
+        <!-- User-related buttons and information -->
             <button class="user-btn">
-                <img src="images/user.png" class="user-pic" onclick="toggleMenu()">
+                <img src="images/user.png" class="user-pic" onclick="toggleMenu()" alt="User Icon">
             </button>
             <div class="sub-menu-wrap" id="subMenu">
                 <div class="sub-menu">
@@ -89,8 +92,9 @@ session_start();
                     </div>
                     <hr>
                     
+                    <!-- Logout option with icon -->
                     <a id =  "logoutB" href="#" class="sub-menu-link">
-                    <img src="images/logout.png">
+                    <img src="images/logout.png" alt="Logout icon">
                     <p>logout</p>
                     <span>></span>
                     </a>
@@ -100,93 +104,91 @@ session_start();
     </div>
 
 
-<!-- code for the MAIN CONTENT after header div -->
-<div class="main-content">
-    <div class="white-div">
-                
-                <div class="white-div">
-                    <br>
-                    <h1 class="faq-title">Frequently Asked Questions</h1>
-                    <ul class="breadcrumbs">
-                        <li class="breadcrumbs-item">
-                            <a href="standard_index.php" class="breadcrumbs_link">Home</a>
-                        </li>
-                        <li class="breadcrumbs-item">
-                            <a href="faq.php" class="breadcrumbs_link--active" 
-                            breadcrumbs_link--active>FAQS</a>
-                        </li>
-                    </ul>
-                    <div id="faqPosts">
-
-                    </div>
-                      
-                </div>
+    <!-- Main content section with FAQs and breadcrumbs -->
+    <div class="main-content">
+        <div class="white-div">
+            <div class="white-div">
+                <br>
+                <h1 class="faq-title">Frequently Asked Questions</h1>
+                <ul class="breadcrumbs">
+                    <li class="breadcrumbs-item">
+                        <a href="standard_index.php" class="breadcrumbs_link">Home</a>
+                    </li>
+                    <li class="breadcrumbs-item">
+                        <a href="faq.php" class="breadcrumbs_link--active">
+                                breadcrumbs_link--active>FAQS</a>
+                    </li>
+                </ul>
+                 <!-- Container for displaying FAQ posts retrieved via AJAX -->
+                <div id="faqPosts"></div>
         </div>
+    </div>
     <!-- section for footer -->
     <div class="footer">
         <p><u>Make It All</u> <u>Acceptable Use Policy </u></p>
     </div>
-    <script>
+
+<!-- JavaScript section for dynamically creating FAQ elements and AJAX request -->
+<script>
+    // Function to create an expandable FAQ element
+    function createFAQ(category, title, content){
+        let faqContainer = document.getElementById("faqPosts");
+        let div = document.createElement('div');
+        div.classList.add('expandable-box');
+
+        // Create an h2 element with the text "title 1"
+        let h2 = document.createElement('h2');
+        h2.textContent = title;
+
+        // Create a p element with the class "box-content" and initial style "display: none;"
+        let p = document.createElement('p');
+        p.classList.add('box-content');
+        p.style.display = 'none';
+        p.textContent = content; // Add your content here
+        let h4=document.createElement('h4')
+        h4.style.display = 'none';
+        h4.textContent = category; // Add your content here
+        // Append the h2 and p elements to the div element
+        div.appendChild(h2);
+        div.appendChild(p);
+        div.appendChild(h4);
+        div.style.marginBottom = '30px';
+        // Add an onclick event listener to toggle the display of the p element
+        div.addEventListener('click', function() {
+            p.style.display = p.style.display === 'none' ? 'block' : 'none';
+            h4.style.display = h4.style.display === 'none' ? 'block' : 'none';
+        });
+        faqContainer.append(div);
+    }
 
 
-function createFAQ(category, title, content)
-{
-    let faqContainer = document.getElementById("faqPosts");
-    let div = document.createElement('div');
-div.classList.add('expandable-box');
-
-// Create an h2 element with the text "title 1"
-let h2 = document.createElement('h2');
-h2.textContent = title;
-
-// Create a p element with the class "box-content" and initial style "display: none;"
-let p = document.createElement('p');
-p.classList.add('box-content');
-p.style.display = 'none';
-p.textContent = content; // Add your content here
-let h4=document.createElement('h4')
-h4.style.display = 'none';
-h4.textContent = category; // Add your content here
-// Append the h2 and p elements to the div element
-div.appendChild(h2);
-div.appendChild(p);
-div.appendChild(h4);
-div.style.marginBottom = '30px';
-// Add an onclick event listener to toggle the display of the p element
-div.addEventListener('click', function() {
-    p.style.display = p.style.display === 'none' ? 'block' : 'none';
-    h4.style.display = h4.style.display === 'none' ? 'block' : 'none';
-});
-faqContainer.append(div);
-}
-      $(document).ready(function() {
-                $.ajax({
-                    url: "getFaq.php",
-                    type: "GET",
-		            dataType: 'json',
-                    success: function (postsData) {
-                        let len = postsData.posts.length;
-                        for (let i = 0; i < len; i++) {
-                            let category= postsData.posts[i].category;
-                            let title= postsData.posts[i].title;
-                            let content = postsData.posts[i].content;
-                            createFAQ(category, title, content);
-                            console.log(postsData)
-               		 }
-                    
-                    },
-                    error: function (e) {
-                        console.log(e.message);
-                    }
-                });
+// Document ready function for making an AJAX request to retrieve FAQ data
+    $(document).ready(function() {
+        $.ajax({
+            url: "getFaq.php",
+            type: "GET",
+		    dataType: 'json',
+            success: function (postsData) {
+                let len = postsData.posts.length;
+                // Loop through retrieved data and create FAQ elements
+                for (let i = 0; i < len; i++) {
+                    let category= postsData.posts[i].category;
+                    let title= postsData.posts[i].title;
+                    let content = postsData.posts[i].content;
+                    createFAQ(category, title, content);
+               	}
+            },
+            error: function (e) {
+                console.log(e.message);
+            }
+         });
     
-            });
+    });
 
-
-
-    //all the linking and nav bar functionality
+    //ensure right user role is passed through the php sessions
     let role = '<?php echo $role?>';
 
+    // JavaScript code for toggling the user submenu
     let subMenu = document.getElementById("subMenu");
     let userButton = document.querySelector(".user-btn");
 
@@ -210,6 +212,8 @@ faqContainer.append(div);
             document.removeEventListener('click', closeMenuOutside);
         }
     }
+
+    // Document ready function for initializing navbar elements
 
     $(document).ready(function (){
         $('#ManageContent').css('display','block');
