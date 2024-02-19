@@ -12,11 +12,11 @@ session_start();
 </head>
 
 <body>
-    <div class="header">
+    <div class="header"> <!-- Header section containing the logo and navigation tabs -->
         <div class="logo">
             <img src="images/companylogo.png">
         </div>
-        <div class="tabs">
+        <div class="tabs"> <!-- Navigation tabs for different sections of the site -->
             <button id = "ManageButton" class="tab">
                 <img src="images/manage.png" alt="Manage Icon" height="20px" width="20px">
                 Manage</button>
@@ -35,7 +35,7 @@ session_start();
         </div>
 
 
-        <div class="buttons">
+        <div class="buttons"> <!-- Div for the user button and its submenu -->
             <button class="user-btn">
                 <img src="images/user.png" class="user-pic" onclick="toggleMenu()">
             </button>
@@ -75,9 +75,9 @@ session_start();
 
                         ?></h4>
                     </div>
-                    <hr>
+                    <hr> <!-- Div for the user button and its submenu -->
                     
-                    <a id =  "logoutB" href="#" class="sub-menu-link">
+                    <a id =  "logoutB" href="#" class="sub-menu-link">  <!-- Logout link -->
                     <img src="images/logout.png">
                     <p>logout</p>
                     <span>></span>
@@ -140,10 +140,10 @@ session_start();
             document.removeEventListener('click', closeMenuOutside);
         }
     }
-
+    // JavaScript code for handling the toggle of the user submenu and setting the active class on the Knowledge tab
     $(document).ready(function (){
         $('#KnowledgeButton').addClass("active");
-        $('.arrow').css('display','block');
+        $('.arrow').css('display','block');  
     });
 </script>
 <script src="/PKMS/link.js"></script>
