@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 ini_set("display_errors",1);
 
-$topic = $_GET['topic']; // Assuming 'topic' is passed via the query string
+$topic = $_GET['topic']; 
  $email = $_GET['email'];
 $filter = $_GET['filter'];
 $pagenum = $_GET['pagenum'];

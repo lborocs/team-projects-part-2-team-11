@@ -1,4 +1,11 @@
 <?php
+ob_start();
+// session_start();
+if (session_status() === PHP_SESSION_NONE) {     // If session is not already started, start the session    
+    session_start(); }
+// echo "$User1";
+$User1 = $_SESSION['email'];
+
 // set up the connection to the database
 $username = "team011";
 $password = "JAEWyfUXpzqank7scpWm";
@@ -12,11 +19,10 @@ $conn = mysqli_connect($servername, $username, $password, $dbname);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-
 // Query to fetch incomplete projects (My Projects)
 $sqlMyProjects = "SELECT name 
                     FROM `Project` 
-                    WHERE (manager = 'miles.morales@makeitall.org.uk') 
+                    WHERE (manager = '$User1') 
                     AND project_status='INCOMPLETE'";
 $resultMyProjects = $conn->query($sqlMyProjects);
 
@@ -32,7 +38,7 @@ if ($resultMyProjects->num_rows > 0) {
 // Query to fetch complete projects (Archived Projects)
 $sqlArchivedProjects = "SELECT name 
                         FROM `Project` 
-                        WHERE (manager = 'miles.morales@makeitall.org.uk') 
+                        WHERE (manager = '$User1') 
                         AND project_status='COMPLETE'";
 $resultArchivedProjects = $conn->query($sqlArchivedProjects);
 
@@ -49,9 +55,6 @@ mysqli_close($conn);
 ?>
 
 <!-- Container for My Projects -->
-<!-- <div>
-    <a id="CreateProject" href="#createProject">Create A Project</a>
-</div> -->
 <div id="myProjects">
 <div id="myProject1">
 

@@ -25,11 +25,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Insert the new user into the database
     $sql = "INSERT INTO Users_Details (user_email, role) VALUES ('$user_email', '$role')";
-    // if ($conn->query($sql) === TRUE) {
-    //     echo "success";
-    // } else {
-    //     echo "Error adding user: " . $conn->error;
-    // }
     if ($conn->query($sql) === TRUE) {
         // Retrieve updated list of users
         $sql = "SELECT user_email FROM Users_Details";

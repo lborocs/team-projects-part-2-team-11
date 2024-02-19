@@ -1,10 +1,13 @@
+
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="final_landing.css">
-    <link rel="stylesheet" href="/PKMS/PKMS(Productivity)/ManagerDraft.css">
-    <link rel="stylesheet" href="/PKMS/PKMS(Manager)/ManagerDraft.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title> PKMS DashBoard</title>
 </head>
@@ -21,16 +24,17 @@
             <button id = "ProdButton" class="tab">
                 <img src="images/productivity.png" alt="Productivity Icon" height="30px" width="30px">
                 Productivity</button>
-            <button class="tab">
+            <button id = "KnowledgeButton" class="tab">
                 <img src="images/knowledge.png" alt="Knowledge Icon" height="20px" width="20px">
                 Knowledge</button>
-            <button class="tab">
+            <button id = "RemindersButton" class="tab">
                 <img src="images/reminder.png" alt="Reminder Icon" height="20px" width="20px">
                 Reminders</button>
-            <button class="tab">
+            <button id = "InviteButton" class="tab">
                 <img src="images/invite.png" alt="Invite Icon" height="20px" width="20px">
                 Invite</button>
         </div>
+
         <div class="buttons">
             <button class="user-btn">
                 <img src="images/user.png" class="user-pic" onclick="toggleMenu()">
@@ -39,15 +43,43 @@
                 <div class="sub-menu">
                     <div class="user-info">
                         <img src="images/user.png">
-                        <h4>James Aldrino</h4>
+                        <h4><?php
+                        
+                            //set up the connection to the data base
+                            $username = "team011";
+                            $password = "JAEWyfUXpzqank7scpWm";
+                            $servername = "localhost";
+                            $dbname = "team011";
+                    
+                            // Create connection
+                            $conn = mysqli_connect($servername, $username, $password, $dbname);
+                    
+                            // Check connection
+                            if (!$conn) {
+                                die("Connection failed: " . mysqli_connect_error());
+                            }
+                            
+                            $email = $_SESSION['email'];
+                            $role = $_SESSION['role'];
+
+                            $usernameQuery = "SELECT username
+                            FROM `Users_Details`
+                            WHERE user_email = '$email'";
+
+                            $username = mysqli_query($conn, $usernameQuery);
+
+                            if (mysqli_num_rows($username) > 0){
+                                //output data of each row
+                                while ($row = mysqli_fetch_array($username)){
+                                    echo "Welcome ".$row[0];
+                                }
+                            }
+
+                        ?></h4>
                     </div>
                     <hr>
-                    <a href="#" class="sub-menu-link">
-                    <img src="images/help.png">
-                    <p>Help </p>
-                    <span>></span>
-                    </a>
-                    <a href="#" class="sub-menu-link">
+                    
+                    <a id =  "logoutB" href="#" class="sub-menu-link">
                     <img src="images/logout.png">
                     <p>logout</p>
                     <span>></span>
@@ -56,15 +88,19 @@
             </div>
         </div>
     </div>
+
+
 <!-- code for the MAIN CONTENT after header div -->
     <div class="main-content">
         <div class="white-div">
-            
-            <div class="content" id="ManageContent" style="display: none;">
-                <!-- Content for the 'Knowledge' tab -->
-                <?php include 'ManagerDraft2.php'; ?>
+            <div class="content" id="content3" style="display: contents;">
+                <div class="info-center">
+                    <div class="grid-container2">
+                        <a href="ManagerDashboard.php" style="text-decoration:none; color: inherit;" class="grid-item">MY DASHBOARD</a>
+                        <a href="/manage_controls.php" style="text-decoration:none; color: inherit;" class="grid-item">MANAGE CONTROLS</a>
+                    </div>  
+                </div>      
             </div>
-            
         </div>
     </div>
     <!-- section for footer -->
@@ -75,8 +111,10 @@
 
 
 
-
+    
     <script>
+    let role = '<?php echo $role?>';
+
     let subMenu = document.getElementById("subMenu");
     let userButton = document.querySelector(".user-btn");
 
@@ -101,24 +139,38 @@
         }
     }
 
-    const tabs = document.querySelectorAll('.tab');
-    // const arrow = document.querySelector('.arrow');
-    const contents = document.querySelectorAll('.content'); // Get all content divs
+    // $('#logoutB').click(function (){
+    //     window.location.href = "/PKMS/PKMS_Complete/Onyedikachi's%20code/signin.php";
+    // });
 
+    // function displayManager(role){
+    //     if (role != "Manager"){
+    //         $('#ManageButton').css('display','none');
+    //     }else {
+    //         $('#ManageButton').css('display','block');
+    //     }          
+    // }
+    // displayManager(role);
 
-    tabs.forEach((tab, index) => {
-    tab.addEventListener('click', function () {
-        tabs.forEach(t => t.classList.remove('active'));
-        this.classList.add('active');
-        contents.forEach(content => content.classList.remove('active'));
-        contents[index].classList.add('active');
-        // arrow.style.display = 'block';
-        });
-    });
+    // $('#ManageButton').click(function (){
+    //     $('#ManageContent').css('display','block');
+    //     $('#ManageButton').addClass("active");
+    //     $('.arrow').css('display','block');
+    // });
+    // $('#ManageButton').click();
 
-    $('#ManageButton').click(function (){
+    // //manger page essensials
+    // $('#ProdButton').click(function (){
+    //     window.location.href = "/PKMS/PKMS(Productivity)/ProductivityLanding.php";
+    // });
+
+    $(document).ready(function (){
         $('#ManageContent').css('display','block');
+        $('#ManageButton').addClass("active");
+        $('.arrow').css('display','block');
     });
+
+
 
 
     // // Handle window resize event
@@ -129,6 +181,7 @@
     // });
 
 </script>
+<script src="/PKMS/link.js"></script>
 
 </body>
 </html>
