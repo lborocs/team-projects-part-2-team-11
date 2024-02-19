@@ -1,9 +1,10 @@
 <?php
 
+// Enable error reporting for debugging
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
-
+// Retrieve the email address from the GET request
 $email = $_GET['email'];
 
 $host = "localhost";
@@ -21,8 +22,7 @@ if (!$conn) {
 $sql = "SELECT username,password FROM Users_Details WHERE user_email= ? AND username IS NULL AND password IS NULL;";
 
 
-
-
+// Prepare the SQL statement for execution
 $stmt = $conn->prepare($sql);
 
 if (!$stmt) {
@@ -32,6 +32,7 @@ if (!$stmt) {
 
 $stmt->bind_param("s",$email);
 
+// Execute the prepared statement
 if ($stmt->execute()) {
 
     echo json_encode(['status' => 'success', 'emails' => $stmt->get_result()->fetch_row() ]);
