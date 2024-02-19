@@ -30,7 +30,7 @@ if (!$conn) {
 }
 
 // Check if the employee is a team leader for any project
-$sqlTeamLeaderProjects = "SELECT DISTINCT p.project_id, p.name AS project_name, p.deadline AS project_deadline 
+$sqlTeamLeaderProjects = "SELECT p.project_id, p.name AS project_name, p.deadline AS project_deadline 
                           FROM Project p
                           WHERE p.team_leader = '$employeeEmail' AND p.deadline <= DATE_ADD(NOW(), INTERVAL 7 DAY) AND p.project_status = 'INCOMPLETE'
                           ORDER BY p.deadline";
@@ -104,7 +104,7 @@ if (mysqli_num_rows($resultTeamLeaderProjects) > 0) {
 
 
 // Query to fetch projects where the employee is a regular team member
-$sqlRegularEmployeeProjects = "SELECT DISTINCT p.project_id, p.name AS project_name, p.deadline AS project_deadline
+$sqlRegularEmployeeProjects = "SELECT p.project_id, p.name AS project_name, p.deadline AS project_deadline
                                 FROM Project p
                                 JOIN Tasks t ON p.project_id = t.project_id
                                 WHERE t.user_email = '$employeeEmail' AND t.deadline <= DATE_ADD(NOW(), INTERVAL 7 DAY)
