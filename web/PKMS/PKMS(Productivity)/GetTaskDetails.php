@@ -13,7 +13,7 @@
         $taskID = $_POST['Task_ID'];
         $user = $_POST['User'];
         $permission = $_POST['Permission'];
-        $deletable = $_POST['Deletable'];
+        $deletable = $_POST['Deleteable'];
     } else {
         $user = '';
         $taskID = '';
