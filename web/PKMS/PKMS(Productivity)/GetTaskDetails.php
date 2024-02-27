@@ -13,7 +13,7 @@
         $taskID = $_POST['Task_ID'];
         $user = $_POST['User'];
         $permission = $_POST['Permission'];
-        $deletable = $_POST['Deleteable'];
+        $deletable = $_POST['Deletable'];
     } else {
         $user = '';
         $taskID = '';
@@ -34,6 +34,9 @@
         while ($row = mysqli_fetch_array($TaskInfo)){
             $projectID = $row[6];
             $email = $row[5];
+            if ($row[7] == 0){
+                $row[7] = "N/A";
+            }
 
             // if th epermistions passed in are true or the tasks ID is 
             if (($permission == 'true') || ($projectID == '0')){
@@ -94,6 +97,10 @@
                 echo "<label for='Deadline'>Task Deadline (YYYY-MM-DD):</label>";
                 echo "<input type='text' id='Deadline' name='Deadline' class='input-field ' value = '$row[3]' required><br><br>";
 
+                //for the estimated time for the tasks
+                echo "<label for='estimated'>Task estimated Time</label>";
+                echo "<input type='text' id='estimated' name='estimated' class='input-field ' value = '$row[7]' required><br><br>";
+
                 //status change section:
                 echo '<label for="Status">Status:</label>
                 <select id="Status" name="Status" class="input-field" required>
@@ -130,6 +137,10 @@
                 //task deadline code.
                 echo "<label for='Deadline'>Task Deadline (YYYY-MM-DD):</label>";
                 echo "<input id='Deadline' name='Deadline' type='text' class='input-field' value = '$row[3]' readonly><br>";
+
+                //for the estimated time for the tasks
+                echo "<label for='estimated'>Task estimated Time</label>";
+                echo "<input type='text' id='estimated' name='estimated' class='input-field ' value = '$row[7]' readonly><br><br>";
 
                 //the status section og the task detail
                 echo '<label for="Status">Status:</label>

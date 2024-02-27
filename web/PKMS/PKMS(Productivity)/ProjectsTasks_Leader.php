@@ -13,7 +13,7 @@ ini_set("display_errors", 1);
     if ($_SERVER["REQUEST_METHOD"] == "POST"){
         $ID = $_POST['Project_ID'];
         $filter_email = $_POST['Filter'];
-        echo "Project ID :".$ID;
+        echo "<b>Project ID</b> :".$ID;
     } else {
         $ID = 0;
         $filter_email = '';
@@ -25,6 +25,7 @@ ini_set("display_errors", 1);
     WHERE user_email = '$filter_email';";
     $employee = mysqli_query($conn, $employeeQuery1);
 
+    //se the filter value
     if (mysqli_num_rows($employee) > 0){
         //output data of each row
         while ($row = mysqli_fetch_array($employee)){
@@ -33,6 +34,39 @@ ini_set("display_errors", 1);
     } else {
         $filter_email = '%';
     }
+
+    //get the project information
+    $projectQuery = "SELECT *
+    FROM Project
+    WHERE project_id = '$ID'";
+    $project = mysqli_query($conn, $projectQuery);
+
+    if (mysqli_num_rows($project) > 0){
+        while ($row = mysqli_fetch_array($project)){
+            // echo "  <b>Title</b> : ".$row[1];
+            echo "  <b>Deadline</b>: ".$row[2];
+            $allocatedHours = $row[5];
+            //echo "  <b>Allocated hours</b> : ".$row[5];
+            echo "  <b>Project Status</b> : ".$row[6];
+        }
+    }
+
+    echo "<br>";
+
+    //total task project estimated time
+    $totalEstimateQuery = "SELECT SUM(estimated_time)
+    FROM Tasks
+    WHERE project_id = '$ID'";
+    $totalEstimate = mysqli_query($conn,$totalEstimateQuery);
+
+    if(mysqli_num_rows($totalEstimate)>0){
+        while ($row = mysqli_fetch_array($totalEstimate)){
+            echo "  <b>Estimated Project Hours</b> : ".$row[0];
+            echo "  <b>Allocated hours</b> : ".$allocatedHours;
+            echo " <b>Differnece</b> : ".(intval($row[0])-intval($allocatedHours));
+        }
+    }
+
 
     echo '
     <div id = "Kanban" style = "display: flex; align-items: stretch;">

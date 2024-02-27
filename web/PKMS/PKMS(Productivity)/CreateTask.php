@@ -15,6 +15,7 @@
         $taskDeadline = $_POST['taskDeadline'];
         $assignedTo = $_POST['assignedTo'];
         $Project_ID = $_POST['Project_ID'];
+        $estimatedTime = $_POST['estimated_time'];
 
     } else {
         $taskTitle = '';
@@ -22,6 +23,7 @@
         $taskDeadline = '';
         $assignedTo = '';
         $Project_ID = '';
+        $estimatedTime = '';
     }
 
     //generate taskID
@@ -36,12 +38,8 @@
         }
     }
 
-    if ($Project_ID == null){
-        $Project_ID = 0;
-    }
-
     //Do the query to create the new tasks
-    $createTasksQuery = "INSERT INTO `Tasks` (`task_id`, `title`, `description`, `deadline`, `status`, `user_email`, `project_id`) 
-    VALUES ('$taskID', '$taskTitle', '$taskDescription', '$taskDeadline', 'INCOMPLETE', '$assignedTo', '$Project_ID');";
+    $createTasksQuery = "INSERT INTO `Tasks` (`task_id`, `title`, `description`, `deadline`, `status`, `user_email`, `project_id`, `estimated_time`) 
+    VALUES ('$taskID', '$taskTitle', '$taskDescription', '$taskDeadline', 'INCOMPLETE', '$assignedTo', '$Project_ID', '$estimatedTime');";
     mysqli_query($conn, $createTasksQuery);
 ?>

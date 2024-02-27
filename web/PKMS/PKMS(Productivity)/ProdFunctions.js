@@ -178,6 +178,14 @@ $('#SubmitB').on('click', function(){
       return false;
   }
 
+  //validate the estimated date.
+  var estimatedTimeRegex = /^[0-9]+$/
+  var estimated_time = $('#estimatedTime').val()
+  if (!estimated_time.match(estimatedTimeRegex)) {
+    alert("Please enter only an integer for the estimated date");
+    return false;
+  }
+
   $.ajax({
     url:"CreateTask.php",
     type: "POST",
@@ -187,7 +195,8 @@ $('#SubmitB').on('click', function(){
       taskDescription : $('#taskDescription').val(),
       taskDeadline : $('#taskDeadline').val(),
       assignedTo : $('#assignedTo').val(),
-      Project_ID : $('#Project_ID').val()
+      Project_ID : $('#Project_ID').val(),
+      estimated_time : $('#estimatedTime').val()
     },
     success: function(data){
       closeModal();
@@ -245,9 +254,41 @@ function getTaskDetails(id){
 
 ////updating a task////
 function updateTask(taskID,string){
-  $('#Update').val(string)
-  console.log($('#Update').val());
-  
+  $('#Update').val(string);
+
+  if (string == "updateTask"){
+    // Validate task name
+    if ($.trim($('#Title').val()) == "") {
+      alert("Please enter a Task name.");
+      return false;
+    }
+
+    // Validate deadline format
+    var deadlineRegex = /^([0-9]{2})?[0-9]{2}(-)(1[0-2]|0?[1-9])\2(3[01]|[12][0-9]|0?[1-9])$/
+    var taskDeadline = $('#Deadline').val()
+    if (!taskDeadline.match(deadlineRegex)) {
+        alert("Please enter the deadline in the format YYYY-MM-DD.");
+        return false;
+    }
+
+    //validate the estimated date.
+    var estimatedTimeRegex = /^[0-9]+$/
+    var estimated_time = $('#estimated').val()
+
+    if (estimated_time == "N/A"){
+      estimated_time = 0;
+    }
+
+    console.log(estimated_time);
+    if (estimated_time != 0){
+      if (!estimated_time.match(estimatedTimeRegex)) {
+        alert("Please enter only an integer for the estimated date");
+        return false;
+      }
+    }
+    
+  }
+
   $.ajax({
     url:"UpdateTask.php",
     type: "POST",
@@ -260,10 +301,13 @@ function updateTask(taskID,string){
       taskDeadline : $('#Deadline').val(),
       taskStatus : $('#Status').val(),
       assignedTo : $('#assigned').val(),
-      Project_ID : $('#Project_ID').val()
+      Project_ID : $('#Project_ID').val(),
+      estimated_time : $('#estimated').val()
+
     },
     success: function(data){
       updateArea(state);
+
       closeModal();
       alert('Task Updated :)');
     },

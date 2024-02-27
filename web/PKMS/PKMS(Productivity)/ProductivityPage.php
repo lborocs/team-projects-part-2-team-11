@@ -50,7 +50,7 @@ session_start();
     
             <?php
                 //get all tasks
-                $projQuery = "SELECT `Tasks`.`project_id`,  `Project`.`name`
+                $projQuery = "SELECT DISTINCT `Tasks`.`project_id`,  `Project`.`name`
                 FROM `Tasks` JOIN `Project` ON `Tasks`.`project_id` = `Project`.`project_id`
                 WHERE user_email = '$User' and `Tasks`.`project_id` != '0'
                 ORDER BY `Tasks`.`project_id` ASC;";
@@ -189,6 +189,9 @@ session_start();
                 <label for="assignedTo">Choose User:</label>
                 <select id="assignedTo" name="assignedTo" class="input-field" required>
                 </select><br><br>
+
+                <label for="estimatedTime">Estimated time to complete:</label>
+                <input type = "text" id="estimatedTime" name="estimatedTime" class="input-field" required><br><br>
 
                 <input id = "Project_ID" name = "Project_ID" type="hidden"> 
 
