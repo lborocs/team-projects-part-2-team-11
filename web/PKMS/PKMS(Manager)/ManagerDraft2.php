@@ -140,6 +140,8 @@
                 <input type="text" id="taskDescription" name="taskDescription" class="input-field"><br><br>
                 <label for="taskDeadline">Task Deadline (YYYY-MM-DD):</label>
                 <input type="text" id="taskDeadline" name="taskDeadline" class="input-field" required><br><br>
+                <label for="taskDeadline">Task Estimated Time:</label>
+                <input type="text" id="taskEstimatedTime" name="taskEstimatedTime" class="input-field" ><br><br>
                 <label for="teamMember">Choose User:</label>
                 <select id="teamMember" name="teamMember" class="input-field">
                     <option value="">Select User</option>
@@ -212,6 +214,13 @@
                 </h5>
                 </div>
             </div>
+            <div class="graph-container">
+                <div class="graph graph-1">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="difference"></span>
+                </div>
+            </div>
+
+
             <!--Team details and tasks table-->
             <div class="graph-container">
                 <div class="graph graph-1 team-tasks">

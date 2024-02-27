@@ -107,8 +107,9 @@ if (mysqli_num_rows($resultTeamLeaderProjects) > 0) {
 $sqlRegularEmployeeProjects = "SELECT p.project_id, p.name AS project_name, p.deadline AS project_deadline
                                 FROM Project p
                                 JOIN Tasks t ON p.project_id = t.project_id
-                                WHERE t.user_email = '$employeeEmail' AND t.deadline <= DATE_ADD(NOW(), INTERVAL 7 DAY)
-                                AND p.project_status-'INCOMPLETE'
+                                WHERE (t.user_email = '$employeeEmail' OR p.team_leader = '$employeeEmail') AND t.deadline <= DATE_ADD(NOW(), INTERVAL 7 DAY)
+                                AND p.project_status='INCOMPLETE'
+                                GROUP BY p.project_id
                                 ORDER BY t.deadline";
 
 $resultRegularEmployeeProjects = mysqli_query($conn, $sqlRegularEmployeeProjects);

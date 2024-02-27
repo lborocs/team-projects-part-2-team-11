@@ -37,12 +37,12 @@ session_start();
 
         <div class="buttons">
             <button class="user-btn">
-                <img src="images/user.png" class="user-pic" onclick="toggleMenu()">
+                <img src="user.png" class="user-pic" onclick="toggleMenu()">
             </button>
             <div class="sub-menu-wrap" id="subMenu">
                 <div class="sub-menu">
                     <div class="user-info">
-                        <img src="images/user.png">
+                        <img src="user.png">
                         <h4><?php
                         
                             //set up the connection to the data base

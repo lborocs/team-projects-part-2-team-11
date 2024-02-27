@@ -28,6 +28,8 @@ $taskDescription = $_POST['taskDescription'];
 $taskDeadline = $_POST['taskDeadline'];
 $teamMember = $_POST['teamMember'];
 $Project_ID = $_POST['Project_ID'];
+$taskEstimatedTime= $_POST['taskEstimatedTime'];
+
 
 $teamMemberQuery = "SELECT user_email FROM Users_Details WHERE username = ?";
 
@@ -62,8 +64,8 @@ if (mysqli_num_rows($allTasks)>0){
 }
 
 // Prepare and execute SQL statement with prepared statement to prevent SQL injection
-$stmt = $conn->prepare("INSERT INTO Tasks (task_id, title, description, deadline, status, user_email, project_id) VALUES (?,?, ?, ?,'INCOMPLETE',?,?)");
-$stmt->bind_param("isssss",$maxTaskID,$taskName, $taskDescription, $taskDeadline, $teamMember, $Project_ID);
+$stmt = $conn->prepare("INSERT INTO Tasks (task_id, title, description, deadline, status, user_email, project_id,estimated_time) VALUES (?,?, ?, ?,'INCOMPLETE',?,?,?)");
+$stmt->bind_param("isssssi",$maxTaskID,$taskName, $taskDescription, $taskDeadline, $teamMember, $Project_ID,$taskEstimatedTime);
 
 $stmt->execute();
 

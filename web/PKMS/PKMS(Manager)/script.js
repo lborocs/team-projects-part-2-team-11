@@ -22,6 +22,22 @@ function fetchProjectDeadline(projectName) {
         });
 }
 
+function fetchHoursDifference(projectName) {
+    // Make an AJAX request to fetch the difference in hours
+    fetch('fetch_hours_difference.php?projectName=' + encodeURIComponent(projectName))
+        .then(response => response.text())
+        .then(difference => {
+            // Update the difference span with the fetched difference in hours
+            document.getElementById('difference').textContent = difference;
+        })
+        .catch(error => {
+            // Log and handle errors in fetching the difference in hours
+            console.error('Error fetching difference in hours:', error);
+            document.getElementById('difference').textContent = 'Error fetching difference';
+        });
+}
+
+
 function fetchProjectID(projectName) {
     // Make an AJAX request to get the project ID based on the project name
     const xhr = new XMLHttpRequest();
@@ -64,6 +80,7 @@ function reload(){
             // Update the project name in the HTML
             const projectHeader = document.querySelector('#ProjectDetails h3');
             projectHeader.textContent = projectName;
+            fetchHoursDifference(projectName);
             fetchTaskDetails(projectName);
             fetchProjectDeadline(projectName);
             fetchProjectID(projectName); // Fetch project ID based on the project name
@@ -437,6 +454,33 @@ const validateTaskForm = function (event) {
     const taskName = document.getElementById("taskName").value;
     const taskDescription = document.getElementById("taskDescription").value;
     const taskDeadline = document.getElementById("taskDeadline").value;
+    const taskEstimatedTime = document.getElementById("taskEstimatedTime").value;
+
+    console.log("Estimated Time:", taskEstimatedTime); // Debug statement
+
+
+    // Function to validate if the input is a non-negative integer
+    function validateTaskEstimatedTime(time) {
+        // Check if the input is empty
+        if (time.trim() === '') {
+            return true; // Empty input is valid
+        }
+        
+        // Regular expression to match non-negative integers
+        var regex = /^\d+$/;
+        
+        // Test the input against the regular expression
+        if (regex.test(time)) {
+            // Check if the input is a non-negative integer
+            if (parseInt(time) >= 0) {
+                return true; // Non-negative integer
+            } else {
+                return false; // Negative integer
+            }
+        } else {
+            return false; // Not a non-negative integer
+        }
+    }
 
     // Validate task name
     if (taskName.trim() === "") {
@@ -466,6 +510,13 @@ const validateTaskForm = function (event) {
         alert("Deadline must be at least a day ahead of today.");
         return false;
     }
+
+    if (!validateTaskEstimatedTime(taskEstimatedTime)) {
+        alert("Estimated time must be a non-negative integer or empty.");
+        event.preventDefault();
+        return false;
+    }
+
     return true;
 };
 

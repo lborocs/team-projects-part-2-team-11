@@ -24,11 +24,52 @@
     </form>
     </div>
     <div class="additions">
-    <h2>Update User Role</h2>
-    <!-- Form for updating user roles -->
-    <form id="update_role_form" action="update_role.php" method="post">
-        <label for="user_email_update">Select User:</label>
-        <select name="user_email_update" id="user_email_update">
+        <h2>Update User Role</h2>
+        <!-- Form for updating user roles -->
+        <form id="update_role_form" action="update_role.php" method="post">
+            <label for="user_email_update">Select User:</label>
+            <select name="user_email_update" id="user_email_update">
+                <?php
+                // Database connection details
+                $servername = "localhost";
+                $username = "team011";
+                $password = "JAEWyfUXpzqank7scpWm";
+                $dbname = "team011";
+
+                // Create connection
+                $conn = mysqli_connect($servername, $username, $password, $dbname);
+
+                // Check connection
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
+
+                // Retrieve list of user emails
+                $sql = "SELECT user_email FROM Users_Details";
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        echo "<option value='" . $row['user_email'] . "'>" . $row['user_email'] . "</option>";
+                    }
+                }
+                ?>
+            </select>
+            
+            <br><br>
+            <label for="role_update">New Role:</label>
+            <select name="role_update" id="role_update">
+                <option value="Manager">Manager</option>
+                <option value="Employee">Employee</option>
+            </select>
+            <br><br>
+            <input type="submit" value="Update Role">
+        </form>
+    </div>
+    <div class="additions">
+        <h2>Reset User's Logins</h2>
+        <label for="reset_user">Select User:</label>
+        <select name="reset_user" id="reset_user">
             <?php
             // Database connection details
             $servername = "localhost";
@@ -55,37 +96,57 @@
             }
             ?>
         </select>
-        
-        <br><br>
-        <label for="role_update">New Role:</label>
-        <select name="role_update" id="role_update">
-            <option value="Manager">Manager</option>
-            <option value="Employee">Employee</option>
-        </select>
-        <br><br>
-        <input type="submit" value="Update Role">
-    </form>
-        </div>
-        <div style = "text-align : center;"><button id = "logoutB">Logout</button></div>
-        </div>
-        <!-- Container for displaying user list -->
-        <div class="container">
-            <div class="additions">
-                <h2>List of Users</h2>
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>User Email</th>
-                            <th>Role</th>
-                        </tr>
-                    </thead>
-                <tbody id="user_table_body">
-                <?php include 'get_users.php';?>
+    <br><br>
+    <input type="submit" value="Reset User" onclick="resetUserLogins()">
+    </div>
+    <div style = "text-align : center;"><button id = "logoutB">Logout</button></div>
+</div>
+<!-- Container for displaying user list -->
+<div class="container">
+    <div class="additions">
+        <h2>List of Users</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>User Email</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody id="user_table_body">
+            <?php include 'get_users.php';?>
             </tbody>
         </table>
     </div>
 </div>
 <script>
+    // Function to reset user logins
+    function resetUserLogins() {
+        var user_email = document.getElementById('reset_user').value;
+
+        // Send AJAX request to reset user logins
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'fetch_projects.php', true);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var response = xhr.responseText;
+                    if (response === 'success') {
+                        // Display success message
+                        alert('User logins reset successfully.');
+                    } else {
+                        // Display error message
+                        alert('Error resetting user logins: ' + response);
+                    }
+                } else {
+                    // Display error message for HTTP request
+                    alert('Error: ' + xhr.status);
+                }
+            }
+        };
+        xhr.send('reset_user=' + user_email);
+    }
+
     // This function sends an AJAX request to fetch updated user data from the server. It uses XMLHttpRequest to make a GET request to the 'get_users.php' endpoint. 
     //When the response is received, it updates the HTML content of the 'user_table_body' element with the new user data.
     function updateUserTable() {
@@ -122,10 +183,31 @@
         };
         xhr.send(formData);
     }
+
+    // Function to validate if the email is unique
+    function validateUniqueEmail(email) {
+        var selectUser = document.getElementById('user_email_update');
+        var options = selectUser.options;
+        for (var i = 0; i < options.length; i++) {
+            if (options[i].value === email) {
+                alert('User with this email already exists. Please choose a different email.');
+                document.getElementById('user_email').value = '';
+                return false;
+            }
+        }
+        return true;
+    }
     //This event listener is triggered when the form with ID 'add_user_form' is submitted. It prevents the default form submission behavior, 
     //sends an AJAX request to add a new user using the sendAjaxRequest() function, and updates the user selection options if the operation is successful.
     document.getElementById('add_user_form').addEventListener('submit', function(event) {
     event.preventDefault();
+
+    var user_email = document.getElementById('user_email').value;
+
+    if (!validateUniqueEmail(user_email)) {
+        return; // Stop further processing
+    }
+
     sendAjaxRequest('add_user_form', function(response) {
         var users = JSON.parse(response);
         if (Array.isArray(users)) {
